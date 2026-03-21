@@ -1,0 +1,323 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pingcap.com/schemas/tidb/data-service.json",
+  "title": "TiDB Cloud Data Service",
+  "description": "Schema representing TiDB Cloud Data Service entities including Data Apps, custom SQL-backed API endpoints, endpoint parameters, API keys, and deployment records. The Data Service enables developers to expose TiDB Cloud data via HTTPS REST endpoints backed by SQL queries.",
+  "type": "object",
+  "required": ["dataAppId", "displayName"],
+  "properties": {
+    "dataAppId": {
+      "type": "string",
+      "description": "The unique identifier assigned to the Data App by TiDB Cloud."
+    },
+    "displayName": {
+      "type": "string",
+      "description": "The human-readable display name of the Data App.",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "description": {
+      "type": "string",
+      "description": "An optional description of the Data App's purpose and the data it exposes.",
+      "maxLength": 256
+    },
+    "region": {
+      "type": "string",
+      "description": "The cloud region where this Data App is deployed."
+    },
+    "createTime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The ISO 8601 timestamp when the Data App was created."
+    },
+    "updateTime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The ISO 8601 timestamp when the Data App was last modified."
+    }
+  },
+  "$defs": {
+    "DataSource": {
+      "type": "object",
+      "description": "A TiDB Cloud cluster linked as a data source within a Data App.",
+      "required": ["clusterId"],
+      "properties": {
+        "clusterId": {
+          "type": "string",
+          "description": "The unique identifier of the linked TiDB Cloud cluster."
+        },
+        "clusterName": {
+          "type": "string",
+          "description": "The display name of the linked cluster."
+        },
+        "clusterType": {
+          "type": "string",
+          "description": "The type of the linked cluster.",
+          "enum": ["SERVERLESS", "DEDICATED"]
+        }
+      }
+    },
+    "Endpoint": {
+      "type": "object",
+      "description": "A custom SQL-backed API endpoint within a TiDB Cloud Data App that handles HTTPS requests by executing SQL against a linked cluster.",
+      "required": ["displayName", "path", "method", "clusterId", "sqlTemplate"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The resource name of the endpoint."
+        },
+        "displayName": {
+          "type": "string",
+          "description": "The human-readable display name for the endpoint.",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "description": {
+          "type": "string",
+          "description": "A description of what this endpoint returns and how to call it.",
+          "maxLength": 256
+        },
+        "path": {
+          "type": "string",
+          "description": "The URL path for the endpoint, relative to the Data App base URL (e.g., /users/{id}).",
+          "pattern": "^/"
+        },
+        "method": {
+          "type": "string",
+          "description": "The HTTP method this endpoint accepts.",
+          "enum": ["GET", "POST", "PUT", "DELETE"]
+        },
+        "clusterId": {
+          "type": "string",
+          "description": "The ID of the linked cluster this endpoint queries."
+        },
+        "sqlTemplate": {
+          "type": "string",
+          "description": "The SQL template executed when this endpoint is called. Supports ${param_name} substitution for parameters."
+        },
+        "tag": {
+          "type": "string",
+          "description": "An optional label for grouping related endpoints."
+        },
+        "settings": {
+          "$ref": "#/$defs/EndpointSettings"
+        },
+        "params": {
+          "type": "array",
+          "description": "The list of parameter definitions accepted by this endpoint.",
+          "items": {
+            "$ref": "#/$defs/EndpointParameter"
+          }
+        }
+      }
+    },
+    "EndpointSettings": {
+      "type": "object",
+      "description": "Configuration settings controlling the behavior of a Data App endpoint.",
+      "properties": {
+        "timeout": {
+          "type": "integer",
+          "description": "Maximum SQL execution time in milliseconds before returning a timeout error.",
+          "minimum": 1,
+          "maximum": 30000
+        },
+        "rowLimit": {
+          "type": "integer",
+          "description": "Maximum number of rows the endpoint can return in a single response.",
+          "minimum": 1,
+          "maximum": 2000
+        },
+        "cacheEnabled": {
+          "type": "boolean",
+          "description": "Whether response caching is enabled for GET requests to this endpoint."
+        },
+        "cacheTtl": {
+          "type": "integer",
+          "description": "Time-to-live for cached responses in seconds.",
+          "minimum": 1,
+          "maximum": 3600
+        },
+        "paginationEnabled": {
+          "type": "boolean",
+          "description": "Whether cursor-based pagination is enabled for result sets."
+        },
+        "batchOperation": {
+          "type": "boolean",
+          "description": "Whether this endpoint accepts batch array input for bulk operations."
+        }
+      }
+    },
+    "EndpointParameter": {
+      "type": "object",
+      "description": "A parameter definition for a Data App endpoint that maps to SQL template substitution variables.",
+      "required": ["name", "type"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The parameter name as referenced in the SQL template using ${name} syntax.",
+          "pattern": "^[a-zA-Z_][a-zA-Z0-9_]*$"
+        },
+        "type": {
+          "type": "string",
+          "description": "The data type of the parameter.",
+          "enum": ["STRING", "INTEGER", "NUMBER", "BOOLEAN", "ARRAY"]
+        },
+        "required": {
+          "type": "boolean",
+          "description": "Whether this parameter is required for every call to the endpoint."
+        },
+        "defaultValue": {
+          "type": "string",
+          "description": "The default value used when the parameter is not provided by the caller."
+        },
+        "description": {
+          "type": "string",
+          "description": "A description of the parameter's purpose and expected format.",
+          "maxLength": 256
+        }
+      }
+    },
+    "DataAppApiKey": {
+      "type": "object",
+      "description": "An API key scoped to a specific Data App, used for authenticating HTTPS calls to the Data App's endpoints via HTTP Digest Authentication.",
+      "required": ["role"],
+      "properties": {
+        "apiKeyId": {
+          "type": "string",
+          "description": "The unique identifier of the Data App API key."
+        },
+        "publicKey": {
+          "type": "string",
+          "description": "The public key portion used as the username in Digest Authentication."
+        },
+        "privateKey": {
+          "type": "string",
+          "description": "The private key portion used as the password. Only returned at creation time."
+        },
+        "description": {
+          "type": "string",
+          "description": "A human-readable description identifying the purpose or owner of this key.",
+          "maxLength": 256
+        },
+        "role": {
+          "type": "string",
+          "description": "The permission role controlling what operations this key can perform.",
+          "enum": ["READ_ONLY", "READ_AND_WRITE"]
+        },
+        "rateLimitRpm": {
+          "type": "integer",
+          "description": "The maximum number of requests per minute allowed for this API key.",
+          "minimum": 1,
+          "maximum": 1000
+        },
+        "expiresAt": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Optional ISO 8601 expiration timestamp after which this key will no longer be valid."
+        }
+      }
+    },
+    "Deployment": {
+      "type": "object",
+      "description": "A versioned deployment record of a Data App, capturing the endpoint configuration at the time of deployment.",
+      "required": ["deploymentId", "dataAppId", "status"],
+      "properties": {
+        "deploymentId": {
+          "type": "string",
+          "description": "The unique identifier of this deployment."
+        },
+        "dataAppId": {
+          "type": "string",
+          "description": "The ID of the Data App that was deployed."
+        },
+        "status": {
+          "type": "string",
+          "description": "The current status of the deployment.",
+          "enum": ["PENDING", "RUNNING", "SUCCEEDED", "FAILED"]
+        },
+        "createTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The ISO 8601 timestamp when the deployment was initiated."
+        },
+        "endTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The ISO 8601 timestamp when the deployment completed or failed."
+        }
+      }
+    },
+    "EndpointCallResponse": {
+      "type": "object",
+      "description": "The standard JSON response body returned by a Data App endpoint call.",
+      "required": ["code", "msg"],
+      "properties": {
+        "code": {
+          "type": "integer",
+          "description": "The application-level response code. 200 indicates the SQL was executed successfully.",
+          "enum": [200, 400, 401, 403, 404, 429, 500]
+        },
+        "msg": {
+          "type": "string",
+          "description": "A human-readable message describing the response status."
+        },
+        "result": {
+          "$ref": "#/$defs/EndpointCallResult"
+        }
+      }
+    },
+    "EndpointCallResult": {
+      "type": "object",
+      "description": "The data payload returned by a successful Data App endpoint call.",
+      "properties": {
+        "columns": {
+          "type": "array",
+          "description": "The column definitions for the result set.",
+          "items": {
+            "$ref": "#/$defs/ResultColumn"
+          }
+        },
+        "rows": {
+          "type": "array",
+          "description": "The result rows returned by the SQL query.",
+          "items": {
+            "type": "object",
+            "description": "A single result row as a key-value object.",
+            "additionalProperties": true
+          }
+        },
+        "latency": {
+          "type": "string",
+          "description": "The SQL execution latency string (e.g., 23ms)."
+        },
+        "row_affect": {
+          "type": "integer",
+          "description": "The number of rows affected by a DML statement."
+        },
+        "row_count": {
+          "type": "integer",
+          "description": "The total number of rows returned by the query."
+        }
+      }
+    },
+    "ResultColumn": {
+      "type": "object",
+      "description": "A column definition in a Data App endpoint result set.",
+      "required": ["col", "data_type"],
+      "properties": {
+        "col": {
+          "type": "string",
+          "description": "The column name."
+        },
+        "data_type": {
+          "type": "string",
+          "description": "The SQL data type of the column (e.g., VARCHAR, INT, DATETIME)."
+        },
+        "nullable": {
+          "type": "boolean",
+          "description": "Whether this column can contain NULL values."
+        }
+      }
+    }
+  }
+}

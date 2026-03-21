@@ -1,0 +1,851 @@
+openapi: 3.1.0
+info:
+  title: TiDB Cloud Data Service API
+  description: >-
+    The TiDB Cloud Data Service API enables developers to manage Data Apps and
+    custom REST endpoints backed by SQL queries running against TiDB Cloud
+    clusters. Operators create Data Apps, link them to clusters, define custom
+    endpoints with SQL templates, manage API keys, and deploy endpoints via this
+    API. Endpoints support GET, POST, PUT, and DELETE methods, return
+    JSON-formatted results, and can be configured with pagination, rate limiting,
+    and caching. The API uses HTTP Digest Authentication and is served from the
+    dataservice.tidbapi.com host.
+  version: v1beta1
+  contact:
+    name: TiDB Cloud Support
+    url: https://docs.pingcap.com/tidbcloud/data-service-overview/
+  termsOfService: https://www.pingcap.com/legal/privacy-policy/
+externalDocs:
+  description: TiDB Cloud Data Service Overview
+  url: https://docs.pingcap.com/tidbcloud/data-service-overview/
+servers:
+  - url: https://dataservice.tidbapi.com/v1beta1
+    description: Data Service Management API Server
+tags:
+  - name: Data Apps
+    description: Operations for creating, listing, updating, and deleting Data Apps.
+  - name: Data Sources
+    description: Operations for linking and managing TiDB Cloud clusters as data sources within a Data App.
+  - name: Endpoints
+    description: Operations for creating, listing, updating, testing, and deleting custom SQL-backed API endpoints.
+  - name: Data App API Keys
+    description: Operations for managing API keys scoped to a specific Data App.
+  - name: Deployments
+    description: Operations for deploying and managing versions of a Data App.
+security:
+  - digestAuth: []
+paths:
+  /dataApps:
+    get:
+      operationId: listDataApps
+      summary: List Data Apps
+      description: >-
+        Returns a paginated list of all Data Apps in the organization. Each Data
+        App represents a collection of custom endpoints that are backed by SQL
+        queries running against linked TiDB Cloud clusters. Results include
+        the app ID, display name, description, and linked cluster information.
+      tags:
+        - Data Apps
+      parameters:
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/pageToken'
+      responses:
+        '200':
+          description: A paginated list of Data Apps.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListDataAppsResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+    post:
+      operationId: createDataApp
+      summary: Create a Data App
+      description: >-
+        Creates a new Data App within the organization. A Data App is a container
+        for custom SQL-backed API endpoints. After creation, link a TiDB Cloud
+        cluster as a data source and define endpoints to begin serving data via
+        HTTPS.
+      tags:
+        - Data Apps
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDataAppRequest'
+      responses:
+        '200':
+          description: Data App created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataApp'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /dataApps/{dataAppId}:
+    get:
+      operationId: getDataApp
+      summary: Get a Data App
+      description: >-
+        Returns the configuration and metadata for a specific Data App, including
+        its display name, description, linked data sources, system endpoint
+        configuration, and Chat2Query settings if enabled.
+      tags:
+        - Data Apps
+      parameters:
+        - $ref: '#/components/parameters/dataAppId'
+      responses:
+        '200':
+          description: Data App details retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataApp'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateDataApp
+      summary: Update a Data App
+      description: >-
+        Updates the display name or description of an existing Data App. Only
+        the fields provided in the request body are modified. Linked data sources
+        and endpoints remain unchanged.
+      tags:
+        - Data Apps
+      parameters:
+        - $ref: '#/components/parameters/dataAppId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDataAppRequest'
+      responses:
+        '200':
+          description: Data App updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataApp'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteDataApp
+      summary: Delete a Data App
+      description: >-
+        Permanently deletes a Data App and all of its associated endpoints, API
+        keys, and deployment history. This operation is irreversible. All clients
+        calling endpoints within this Data App will receive errors after deletion.
+      tags:
+        - Data Apps
+      parameters:
+        - $ref: '#/components/parameters/dataAppId'
+      responses:
+        '200':
+          description: Data App deleted successfully.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /dataApps/{dataAppId}/dataSources:
+    get:
+      operationId: listDataSources
+      summary: List data sources
+      description: >-
+        Returns all TiDB Cloud clusters linked as data sources to a specific Data
+        App. Each data source includes the cluster ID, cluster name, and the
+        databases accessible from this Data App.
+      tags:
+        - Data Sources
+      parameters:
+        - $ref: '#/components/parameters/dataAppId'
+      responses:
+        '200':
+          description: List of data sources retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListDataSourcesResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      operationId: createDataSource
+      summary: Create a data source
+      description: >-
+        Links a TiDB Cloud cluster to a Data App as a data source. Once linked,
+        endpoints within the Data App can execute SQL queries against databases in
+        the linked cluster. A Data App can be linked to multiple clusters.
+      tags:
+        - Data Sources
+      parameters:
+        - $ref: '#/components/parameters/dataAppId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDataSourceRequest'
+      responses:
+        '200':
+          description: Data source linked successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataSource'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /dataApps/{dataAppId}/dataSources/{clusterId}:
+    get:
+      operationId: getDataSource
+      summary: Get a data source
+      description: >-
+        Returns the configuration of a specific cluster linked as a data source
+        to a Data App, identified by the cluster ID.
+      tags:
+        - Data Sources
+      parameters:
+        - $ref: '#/components/parameters/dataAppId'
+        - $ref: '#/components/parameters/clusterId'
+      responses:
+        '200':
+          description: Data source details retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataSource'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteDataSource
+      summary: Delete a data source
+      description: >-
+        Unlinks a TiDB Cloud cluster from a Data App. Endpoints that reference
+        this cluster will stop working after the data source is removed.
+      tags:
+        - Data Sources
+      parameters:
+        - $ref: '#/components/parameters/dataAppId'
+        - $ref: '#/components/parameters/clusterId'
+      responses:
+        '200':
+          description: Data source unlinked successfully.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /dataApps/{dataAppId}/endpoints:
+    get:
+      operationId: listEndpoints
+      summary: List endpoints
+      description: >-
+        Returns a paginated list of all custom SQL-backed endpoints defined within
+        a Data App. Each endpoint entry includes its HTTP method, path, SQL
+        template, parameters, and configuration settings such as caching and
+        pagination.
+      tags:
+        - Endpoints
+      parameters:
+        - $ref: '#/components/parameters/dataAppId'
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/pageToken'
+      responses:
+        '200':
+          description: A paginated list of endpoints.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListEndpointsResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      operationId: createEndpoint
+      summary: Create an endpoint
+      description: >-
+        Defines a new custom SQL-backed API endpoint within a Data App. Specify
+        the HTTP method, URL path, target cluster, SQL template, and any path or
+        query parameters. The endpoint will become available after the Data App
+        is deployed.
+      tags:
+        - Endpoints
+      parameters:
+        - $ref: '#/components/parameters/dataAppId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateEndpointRequest'
+      responses:
+        '200':
+          description: Endpoint created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Endpoint'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /dataApps/{dataAppId}/apiKeys:
+    get:
+      operationId: listDataAppApiKeys
+      summary: List Data App API keys
+      description: >-
+        Returns all API keys scoped to a specific Data App. These keys are used
+        to authenticate calls to the custom endpoints defined within the Data App
+        and are separate from organization-level API keys.
+      tags:
+        - Data App API Keys
+      parameters:
+        - $ref: '#/components/parameters/dataAppId'
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/pageToken'
+      responses:
+        '200':
+          description: List of Data App API keys retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListDataAppApiKeysResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      operationId: createDataAppApiKey
+      summary: Create a Data App API key
+      description: >-
+        Creates a new API key scoped to a specific Data App. Specify the key
+        description, role (READ_ONLY or READ_AND_WRITE), rate limit in requests
+        per minute, and optional expiration settings. The private key is only
+        returned at creation time.
+      tags:
+        - Data App API Keys
+      parameters:
+        - $ref: '#/components/parameters/dataAppId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDataAppApiKeyRequest'
+      responses:
+        '200':
+          description: Data App API key created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataAppApiKey'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /dataApps/{dataAppId}/deployments:
+    get:
+      operationId: listDeployments
+      summary: List deployments
+      description: >-
+        Returns a paginated list of deployment records for a Data App. Each
+        deployment captures a versioned snapshot of the Data App's endpoints
+        at the time of deployment, enabling rollback and audit of configuration
+        changes.
+      tags:
+        - Deployments
+      parameters:
+        - $ref: '#/components/parameters/dataAppId'
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/pageToken'
+      responses:
+        '200':
+          description: A paginated list of deployments.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListDeploymentsResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      operationId: createDeployment
+      summary: Create a deployment
+      description: >-
+        Deploys the current configuration of a Data App, making all defined
+        endpoints live. Creates an immutable deployment record that can be
+        referenced for rollback. Endpoints are not publicly accessible until
+        a successful deployment is created.
+      tags:
+        - Deployments
+      parameters:
+        - $ref: '#/components/parameters/dataAppId'
+      responses:
+        '200':
+          description: Data App deployed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Deployment'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /dataApps/{dataAppId}/apiSpec:
+    get:
+      operationId: getDataAppApiSpec
+      summary: Get OpenAPI specification
+      description: >-
+        Returns the OpenAPI 3.0 specification for all endpoints defined within
+        a Data App. The specification can be returned in JSON or YAML format
+        by setting the Accept header accordingly. Use this spec to generate
+        client SDKs, import into API testing tools, or publish API documentation.
+      tags:
+        - Data Apps
+      parameters:
+        - $ref: '#/components/parameters/dataAppId'
+      responses:
+        '200':
+          description: OpenAPI specification retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: The OpenAPI 3.0 specification document as a JSON object.
+            application/yaml:
+              schema:
+                type: string
+                description: The OpenAPI 3.0 specification document as a YAML string.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  securitySchemes:
+    digestAuth:
+      type: http
+      scheme: digest
+      description: >-
+        HTTP Digest Authentication using a TiDB Cloud organization API public key
+        as the username and private key as the password. Keys are generated in
+        the TiDB Cloud console under Organization Settings > API Keys.
+  parameters:
+    dataAppId:
+      name: dataAppId
+      in: path
+      description: The unique identifier of the Data App.
+      required: true
+      schema:
+        type: string
+    clusterId:
+      name: clusterId
+      in: path
+      description: The unique identifier of the TiDB Cloud cluster used as a data source.
+      required: true
+      schema:
+        type: string
+    pageSize:
+      name: pageSize
+      in: query
+      description: Maximum number of results to return per page. Default is 100, maximum is 100.
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 100
+    pageToken:
+      name: pageToken
+      in: query
+      description: Pagination token returned from a previous list request to retrieve the next page.
+      required: false
+      schema:
+        type: string
+  responses:
+    BadRequest:
+      description: The request body or parameters are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Authentication failed. Check your API key credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    RateLimitExceeded:
+      description: Rate limit exceeded. The API allows 100 requests per minute.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    DataApp:
+      type: object
+      description: A TiDB Cloud Data App containing custom SQL-backed API endpoints.
+      properties:
+        dataAppId:
+          type: string
+          description: The unique identifier of the Data App.
+        displayName:
+          type: string
+          description: The human-readable display name of the Data App.
+        description:
+          type: string
+          description: A description of the Data App's purpose.
+        region:
+          type: string
+          description: The cloud region where this Data App is deployed.
+        createTime:
+          type: string
+          format: date-time
+          description: The timestamp when the Data App was created.
+        updateTime:
+          type: string
+          format: date-time
+          description: The timestamp when the Data App was last modified.
+    CreateDataAppRequest:
+      type: object
+      description: Request body for creating a new Data App.
+      required:
+        - displayName
+      properties:
+        displayName:
+          type: string
+          description: The display name for the new Data App.
+        description:
+          type: string
+          description: An optional description of the Data App.
+        clusterId:
+          type: string
+          description: An optional cluster ID to link as the initial data source.
+    UpdateDataAppRequest:
+      type: object
+      description: Request body for updating an existing Data App.
+      properties:
+        displayName:
+          type: string
+          description: The new display name for the Data App.
+        description:
+          type: string
+          description: The new description for the Data App.
+    ListDataAppsResponse:
+      type: object
+      description: Paginated list of Data Apps.
+      properties:
+        dataApps:
+          type: array
+          description: The list of Data App objects on this page.
+          items:
+            $ref: '#/components/schemas/DataApp'
+        nextPageToken:
+          type: string
+          description: Token to retrieve the next page of results.
+    DataSource:
+      type: object
+      description: A TiDB Cloud cluster linked as a data source within a Data App.
+      properties:
+        clusterId:
+          type: string
+          description: The unique identifier of the linked cluster.
+        clusterName:
+          type: string
+          description: The display name of the linked cluster.
+        clusterType:
+          type: string
+          description: The type of cluster (SERVERLESS or DEDICATED).
+    CreateDataSourceRequest:
+      type: object
+      description: Request body for linking a cluster as a data source.
+      required:
+        - clusterId
+      properties:
+        clusterId:
+          type: string
+          description: The unique identifier of the TiDB Cloud cluster to link.
+    ListDataSourcesResponse:
+      type: object
+      description: List of data sources for a Data App.
+      properties:
+        dataSources:
+          type: array
+          description: The list of linked data source objects.
+          items:
+            $ref: '#/components/schemas/DataSource'
+    Endpoint:
+      type: object
+      description: A custom SQL-backed API endpoint within a Data App.
+      properties:
+        name:
+          type: string
+          description: The resource name of the endpoint.
+        displayName:
+          type: string
+          description: The human-readable display name for the endpoint.
+        description:
+          type: string
+          description: A description of what the endpoint does.
+        path:
+          type: string
+          description: The URL path for the endpoint (e.g., /users/{id}).
+        method:
+          type: string
+          description: The HTTP method for the endpoint.
+          enum:
+            - GET
+            - POST
+            - PUT
+            - DELETE
+        clusterId:
+          type: string
+          description: The ID of the cluster this endpoint runs queries against.
+        sqlTemplate:
+          type: string
+          description: The SQL template executed when the endpoint is called. Supports parameter substitution.
+        tag:
+          type: string
+          description: A label for grouping related endpoints.
+        settings:
+          $ref: '#/components/schemas/EndpointSettings'
+        params:
+          type: array
+          description: The list of parameters accepted by this endpoint.
+          items:
+            $ref: '#/components/schemas/EndpointParameter'
+    EndpointSettings:
+      type: object
+      description: Configuration settings for an endpoint's behavior.
+      properties:
+        timeout:
+          type: integer
+          description: The maximum execution time in milliseconds before the endpoint returns a timeout error.
+        rowLimit:
+          type: integer
+          description: The maximum number of rows returned by a single endpoint call.
+        cacheEnabled:
+          type: boolean
+          description: Whether response caching is enabled for this endpoint.
+        cacheTtl:
+          type: integer
+          description: The time-to-live for cached responses in seconds.
+        paginationEnabled:
+          type: boolean
+          description: Whether cursor-based pagination is enabled for this endpoint.
+    EndpointParameter:
+      type: object
+      description: A parameter definition for a Data App endpoint.
+      properties:
+        name:
+          type: string
+          description: The parameter name as referenced in the SQL template.
+        type:
+          type: string
+          description: The data type of the parameter.
+          enum:
+            - STRING
+            - INTEGER
+            - NUMBER
+            - BOOLEAN
+            - ARRAY
+        required:
+          type: boolean
+          description: Whether this parameter must be provided when calling the endpoint.
+        defaultValue:
+          type: string
+          description: The default value used when the parameter is not provided.
+    CreateEndpointRequest:
+      type: object
+      description: Request body for creating a new endpoint within a Data App.
+      required:
+        - displayName
+        - path
+        - method
+        - clusterId
+        - sqlTemplate
+      properties:
+        displayName:
+          type: string
+          description: The display name for the new endpoint.
+        description:
+          type: string
+          description: An optional description of the endpoint.
+        path:
+          type: string
+          description: The URL path for the endpoint.
+        method:
+          type: string
+          description: The HTTP method for the endpoint.
+          enum:
+            - GET
+            - POST
+            - PUT
+            - DELETE
+        clusterId:
+          type: string
+          description: The ID of the cluster this endpoint queries.
+        sqlTemplate:
+          type: string
+          description: The SQL template to execute when the endpoint is called.
+        tag:
+          type: string
+          description: An optional label for grouping the endpoint.
+        settings:
+          $ref: '#/components/schemas/EndpointSettings'
+        params:
+          type: array
+          description: Parameter definitions for this endpoint.
+          items:
+            $ref: '#/components/schemas/EndpointParameter'
+    ListEndpointsResponse:
+      type: object
+      description: Paginated list of endpoints in a Data App.
+      properties:
+        endpoints:
+          type: array
+          description: The list of endpoint objects on this page.
+          items:
+            $ref: '#/components/schemas/Endpoint'
+        nextPageToken:
+          type: string
+          description: Token to retrieve the next page of results.
+    DataAppApiKey:
+      type: object
+      description: An API key scoped to a specific Data App for authenticating endpoint calls.
+      properties:
+        apiKeyId:
+          type: string
+          description: The unique identifier of the Data App API key.
+        publicKey:
+          type: string
+          description: The public key used as the username in Digest Authentication.
+        privateKey:
+          type: string
+          description: The private key used as the password. Only returned at creation time.
+        description:
+          type: string
+          description: A human-readable description for the API key.
+        role:
+          type: string
+          description: The permission role assigned to the key.
+          enum:
+            - READ_ONLY
+            - READ_AND_WRITE
+        rateLimitRpm:
+          type: integer
+          description: The rate limit in requests per minute for this key.
+          minimum: 1
+          maximum: 1000
+    CreateDataAppApiKeyRequest:
+      type: object
+      description: Request body for creating a new Data App API key.
+      required:
+        - role
+      properties:
+        description:
+          type: string
+          description: A description for the new API key.
+        role:
+          type: string
+          description: The permission role for the API key.
+          enum:
+            - READ_ONLY
+            - READ_AND_WRITE
+        rateLimitRpm:
+          type: integer
+          description: Rate limit in requests per minute.
+          minimum: 1
+          maximum: 1000
+    ListDataAppApiKeysResponse:
+      type: object
+      description: List of API keys for a Data App.
+      properties:
+        apiKeys:
+          type: array
+          description: The list of Data App API key objects.
+          items:
+            $ref: '#/components/schemas/DataAppApiKey'
+        nextPageToken:
+          type: string
+          description: Token to retrieve the next page of results.
+    Deployment:
+      type: object
+      description: A versioned deployment of a Data App.
+      properties:
+        deploymentId:
+          type: string
+          description: The unique identifier of this deployment.
+        dataAppId:
+          type: string
+          description: The ID of the Data App that was deployed.
+        status:
+          type: string
+          description: The status of the deployment.
+          enum:
+            - PENDING
+            - RUNNING
+            - SUCCEEDED
+            - FAILED
+        createTime:
+          type: string
+          format: date-time
+          description: The timestamp when the deployment was created.
+    ListDeploymentsResponse:
+      type: object
+      description: Paginated list of deployments for a Data App.
+      properties:
+        deployments:
+          type: array
+          description: The list of deployment objects on this page.
+          items:
+            $ref: '#/components/schemas/Deployment'
+        nextPageToken:
+          type: string
+          description: Token to retrieve the next page of results.
+    ErrorResponse:
+      type: object
+      description: Standard error response returned when an API request fails.
+      properties:
+        code:
+          type: integer
+          description: The HTTP status code of the error.
+        status:
+          type: string
+          description: The error status string.
+        error:
+          type: string
+          description: A machine-readable error code identifier.
+        message:
+          type: string
+          description: A human-readable error message describing the failure.

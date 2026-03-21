@@ -1,0 +1,967 @@
+openapi: 3.1.0
+info:
+  title: TiDB HTTP API
+  description: >-
+    The TiDB HTTP API is a built-in administrative interface available on
+    self-managed TiDB server instances, accessible on port 10080 by default.
+    It exposes endpoints for retrieving server status, database and table schema
+    information, region metadata, MVCC key details, DDL job history, hot region
+    data, and server configuration. Operators and monitoring systems use this API
+    to inspect the internal state of a running TiDB node, integrate with
+    observability tooling, and troubleshoot distributed SQL execution. The API
+    does not require authentication by default and is intended for use within
+    trusted internal networks. The port can be configured in tidb.toml via the
+    status.status-port setting.
+  version: '1.0'
+  contact:
+    name: TiDB GitHub
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  termsOfService: https://www.apache.org/licenses/LICENSE-2.0
+externalDocs:
+  description: TiDB HTTP API Reference
+  url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+servers:
+  - url: http://localhost:10080
+    description: Local TiDB Node (default status port)
+tags:
+  - name: Status
+    description: Endpoints for retrieving the operational status of the TiDB server instance.
+  - name: Schema
+    description: Endpoints for retrieving database and table schema information from the TiDB information schema.
+  - name: Regions
+    description: Endpoints for retrieving TiKV region metadata associated with tables and the cluster.
+  - name: MVCC
+    description: Endpoints for retrieving multi-version concurrency control (MVCC) key details for debugging.
+  - name: DDL
+    description: Endpoints for managing and inspecting DDL jobs, including ownership and history.
+  - name: Settings
+    description: Endpoints for retrieving and modifying TiDB server runtime settings.
+  - name: Statistics
+    description: Endpoints for exporting optimizer statistics used for query planning.
+  - name: Diagnostics
+    description: Endpoints for downloading debug information and managing server diagnostics.
+paths:
+  /status:
+    get:
+      operationId: getServerStatus
+      summary: Get server status
+      description: >-
+        Returns the current operational status of the TiDB server instance,
+        including the number of active connections, the TiDB version string, and
+        the git commit hash of the binary. This endpoint is commonly used by load
+        balancers and health check systems to verify that the TiDB process is
+        running and accepting connections.
+      tags:
+        - Status
+      responses:
+        '200':
+          description: Server status retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerStatus'
+  /metrics:
+    get:
+      operationId: getMetrics
+      summary: Get Prometheus metrics
+      description: >-
+        Returns all Prometheus-format performance metrics for the TiDB server
+        instance. This endpoint is consumed by Prometheus scrape jobs to collect
+        TiDB-specific metrics including query latency, error rates, connection
+        pool utilization, and internal component performance counters.
+      tags:
+        - Status
+      responses:
+        '200':
+          description: Prometheus metrics returned in text exposition format.
+          content:
+            text/plain:
+              schema:
+                type: string
+                description: Prometheus text format metrics output.
+  /info:
+    get:
+      operationId: getServerInfo
+      summary: Get server information
+      description: >-
+        Returns detailed information about the TiDB server instance including
+        version, IP address, listening port, status port, and the git hash of
+        the binary. This endpoint is useful for service discovery and identifying
+        specific nodes in a TiDB cluster.
+      tags:
+        - Status
+      responses:
+        '200':
+          description: Server information retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerInfo'
+  /info/all:
+    get:
+      operationId: getAllServersInfo
+      summary: Get all cluster server information
+      description: >-
+        Returns information about all TiDB server instances in the cluster as
+        registered with the Placement Driver (PD). This provides a cluster-wide
+        view of all running TiDB nodes and their connection endpoints.
+      tags:
+        - Status
+      responses:
+        '200':
+          description: All TiDB server information retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AllServersInfo'
+  /schema:
+    get:
+      operationId: getAllSchemas
+      summary: Get all database schemas
+      description: >-
+        Returns schema information for all databases known to this TiDB instance.
+        The response includes table names, column definitions, and index
+        information as represented in the TiDB information schema.
+      tags:
+        - Schema
+      responses:
+        '200':
+          description: All database schemas retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DatabaseSchema'
+  /schema/{db}:
+    get:
+      operationId: getDatabaseSchema
+      summary: Get database schema
+      description: >-
+        Returns schema information for all tables in the specified database.
+        Optionally set id_name_only to true to return only table IDs and names
+        without the full column and index details, which is faster for large
+        schemas.
+      tags:
+        - Schema
+      parameters:
+        - $ref: '#/components/parameters/db'
+        - name: id_name_only
+          in: query
+          description: If true, returns only table IDs and names without full schema details.
+          required: false
+          schema:
+            type: boolean
+      responses:
+        '200':
+          description: Database schema retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TableSchema'
+        '404':
+          description: The specified database was not found.
+  /schema/{db}/{table}:
+    get:
+      operationId: getTableSchema
+      summary: Get table schema
+      description: >-
+        Returns the full schema definition for the specified table, including all
+        column names, types, default values, and index definitions. Can also
+        look up a table by numeric table_id or multiple table_ids for batch
+        retrieval.
+      tags:
+        - Schema
+      parameters:
+        - $ref: '#/components/parameters/db'
+        - $ref: '#/components/parameters/table'
+        - name: table_id
+          in: query
+          description: Optional numeric table ID for lookup by ID instead of name.
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Table schema retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableSchema'
+        '404':
+          description: The specified database or table was not found.
+  /db-table/{tableID}:
+    get:
+      operationId: getTableByID
+      summary: Get table info by table ID
+      description: >-
+        Returns database information, table information, and the current TiDB
+        info schema version for a specific table identified by its numeric table
+        ID. This is useful for reverse lookups when you have a table ID from
+        region information but need the associated database and table names.
+      tags:
+        - Schema
+      parameters:
+        - name: tableID
+          in: path
+          description: The numeric TiDB internal table ID.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Table information retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableByIDResponse'
+        '404':
+          description: No table with the specified ID was found.
+  /regions/meta:
+    get:
+      operationId: listRegionsMeta
+      summary: List all regions metadata
+      description: >-
+        Returns the metadata for all TiKV regions known to this TiDB instance.
+        Each region entry includes region ID, start and end keys, epoch
+        information, and peer assignments. This endpoint is primarily used for
+        cluster topology inspection and debugging region distribution issues.
+      tags:
+        - Regions
+      responses:
+        '200':
+          description: Region metadata retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/RegionMeta'
+  /regions/hot:
+    get:
+      operationId: getHotRegions
+      summary: Get hot regions
+      description: >-
+        Returns the top hot read and write regions for each TiKV store, along
+        with the associated table and index names. This endpoint is used for
+        identifying hotspot issues in data access patterns, which can cause
+        uneven load distribution across TiKV nodes.
+      tags:
+        - Regions
+      responses:
+        '200':
+          description: Hot regions data retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HotRegions'
+  /regions/{regionID}:
+    get:
+      operationId: getRegionByID
+      summary: Get a region
+      description: >-
+        Returns detailed information about a specific TiKV region identified by
+        its numeric region ID. Includes peer locations, epoch, and the associated
+        frame information mapping the region to TiDB tables and indexes.
+      tags:
+        - Regions
+      parameters:
+        - name: regionID
+          in: path
+          description: The numeric TiKV region ID.
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Region information retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RegionInfo'
+        '404':
+          description: No region with the specified ID was found.
+  /tables/{db}/{table}/regions:
+    get:
+      operationId: getTableRegions
+      summary: Get table regions
+      description: >-
+        Returns the list of TiKV regions that store data for a specific TiDB
+        table. Each region entry includes the region ID, start key, end key,
+        leader peer, and follower peers. Use this endpoint to understand the
+        physical data layout of a table across TiKV stores.
+      tags:
+        - Regions
+      parameters:
+        - $ref: '#/components/parameters/db'
+        - $ref: '#/components/parameters/table'
+      responses:
+        '200':
+          description: Table regions retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableRegions'
+        '404':
+          description: The specified database or table was not found.
+  /tables/{db}/{table}/scatter:
+    post:
+      operationId: scatterTableRegions
+      summary: Scatter table regions
+      description: >-
+        Initiates region scatter for the specified table, redistributing its
+        TiKV regions across stores to improve data balance. This is typically
+        used after bulk data loads that may have caused uneven region distribution.
+      tags:
+        - Regions
+      parameters:
+        - $ref: '#/components/parameters/db'
+        - $ref: '#/components/parameters/table'
+      responses:
+        '200':
+          description: Region scatter initiated successfully.
+        '404':
+          description: The specified database or table was not found.
+  /mvcc/key/{db}/{table}/{handle}:
+    get:
+      operationId: getMvccByHandle
+      summary: Get MVCC info by row handle
+      description: >-
+        Returns multi-version concurrency control (MVCC) information for the key
+        corresponding to the specified row handle in a table. Shows all versions
+        of the key across transactions, including start timestamp, commit
+        timestamp, and value. Used for debugging transaction conflicts and
+        stale data issues.
+      tags:
+        - MVCC
+      parameters:
+        - $ref: '#/components/parameters/db'
+        - $ref: '#/components/parameters/table'
+        - name: handle
+          in: path
+          description: The row handle (primary key value or internal row ID) for the target row.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: MVCC information retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MvccInfo'
+        '404':
+          description: The specified database, table, or handle was not found.
+  /mvcc/hex/{hexKey}:
+    get:
+      operationId: getMvccByHexKey
+      summary: Get MVCC info by hex key
+      description: >-
+        Returns MVCC information for a key specified as a hexadecimal string.
+        This endpoint is used when you have the raw encoded key from TiKV region
+        information and need to look up the MVCC history for that specific key.
+      tags:
+        - MVCC
+      parameters:
+        - name: hexKey
+          in: path
+          description: The raw key encoded as a hexadecimal string.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: MVCC information retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MvccInfo'
+  /ddl/history:
+    get:
+      operationId: getDdlHistory
+      summary: Get DDL job history
+      description: >-
+        Returns the history of DDL (Data Definition Language) jobs executed on
+        the cluster, such as CREATE TABLE, ALTER TABLE, DROP INDEX, and similar
+        schema change operations. Results are paginated using start_job_id and
+        limit parameters. DDL history is useful for auditing schema changes and
+        diagnosing failed schema modifications.
+      tags:
+        - DDL
+      parameters:
+        - name: start_job_id
+          in: query
+          description: The DDL job ID to start listing from, for pagination.
+          required: false
+          schema:
+            type: integer
+        - name: limit
+          in: query
+          description: Maximum number of DDL job history records to return.
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: DDL job history retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DdlJob'
+  /ddl/owner/resign:
+    post:
+      operationId: resignDdlOwner
+      summary: Resign DDL owner
+      description: >-
+        Forces the current TiDB server to resign its role as the DDL owner,
+        triggering a new DDL owner election among all TiDB servers in the cluster.
+        Only one TiDB server is the DDL owner at any time and is responsible for
+        executing schema change jobs. Use this endpoint when the current DDL owner
+        is experiencing issues.
+      tags:
+        - DDL
+      responses:
+        '200':
+          description: DDL owner resignation initiated successfully.
+  /settings:
+    get:
+      operationId: getSettings
+      summary: Get server settings
+      description: >-
+        Returns the current runtime settings of the TiDB server instance,
+        including log level, general log status, and DDL slow threshold. These
+        settings can be modified without restarting the server via the POST method
+        of this endpoint.
+      tags:
+        - Settings
+      responses:
+        '200':
+          description: Server settings retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ServerSettings'
+    post:
+      operationId: updateSettings
+      summary: Update server settings
+      description: >-
+        Modifies one or more runtime settings of the TiDB server without
+        requiring a restart. Supports updating general_log to enable or disable
+        the general query log, log_level to change the server log verbosity, and
+        ddl_slow_threshold to adjust the DDL slow operation threshold in
+        milliseconds.
+      tags:
+        - Settings
+      requestBody:
+        required: true
+        content:
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/UpdateSettingsRequest'
+      responses:
+        '200':
+          description: Server settings updated successfully.
+        '400':
+          description: Invalid setting name or value provided.
+  /stats/dump/{db}/{table}:
+    get:
+      operationId: dumpTableStats
+      summary: Dump table statistics
+      description: >-
+        Returns the optimizer statistics for the specified table in JSON format.
+        Statistics include histogram data, count-min sketch approximations, and
+        correlation coefficients used by the TiDB query optimizer when generating
+        execution plans. Optionally specify a timestamp to retrieve historical
+        statistics.
+      tags:
+        - Statistics
+      parameters:
+        - $ref: '#/components/parameters/db'
+        - $ref: '#/components/parameters/table'
+        - name: timestamp
+          in: query
+          description: Optional Unix timestamp to retrieve historical statistics at a specific point in time.
+          required: false
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Table statistics dumped successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableStats'
+        '404':
+          description: The specified database or table was not found.
+  /debug/zip:
+    get:
+      operationId: downloadDebugZip
+      summary: Download debug info zip
+      description: >-
+        Returns a zip archive containing TiDB debug information useful for
+        diagnosing production issues. The archive includes heap profile, CPU
+        profile, goroutine dump, and configuration information collected over the
+        specified number of seconds. This endpoint is used when filing bug reports
+        or investigating performance problems with PingCAP support.
+      tags:
+        - Diagnostics
+      parameters:
+        - name: seconds
+          in: query
+          description: Number of seconds to collect CPU profile and goroutine data before packaging.
+          required: false
+          schema:
+            type: integer
+            default: 10
+      responses:
+        '200':
+          description: Debug zip archive returned successfully.
+          content:
+            application/zip:
+              schema:
+                type: string
+                format: binary
+                description: A zip file containing debug information.
+components:
+  parameters:
+    db:
+      name: db
+      in: path
+      description: The database name.
+      required: true
+      schema:
+        type: string
+    table:
+      name: table
+      in: path
+      description: The table name within the specified database.
+      required: true
+      schema:
+        type: string
+  schemas:
+    ServerStatus:
+      type: object
+      description: Current operational status of the TiDB server instance.
+      properties:
+        connections:
+          type: integer
+          description: The number of currently active client connections.
+        version:
+          type: string
+          description: The TiDB server version string.
+        git_hash:
+          type: string
+          description: The git commit hash of the running TiDB binary.
+    ServerInfo:
+      type: object
+      description: Detailed information about the TiDB server instance.
+      properties:
+        ddl_id:
+          type: string
+          description: The unique DDL identifier for this TiDB node.
+        ip:
+          type: string
+          description: The IP address of this TiDB node.
+        listening_port:
+          type: integer
+          description: The SQL connection port this node listens on.
+        status_port:
+          type: integer
+          description: The HTTP status port this node listens on.
+        lease:
+          type: string
+          description: The schema lease duration string.
+        binlog_status:
+          type: string
+          description: The current binlog pump connection status.
+        start_timestamp:
+          type: integer
+          description: The Unix timestamp when this TiDB server started.
+        git_hash:
+          type: string
+          description: The git commit hash of the TiDB binary.
+        is_owner:
+          type: boolean
+          description: Whether this TiDB node is the current DDL owner.
+        op_scope_level:
+          type: integer
+          description: The scope level for this server's operational range.
+    AllServersInfo:
+      type: object
+      description: Information about all TiDB nodes in the cluster.
+      properties:
+        servers_num:
+          type: integer
+          description: The total number of TiDB servers in the cluster.
+        owner_id:
+          type: string
+          description: The DDL ID of the current DDL owner node.
+        is_all_server_version_consistent:
+          type: boolean
+          description: Whether all TiDB servers are running the same version.
+        all_servers_info:
+          type: object
+          description: A map of server DDL IDs to their ServerInfo objects.
+          additionalProperties:
+            $ref: '#/components/schemas/ServerInfo'
+    DatabaseSchema:
+      type: object
+      description: Schema information for a TiDB database.
+      properties:
+        db_name:
+          $ref: '#/components/schemas/CIStr'
+        charset:
+          type: string
+          description: The character set of the database.
+        collate:
+          type: string
+          description: The collation of the database.
+    TableSchema:
+      type: object
+      description: Schema information for a TiDB table.
+      properties:
+        id:
+          type: integer
+          description: The internal numeric TiDB table ID.
+        name:
+          $ref: '#/components/schemas/CIStr'
+        charset:
+          type: string
+          description: The character set of the table.
+        collate:
+          type: string
+          description: The collation of the table.
+        cols:
+          type: array
+          description: The list of column definitions in the table.
+          items:
+            $ref: '#/components/schemas/ColumnInfo'
+        index_info:
+          type: array
+          description: The list of index definitions on the table.
+          items:
+            $ref: '#/components/schemas/IndexInfo'
+    ColumnInfo:
+      type: object
+      description: A column definition within a TiDB table schema.
+      properties:
+        id:
+          type: integer
+          description: The internal numeric column ID.
+        name:
+          $ref: '#/components/schemas/CIStr'
+        field_type:
+          type: object
+          description: The MySQL field type descriptor for this column.
+    IndexInfo:
+      type: object
+      description: An index definition on a TiDB table.
+      properties:
+        id:
+          type: integer
+          description: The internal numeric index ID.
+        idx_name:
+          $ref: '#/components/schemas/CIStr'
+        tbl_name:
+          $ref: '#/components/schemas/CIStr'
+        idx_cols:
+          type: array
+          description: The columns included in this index.
+          items:
+            type: object
+        is_unique:
+          type: boolean
+          description: Whether this is a unique index.
+        is_primary:
+          type: boolean
+          description: Whether this is the primary key index.
+    CIStr:
+      type: object
+      description: A case-insensitive string pair used in TiDB schema objects.
+      properties:
+        O:
+          type: string
+          description: The original case-preserved string value.
+        L:
+          type: string
+          description: The lowercase version of the string.
+    TableByIDResponse:
+      type: object
+      description: Database and table information looked up by table ID.
+      properties:
+        db_info:
+          $ref: '#/components/schemas/DatabaseSchema'
+        table_info:
+          $ref: '#/components/schemas/TableSchema'
+    RegionMeta:
+      type: object
+      description: Metadata about a TiKV region.
+      properties:
+        region_id:
+          type: integer
+          description: The unique numeric identifier of the region.
+        start_key:
+          type: string
+          description: The encoded start key of the region's key range.
+        end_key:
+          type: string
+          description: The encoded end key of the region's key range.
+        frames:
+          type: array
+          description: The frame mappings associating this region with TiDB tables and indexes.
+          items:
+            $ref: '#/components/schemas/RegionFrame'
+    RegionFrame:
+      type: object
+      description: A mapping from a TiKV region to a TiDB table or index.
+      properties:
+        db_name:
+          type: string
+          description: The database name associated with this region.
+        table_name:
+          type: string
+          description: The table name associated with this region.
+        table_id:
+          type: integer
+          description: The numeric table ID associated with this region.
+        is_record:
+          type: boolean
+          description: Whether this region stores row data (as opposed to index data).
+        record_id:
+          type: integer
+          description: The record ID range start if this region stores row data.
+        index_name:
+          type: string
+          description: The index name if this region stores index data.
+        index_id:
+          type: integer
+          description: The numeric index ID if this region stores index data.
+    HotRegions:
+      type: object
+      description: Hot read and write region data across all TiKV stores.
+      properties:
+        as_peer:
+          type: array
+          description: Hot regions where the local store is a follower peer.
+          items:
+            $ref: '#/components/schemas/HotRegionStore'
+        as_leader:
+          type: array
+          description: Hot regions where the local store is the leader.
+          items:
+            $ref: '#/components/schemas/HotRegionStore'
+    HotRegionStore:
+      type: object
+      description: Hot region data for a specific TiKV store.
+      properties:
+        store_id:
+          type: integer
+          description: The numeric TiKV store ID.
+        hot_region_list:
+          type: array
+          description: The list of hot regions for this store.
+          items:
+            $ref: '#/components/schemas/HotRegion'
+    HotRegion:
+      type: object
+      description: A hot region with throughput statistics.
+      properties:
+        region_id:
+          type: integer
+          description: The region ID.
+        flow_bytes:
+          type: number
+          description: The data throughput through this region in bytes per second.
+    RegionInfo:
+      type: object
+      description: Detailed information about a specific TiKV region.
+      properties:
+        id:
+          type: integer
+          description: The unique numeric region ID.
+        start_key:
+          type: string
+          description: The encoded start key of the region.
+        end_key:
+          type: string
+          description: The encoded end key of the region.
+        frames:
+          type: array
+          description: The TiDB table/index mappings for this region.
+          items:
+            $ref: '#/components/schemas/RegionFrame'
+    TableRegions:
+      type: object
+      description: Region distribution information for a TiDB table.
+      properties:
+        table_name:
+          type: string
+          description: The name of the table.
+        table_id:
+          type: integer
+          description: The numeric table ID.
+        record_regions:
+          type: array
+          description: The regions storing row data for this table.
+          items:
+            $ref: '#/components/schemas/RegionDetail'
+        indices:
+          type: array
+          description: The index regions for this table.
+          items:
+            $ref: '#/components/schemas/IndexRegions'
+    RegionDetail:
+      type: object
+      description: Details about a specific TiKV region hosting table or index data.
+      properties:
+        region_id:
+          type: integer
+          description: The region ID.
+        leader:
+          $ref: '#/components/schemas/RegionPeer'
+        peers:
+          type: array
+          description: All peer nodes for this region.
+          items:
+            $ref: '#/components/schemas/RegionPeer'
+        start_key:
+          type: string
+          description: The encoded start key of this region.
+        end_key:
+          type: string
+          description: The encoded end key of this region.
+    IndexRegions:
+      type: object
+      description: Region information for a specific table index.
+      properties:
+        name:
+          type: string
+          description: The index name.
+        id:
+          type: integer
+          description: The numeric index ID.
+        regions:
+          type: array
+          description: The regions holding data for this index.
+          items:
+            $ref: '#/components/schemas/RegionDetail'
+    RegionPeer:
+      type: object
+      description: A peer replica of a TiKV region.
+      properties:
+        id:
+          type: integer
+          description: The peer ID.
+        store_id:
+          type: integer
+          description: The TiKV store ID where this peer is hosted.
+    MvccInfo:
+      type: object
+      description: MVCC version history for a TiKV key.
+      properties:
+        key:
+          type: string
+          description: The hexadecimal-encoded key.
+        mvcc:
+          type: object
+          description: The MVCC data for this key.
+          properties:
+            info:
+              type: object
+              description: Raw MVCC information including lock, writes, and values.
+    DdlJob:
+      type: object
+      description: A DDL job record from TiDB's schema change history.
+      properties:
+        id:
+          type: integer
+          description: The unique numeric DDL job ID.
+        type:
+          type: string
+          description: The DDL job type (e.g., create table, add index, drop column).
+        schema_id:
+          type: integer
+          description: The ID of the database schema affected by this DDL job.
+        table_id:
+          type: integer
+          description: The ID of the table affected by this DDL job.
+        schema_name:
+          type: string
+          description: The database name affected by this DDL job.
+        table_name:
+          type: string
+          description: The table name affected by this DDL job.
+        state:
+          type: string
+          description: The current state of the DDL job (done, synced, cancelled, etc.).
+        start_time:
+          type: integer
+          description: The Unix timestamp when the DDL job started.
+        error:
+          type: string
+          description: Error message if the DDL job failed.
+    ServerSettings:
+      type: object
+      description: Current runtime settings of the TiDB server.
+      properties:
+        general_log:
+          type: boolean
+          description: Whether the general query log is enabled.
+        log_level:
+          type: string
+          description: The current log verbosity level (debug, info, warn, error).
+        ddl_slow_threshold:
+          type: integer
+          description: The threshold in milliseconds for logging slow DDL operations.
+    UpdateSettingsRequest:
+      type: object
+      description: Request body for updating TiDB server runtime settings.
+      properties:
+        tidb_general_log:
+          type: integer
+          description: Set to 1 to enable general query logging, 0 to disable.
+          enum:
+            - 0
+            - 1
+        log_level:
+          type: string
+          description: The new log level (debug, info, warn, error, fatal).
+          enum:
+            - debug
+            - info
+            - warn
+            - error
+            - fatal
+        ddl_slow_threshold:
+          type: integer
+          description: New DDL slow threshold in milliseconds.
+    TableStats:
+      type: object
+      description: Optimizer statistics for a TiDB table.
+      properties:
+        database:
+          type: string
+          description: The database name.
+        table_name:
+          type: string
+          description: The table name.
+        columns:
+          type: object
+          description: A map of column names to their statistical histogram data.
+          additionalProperties:
+            type: object
+        indices:
+          type: object
+          description: A map of index names to their statistical data.
+          additionalProperties:
+            type: object
+        count:
+          type: integer
+          description: The estimated total row count for the table.
+        modify_count:
+          type: integer
+          description: The number of row modifications since the last statistics collection.

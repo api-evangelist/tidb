@@ -1,0 +1,339 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://pingcap.com/schemas/tidb/cluster.json",
+  "title": "TiDB Cloud Cluster",
+  "description": "Schema representing a TiDB Cloud cluster resource, including Dedicated and Serverless variants. Captures the configuration, component specifications, connection details, and operational state of a cluster as managed through the TiDB Cloud API.",
+  "type": "object",
+  "required": ["clusterId", "displayName", "cloudProvider", "regionId", "state"],
+  "properties": {
+    "clusterId": {
+      "type": "string",
+      "description": "The unique identifier assigned to the cluster by TiDB Cloud."
+    },
+    "displayName": {
+      "type": "string",
+      "description": "The human-readable display name of the cluster.",
+      "minLength": 1,
+      "maxLength": 64
+    },
+    "clusterType": {
+      "type": "string",
+      "description": "The cluster tier type.",
+      "enum": ["DEDICATED", "SERVERLESS"]
+    },
+    "cloudProvider": {
+      "type": "string",
+      "description": "The cloud provider hosting the cluster.",
+      "enum": ["AWS", "GCP", "AZURE"]
+    },
+    "regionId": {
+      "type": "string",
+      "description": "The cloud region identifier where the cluster is deployed (e.g., us-east-1 for AWS)."
+    },
+    "projectId": {
+      "type": "string",
+      "description": "The TiDB Cloud project ID this cluster belongs to."
+    },
+    "tidbVersion": {
+      "type": "string",
+      "description": "The TiDB database version string running on the cluster (e.g., v7.5.0).",
+      "pattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+"
+    },
+    "state": {
+      "type": "string",
+      "description": "The current operational state of the cluster.",
+      "enum": [
+        "CREATING",
+        "ACTIVE",
+        "PAUSED",
+        "RESUMING",
+        "DELETING",
+        "UPGRADING",
+        "MODIFYING",
+        "IMPORTING"
+      ]
+    },
+    "createTime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The ISO 8601 timestamp when the cluster was created."
+    },
+    "updateTime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "The ISO 8601 timestamp when the cluster was last modified."
+    },
+    "components": {
+      "$ref": "#/$defs/ClusterComponents",
+      "description": "The component node specifications for TiDB, TiKV, and optionally TiFlash."
+    },
+    "connectionStrings": {
+      "$ref": "#/$defs/ConnectionStrings",
+      "description": "The available connection string options for this cluster."
+    },
+    "port": {
+      "type": "integer",
+      "description": "The SQL connection port number for the cluster.",
+      "minimum": 1024,
+      "maximum": 65535,
+      "default": 4000
+    },
+    "labels": {
+      "type": "object",
+      "description": "Optional key-value labels attached to the cluster for organizational purposes.",
+      "additionalProperties": {
+        "type": "string"
+      }
+    }
+  },
+  "$defs": {
+    "ClusterComponents": {
+      "type": "object",
+      "description": "The component configuration for a TiDB Cloud Dedicated cluster.",
+      "properties": {
+        "tidb": {
+          "$ref": "#/$defs/ComputeComponentSpec",
+          "description": "The TiDB compute node configuration."
+        },
+        "tikv": {
+          "$ref": "#/$defs/StorageComponentSpec",
+          "description": "The TiKV storage node configuration."
+        },
+        "tiflash": {
+          "$ref": "#/$defs/StorageComponentSpec",
+          "description": "The optional TiFlash columnar storage node configuration for analytical queries."
+        }
+      }
+    },
+    "ComputeComponentSpec": {
+      "type": "object",
+      "description": "Specification for a stateless TiDB compute node group.",
+      "required": ["nodeSize", "nodeQuantity"],
+      "properties": {
+        "nodeSize": {
+          "type": "string",
+          "description": "The node size key identifying the CPU and memory configuration (e.g., 8C16G)."
+        },
+        "nodeQuantity": {
+          "type": "integer",
+          "description": "The number of TiDB compute nodes in this group.",
+          "minimum": 1
+        },
+        "vcpu": {
+          "type": "integer",
+          "description": "The number of virtual CPU cores per node.",
+          "minimum": 1
+        },
+        "memoryGiB": {
+          "type": "integer",
+          "description": "The amount of memory in GiB per node.",
+          "minimum": 1
+        }
+      }
+    },
+    "StorageComponentSpec": {
+      "type": "object",
+      "description": "Specification for a TiKV or TiFlash storage node group with persistent storage.",
+      "required": ["nodeSize", "nodeQuantity", "storageSize"],
+      "properties": {
+        "nodeSize": {
+          "type": "string",
+          "description": "The node size key identifying the CPU and memory configuration."
+        },
+        "nodeQuantity": {
+          "type": "integer",
+          "description": "The number of storage nodes in this group.",
+          "minimum": 1
+        },
+        "storageSize": {
+          "type": "integer",
+          "description": "The storage capacity per node in GiB.",
+          "minimum": 200
+        },
+        "storageType": {
+          "type": "string",
+          "description": "The storage class type (e.g., Premium, Basic)."
+        }
+      }
+    },
+    "ConnectionStrings": {
+      "type": "object",
+      "description": "The set of available connection string configurations for a cluster.",
+      "properties": {
+        "defaultUser": {
+          "type": "string",
+          "description": "The default database username for this cluster."
+        },
+        "standard": {
+          "$ref": "#/$defs/ConnectionString",
+          "description": "The public internet connection string."
+        },
+        "vpcPeering": {
+          "$ref": "#/$defs/ConnectionString",
+          "description": "The VPC peering connection string for private network access."
+        },
+        "privateEndpoint": {
+          "$ref": "#/$defs/ConnectionString",
+          "description": "The private endpoint connection string."
+        }
+      }
+    },
+    "ConnectionString": {
+      "type": "object",
+      "description": "A connection string specifying the host and port for a cluster.",
+      "required": ["host", "port"],
+      "properties": {
+        "host": {
+          "type": "string",
+          "description": "The hostname or IP address for the connection."
+        },
+        "port": {
+          "type": "integer",
+          "description": "The TCP port number for the connection.",
+          "minimum": 1,
+          "maximum": 65535
+        }
+      }
+    },
+    "ImportTask": {
+      "type": "object",
+      "description": "A data import task that loads external data files into a TiDB Cloud cluster.",
+      "required": ["importId", "clusterId", "sourceType", "state"],
+      "properties": {
+        "importId": {
+          "type": "string",
+          "description": "The unique identifier of the import task."
+        },
+        "clusterId": {
+          "type": "string",
+          "description": "The ID of the cluster receiving the imported data."
+        },
+        "sourceType": {
+          "type": "string",
+          "description": "The source type of the import data.",
+          "enum": ["S3", "GCS", "LOCAL"]
+        },
+        "fileFormat": {
+          "type": "string",
+          "description": "The file format of the import data.",
+          "enum": ["CSV", "SQL", "PARQUET", "AURORA_SNAPSHOT"]
+        },
+        "state": {
+          "type": "string",
+          "description": "The current state of the import task.",
+          "enum": ["PENDING", "RUNNING", "COMPLETED", "FAILED", "CANCELLED"]
+        },
+        "progress": {
+          "type": "number",
+          "description": "The completion percentage of the import task.",
+          "minimum": 0,
+          "maximum": 100
+        },
+        "targetDatabase": {
+          "type": "string",
+          "description": "The target database in the cluster to import data into."
+        },
+        "createTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The ISO 8601 timestamp when the import task was created."
+        },
+        "errorMessage": {
+          "type": "string",
+          "description": "An error message if the import task failed."
+        },
+        "s3Source": {
+          "$ref": "#/$defs/S3Source"
+        }
+      }
+    },
+    "S3Source": {
+      "type": "object",
+      "description": "Configuration for importing data from an AWS S3 bucket.",
+      "required": ["bucketUri"],
+      "properties": {
+        "bucketUri": {
+          "type": "string",
+          "description": "The S3 bucket URI path containing import files (e.g., s3://my-bucket/data/).",
+          "pattern": "^s3://"
+        },
+        "roleArn": {
+          "type": "string",
+          "description": "The AWS IAM Role ARN granting TiDB Cloud read access to the S3 bucket.",
+          "pattern": "^arn:aws:iam::"
+        }
+      }
+    },
+    "ApiKey": {
+      "type": "object",
+      "description": "A TiDB Cloud API key used for authenticating API requests via HTTP Digest Authentication.",
+      "required": ["accessKey", "displayName", "role"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "The resource name of the API key."
+        },
+        "accessKey": {
+          "type": "string",
+          "description": "The public access key used as the username in Digest Authentication."
+        },
+        "secretKey": {
+          "type": "string",
+          "description": "The private secret key used as the password. Only returned at creation time and must be stored securely."
+        },
+        "displayName": {
+          "type": "string",
+          "description": "The human-readable display name for this API key.",
+          "minLength": 1,
+          "maxLength": 64
+        },
+        "role": {
+          "type": "string",
+          "description": "The permission role assigned to this API key (e.g., Organization Owner, Project Viewer)."
+        },
+        "projectId": {
+          "type": "integer",
+          "description": "The project ID this key is scoped to. Zero or absent indicates an organization-level key."
+        }
+      }
+    },
+    "AuditLog": {
+      "type": "object",
+      "description": "A console audit log entry recording an administrative action performed in the TiDB Cloud console.",
+      "required": ["eventType", "operationEmail", "result", "timestamp"],
+      "properties": {
+        "eventType": {
+          "type": "string",
+          "description": "The type of administrative event that was logged."
+        },
+        "operationEmail": {
+          "type": "string",
+          "format": "email",
+          "description": "The email address of the user who performed the action."
+        },
+        "result": {
+          "type": "string",
+          "description": "The outcome of the action.",
+          "enum": ["SUCCESS", "FAILURE"]
+        },
+        "timestamp": {
+          "type": "string",
+          "format": "date-time",
+          "description": "The ISO 8601 timestamp when the event occurred."
+        },
+        "clusterId": {
+          "type": "string",
+          "description": "The cluster ID involved in the event, if applicable."
+        },
+        "projectId": {
+          "type": "string",
+          "description": "The project ID involved in the event, if applicable."
+        },
+        "orgId": {
+          "type": "string",
+          "description": "The organization ID where the event occurred."
+        }
+      }
+    }
+  }
+}

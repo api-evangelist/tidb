@@ -1,0 +1,389 @@
+{
+  "@context": {
+    "@version": 1.1,
+    "tidb": "https://pingcap.com/vocab/tidb/",
+    "schema": "https://schema.org/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "dcterms": "http://purl.org/dc/terms/",
+
+    "Cluster": {
+      "@id": "tidb:Cluster",
+      "@context": {
+        "clusterId": "@id",
+        "displayName": {
+          "@id": "schema:name"
+        },
+        "description": {
+          "@id": "schema:description"
+        },
+        "clusterType": {
+          "@id": "tidb:clusterType"
+        },
+        "cloudProvider": {
+          "@id": "tidb:cloudProvider"
+        },
+        "regionId": {
+          "@id": "tidb:regionId"
+        },
+        "projectId": {
+          "@id": "tidb:projectId"
+        },
+        "tidbVersion": {
+          "@id": "tidb:tidbVersion"
+        },
+        "state": {
+          "@id": "tidb:clusterState"
+        },
+        "port": {
+          "@id": "schema:portNumber",
+          "@type": "xsd:integer"
+        },
+        "createTime": {
+          "@id": "dcterms:created",
+          "@type": "xsd:dateTime"
+        },
+        "updateTime": {
+          "@id": "dcterms:modified",
+          "@type": "xsd:dateTime"
+        },
+        "components": {
+          "@id": "tidb:clusterComponents"
+        },
+        "connectionStrings": {
+          "@id": "tidb:connectionStrings",
+          "@container": "@set"
+        }
+      }
+    },
+
+    "ClusterComponents": {
+      "@id": "tidb:ClusterComponents",
+      "@context": {
+        "tidb": {
+          "@id": "tidb:tidbComponent"
+        },
+        "tikv": {
+          "@id": "tidb:tikvComponent"
+        },
+        "tiflash": {
+          "@id": "tidb:tiflashComponent"
+        }
+      }
+    },
+
+    "ComputeComponentSpec": {
+      "@id": "tidb:ComputeComponentSpec",
+      "@context": {
+        "nodeSize": {
+          "@id": "tidb:nodeSize"
+        },
+        "nodeQuantity": {
+          "@id": "tidb:nodeQuantity",
+          "@type": "xsd:integer"
+        },
+        "vcpu": {
+          "@id": "tidb:vcpu",
+          "@type": "xsd:integer"
+        },
+        "memoryGiB": {
+          "@id": "tidb:memoryGiB",
+          "@type": "xsd:integer"
+        }
+      }
+    },
+
+    "StorageComponentSpec": {
+      "@id": "tidb:StorageComponentSpec",
+      "@context": {
+        "nodeSize": {
+          "@id": "tidb:nodeSize"
+        },
+        "nodeQuantity": {
+          "@id": "tidb:nodeQuantity",
+          "@type": "xsd:integer"
+        },
+        "storageSize": {
+          "@id": "tidb:storageSize",
+          "@type": "xsd:integer"
+        },
+        "storageType": {
+          "@id": "tidb:storageType"
+        }
+      }
+    },
+
+    "ConnectionString": {
+      "@id": "tidb:ConnectionString",
+      "@context": {
+        "host": {
+          "@id": "schema:serverAddress"
+        },
+        "port": {
+          "@id": "schema:portNumber",
+          "@type": "xsd:integer"
+        },
+        "defaultUser": {
+          "@id": "tidb:defaultUser"
+        }
+      }
+    },
+
+    "ImportTask": {
+      "@id": "tidb:ImportTask",
+      "@context": {
+        "importId": "@id",
+        "clusterId": {
+          "@id": "tidb:clusterId"
+        },
+        "sourceType": {
+          "@id": "tidb:sourceType"
+        },
+        "fileFormat": {
+          "@id": "tidb:fileFormat"
+        },
+        "state": {
+          "@id": "tidb:taskState"
+        },
+        "progress": {
+          "@id": "schema:percentComplete",
+          "@type": "xsd:decimal"
+        },
+        "targetDatabase": {
+          "@id": "tidb:targetDatabase"
+        },
+        "errorMessage": {
+          "@id": "schema:error"
+        },
+        "createTime": {
+          "@id": "dcterms:created",
+          "@type": "xsd:dateTime"
+        }
+      }
+    },
+
+    "DataApp": {
+      "@id": "tidb:DataApp",
+      "@context": {
+        "dataAppId": "@id",
+        "displayName": {
+          "@id": "schema:name"
+        },
+        "description": {
+          "@id": "schema:description"
+        },
+        "region": {
+          "@id": "tidb:region"
+        },
+        "createTime": {
+          "@id": "dcterms:created",
+          "@type": "xsd:dateTime"
+        },
+        "updateTime": {
+          "@id": "dcterms:modified",
+          "@type": "xsd:dateTime"
+        },
+        "dataSources": {
+          "@id": "tidb:dataSources",
+          "@container": "@set"
+        },
+        "endpoints": {
+          "@id": "tidb:endpoints",
+          "@container": "@set"
+        }
+      }
+    },
+
+    "DataSource": {
+      "@id": "tidb:DataSource",
+      "@context": {
+        "clusterId": {
+          "@id": "tidb:clusterId"
+        },
+        "clusterName": {
+          "@id": "schema:name"
+        },
+        "clusterType": {
+          "@id": "tidb:clusterType"
+        }
+      }
+    },
+
+    "Endpoint": {
+      "@id": "tidb:Endpoint",
+      "@context": {
+        "name": {
+          "@id": "schema:name"
+        },
+        "displayName": {
+          "@id": "schema:alternateName"
+        },
+        "description": {
+          "@id": "schema:description"
+        },
+        "path": {
+          "@id": "schema:path"
+        },
+        "method": {
+          "@id": "tidb:httpMethod"
+        },
+        "clusterId": {
+          "@id": "tidb:clusterId"
+        },
+        "sqlTemplate": {
+          "@id": "tidb:sqlTemplate"
+        },
+        "tag": {
+          "@id": "schema:keywords"
+        },
+        "params": {
+          "@id": "tidb:endpointParams",
+          "@container": "@set"
+        }
+      }
+    },
+
+    "EndpointParameter": {
+      "@id": "tidb:EndpointParameter",
+      "@context": {
+        "name": {
+          "@id": "schema:name"
+        },
+        "type": {
+          "@id": "tidb:parameterType"
+        },
+        "required": {
+          "@id": "tidb:isRequired",
+          "@type": "xsd:boolean"
+        },
+        "defaultValue": {
+          "@id": "schema:defaultValue"
+        },
+        "description": {
+          "@id": "schema:description"
+        }
+      }
+    },
+
+    "ApiKey": {
+      "@id": "tidb:ApiKey",
+      "@context": {
+        "accessKey": "@id",
+        "displayName": {
+          "@id": "schema:name"
+        },
+        "role": {
+          "@id": "schema:roleName"
+        },
+        "projectId": {
+          "@id": "tidb:projectId"
+        }
+      }
+    },
+
+    "AuditLog": {
+      "@id": "tidb:AuditLog",
+      "@context": {
+        "eventType": {
+          "@id": "tidb:eventType"
+        },
+        "operationEmail": {
+          "@id": "schema:email"
+        },
+        "result": {
+          "@id": "tidb:operationResult"
+        },
+        "timestamp": {
+          "@id": "dcterms:date",
+          "@type": "xsd:dateTime"
+        },
+        "clusterId": {
+          "@id": "tidb:clusterId"
+        },
+        "projectId": {
+          "@id": "tidb:projectId"
+        },
+        "orgId": {
+          "@id": "tidb:orgId"
+        }
+      }
+    },
+
+    "BillingRecord": {
+      "@id": "tidb:BillingRecord",
+      "@context": {
+        "billedDate": {
+          "@id": "dcterms:date",
+          "@type": "xsd:date"
+        },
+        "projectName": {
+          "@id": "schema:name"
+        },
+        "clusterName": {
+          "@id": "tidb:clusterName"
+        },
+        "servicePathName": {
+          "@id": "tidb:servicePathName"
+        },
+        "totalCost": {
+          "@id": "schema:totalPrice"
+        },
+        "credits": {
+          "@id": "tidb:credits"
+        },
+        "discounts": {
+          "@id": "tidb:discounts"
+        },
+        "currency": {
+          "@id": "schema:priceCurrency"
+        }
+      }
+    },
+
+    "Region": {
+      "@id": "tidb:Region",
+      "@context": {
+        "regionId": "@id",
+        "displayName": {
+          "@id": "schema:name"
+        },
+        "cloudProvider": {
+          "@id": "tidb:cloudProvider"
+        }
+      }
+    },
+
+    "DataSummary": {
+      "@id": "tidb:DataSummary",
+      "@context": {
+        "data_summary_id": "@id",
+        "cluster_id": {
+          "@id": "tidb:clusterId"
+        },
+        "database": {
+          "@id": "tidb:database"
+        },
+        "status": {
+          "@id": "tidb:summaryStatus"
+        }
+      }
+    },
+
+    "Chat2DataResult": {
+      "@id": "tidb:Chat2DataResult",
+      "@context": {
+        "question_id": "@id",
+        "sql": {
+          "@id": "tidb:generatedSql"
+        },
+        "rows": {
+          "@id": "tidb:resultRows",
+          "@container": "@set"
+        },
+        "columns": {
+          "@id": "tidb:resultColumns",
+          "@container": "@set"
+        }
+      }
+    }
+  }
+}

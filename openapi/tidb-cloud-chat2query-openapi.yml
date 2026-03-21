@@ -1,0 +1,685 @@
+openapi: 3.1.0
+info:
+  title: TiDB Cloud Chat2Query API
+  description: >-
+    The TiDB Cloud Chat2Query API is an AI-powered interface that enables
+    developers to generate and execute SQL statements against TiDB Cloud clusters
+    using natural language instructions. It is exposed as a special Data App
+    within TiDB Cloud, authenticated via API keys scoped to the Chat2Query Data
+    App. The API provides endpoints for generating data summaries of database
+    schemas, translating natural language prompts into SQL via the v2 and v3
+    chat2data endpoints, refining existing queries, managing multi-round chat
+    sessions, and suggesting questions for data exploration. It is intended for
+    building AI-assisted data exploration tools, reporting interfaces, and
+    applications that need to query structured data without requiring users to
+    write SQL directly. The API uses HTTP Digest Authentication and is rate
+    limited to 100 requests per day per Data App.
+  version: v3
+  contact:
+    name: TiDB Cloud Support
+    url: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
+  termsOfService: https://www.pingcap.com/legal/privacy-policy/
+externalDocs:
+  description: TiDB Cloud Chat2Query API Reference
+  url: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
+servers:
+  - url: https://data.tidbcloud.com/api/v1beta/app/{dataAppId}/endpoint
+    description: Chat2Query Data App Endpoint Server
+    variables:
+      dataAppId:
+        description: The Chat2Query Data App ID assigned by TiDB Cloud.
+        default: dataapp_default
+tags:
+  - name: Data Summaries
+    description: Operations for generating and managing AI summaries of database schemas used as context for SQL generation.
+  - name: Chat2Data
+    description: Operations for translating natural language questions into SQL and executing them against TiDB Cloud clusters.
+  - name: SQL Refinement
+    description: Operations for refining and improving previously generated SQL queries.
+  - name: Sessions
+    description: Operations for creating and managing multi-round conversational chat sessions.
+  - name: Knowledge Bases
+    description: Operations for managing knowledge bases that provide additional context for SQL generation.
+security:
+  - digestAuth: []
+paths:
+  /v3/dataSummaries:
+    get:
+      operationId: listDataSummaries
+      summary: List data summaries
+      description: >-
+        Returns all AI-generated data summaries for the Chat2Query Data App. A
+        data summary captures the schema structure and statistical profile of a
+        database, providing context that the AI uses to generate more accurate SQL
+        statements. Summaries must be created before calling the chat2data
+        endpoint with a data_summary_id.
+      tags:
+        - Data Summaries
+      responses:
+        '200':
+          description: List of data summaries retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListDataSummariesResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+    post:
+      operationId: createDataSummary
+      summary: Create a data summary
+      description: >-
+        Generates an AI-powered summary of the specified database schema on a
+        linked TiDB Cloud cluster. The summary analyzes table structures,
+        relationships, and data distributions to provide context for subsequent
+        SQL generation. Set reuse to true to return an existing summary if one
+        already exists for this database.
+      tags:
+        - Data Summaries
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDataSummaryRequest'
+      responses:
+        '200':
+          description: Data summary creation initiated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataSummaryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+  /v3/dataSummaries/{data_summary_id}:
+    get:
+      operationId: getDataSummary
+      summary: Get a data summary
+      description: >-
+        Returns the details and current generation status of a specific data
+        summary by its ID. Data summary generation is asynchronous; poll this
+        endpoint until the status is DONE before using the summary_id in a
+        chat2data request.
+      tags:
+        - Data Summaries
+      parameters:
+        - $ref: '#/components/parameters/dataSummaryId'
+      responses:
+        '200':
+          description: Data summary retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataSummaryResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    put:
+      operationId: updateDataSummary
+      summary: Update a data summary
+      description: >-
+        Regenerates or updates an existing data summary for a database. Use this
+        endpoint to refresh a summary after significant schema or data changes
+        to keep AI-generated SQL accurate.
+      tags:
+        - Data Summaries
+      parameters:
+        - $ref: '#/components/parameters/dataSummaryId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDataSummaryRequest'
+      responses:
+        '200':
+          description: Data summary updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataSummaryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /v3/chat2data:
+    post:
+      operationId: generateAndExecuteSql
+      summary: Generate and execute SQL from natural language
+      description: >-
+        Translates a natural language question into a SQL statement and executes
+        it against the specified TiDB Cloud cluster and database. The AI model
+        uses the data summary to understand schema context. Supports two generation
+        modes: direct for simple queries, and auto_breakdown for complex questions
+        that benefit from decomposed multi-step query plans.
+      tags:
+        - Chat2Data
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Chat2DataRequest'
+      responses:
+        '200':
+          description: SQL generated and executed successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chat2DataResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+  /v3/refineSql:
+    post:
+      operationId: refineSql
+      summary: Refine a SQL query
+      description: >-
+        Takes a previously generated SQL query and a refinement instruction, then
+        produces an improved SQL statement. Use this endpoint to iteratively
+        improve query accuracy based on user feedback without starting a new
+        query generation from scratch.
+      tags:
+        - SQL Refinement
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RefineSqlRequest'
+      responses:
+        '200':
+          description: SQL refined successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Chat2DataResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+  /v3/suggestQuestions:
+    post:
+      operationId: suggestQuestions
+      summary: Suggest questions for a database
+      description: >-
+        Returns a list of suggested natural language questions that are relevant
+        and answerable given the schema of the specified database. Use this
+        endpoint to populate question suggestion UI in data exploration tools.
+      tags:
+        - Chat2Data
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SuggestQuestionsRequest'
+      responses:
+        '200':
+          description: Question suggestions returned successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SuggestQuestionsResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+  /v3/sessions:
+    post:
+      operationId: createChatSession
+      summary: Create a chat session
+      description: >-
+        Creates a new multi-round conversational chat session. Sessions maintain
+        conversation context across multiple chat2data calls, enabling follow-up
+        questions that reference prior results. Use the returned session ID in
+        subsequent chat2data requests to continue the conversation.
+      tags:
+        - Sessions
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateSessionRequest'
+      responses:
+        '200':
+          description: Chat session created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ChatSession'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+  /v2/dataSummaries:
+    post:
+      operationId: createDataSummaryV2
+      summary: Create a data summary (v2)
+      description: >-
+        Generates a data summary of the specified database schema using the v2
+        Chat2Query API. This is the v2 version of the data summary endpoint.
+        The v3 endpoint is recommended for new integrations as it supports
+        additional features including knowledge bases and session management.
+      tags:
+        - Data Summaries
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDataSummaryRequest'
+      responses:
+        '200':
+          description: Data summary creation initiated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataSummaryResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+  /v2/chat2data:
+    post:
+      operationId: generateAndExecuteSqlV2
+      summary: Generate and execute SQL from natural language (v2)
+      description: >-
+        Translates a natural language question into SQL and executes it using
+        the v2 Chat2Query API. This is an asynchronous operation that returns
+        a job ID. Poll the /v2/jobs/{job_id} endpoint to retrieve results.
+        The v3 endpoint is recommended for new integrations as it returns
+        results synchronously and supports more features.
+      tags:
+        - Chat2Data
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Chat2DataRequest'
+      responses:
+        '200':
+          description: SQL generation job created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobResponse'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+  /v2/jobs/{job_id}:
+    get:
+      operationId: getJobStatus
+      summary: Get job status
+      description: >-
+        Returns the current status and result of an asynchronous Chat2Query v2
+        job. Poll this endpoint after calling the v2 chat2data endpoint until the
+        job status is DONE or FAILED. The query results are included in the
+        response once the job is complete.
+      tags:
+        - Chat2Data
+      parameters:
+        - name: job_id
+          in: path
+          description: The unique identifier of the Chat2Query job.
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Job status retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobStatusResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  securitySchemes:
+    digestAuth:
+      type: http
+      scheme: digest
+      description: >-
+        HTTP Digest Authentication using a Chat2Query Data App API public key
+        as the username and private key as the password. Keys are generated
+        within the Chat2Query Data App in the TiDB Cloud console.
+  parameters:
+    dataSummaryId:
+      name: data_summary_id
+      in: path
+      description: The unique identifier of the data summary.
+      required: true
+      schema:
+        type: integer
+  responses:
+    BadRequest:
+      description: The request body or parameters are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Authentication failed. Check your Chat2Query API key credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    RateLimitExceeded:
+      description: >-
+        Rate limit exceeded. The Chat2Query API allows 100 requests per day per
+        Data App. Contact TiDB Cloud support to request a higher limit.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    CreateDataSummaryRequest:
+      type: object
+      description: Request body for creating a new database schema data summary.
+      required:
+        - cluster_id
+        - database
+      properties:
+        cluster_id:
+          type: string
+          description: The ID of the TiDB Cloud cluster whose database will be summarized.
+        database:
+          type: string
+          description: The name of the database to generate a summary for.
+        description:
+          type: string
+          description: An optional human-readable description for this data summary.
+        reuse:
+          type: boolean
+          description: If true, returns an existing summary for this database instead of generating a new one.
+    DataSummaryResponse:
+      type: object
+      description: API response wrapper for a data summary operation.
+      properties:
+        code:
+          type: integer
+          description: The response code. 200 indicates success.
+        msg:
+          type: string
+          description: A message describing the result.
+        result:
+          $ref: '#/components/schemas/DataSummary'
+    DataSummary:
+      type: object
+      description: An AI-generated summary of a database schema.
+      properties:
+        data_summary_id:
+          type: integer
+          description: The unique identifier of the data summary.
+        cluster_id:
+          type: string
+          description: The ID of the cluster whose database was summarized.
+        database:
+          type: string
+          description: The name of the summarized database.
+        status:
+          type: string
+          description: The generation status of the data summary.
+          enum:
+            - RUNNING
+            - DONE
+            - FAILED
+    ListDataSummariesResponse:
+      type: object
+      description: API response wrapper for listing data summaries.
+      properties:
+        code:
+          type: integer
+          description: The response code. 200 indicates success.
+        msg:
+          type: string
+          description: A message describing the result.
+        result:
+          type: array
+          description: The list of data summary objects.
+          items:
+            $ref: '#/components/schemas/DataSummary'
+    Chat2DataRequest:
+      type: object
+      description: Request body for generating and executing a SQL query from natural language.
+      required:
+        - cluster_id
+        - database
+        - question
+      properties:
+        cluster_id:
+          type: string
+          description: The ID of the TiDB Cloud cluster to run the SQL query against.
+        database:
+          type: string
+          description: The database within the cluster to query.
+        data_summary_id:
+          type: integer
+          description: The ID of a previously generated data summary to use as schema context.
+        question:
+          type: string
+          description: The natural language question to translate into SQL and execute.
+        sql_generate_mode:
+          type: string
+          description: The SQL generation strategy to use.
+          enum:
+            - direct
+            - auto_breakdown
+          default: direct
+        session_id:
+          type: string
+          description: The session ID for multi-round conversational queries.
+    Chat2DataResponse:
+      type: object
+      description: API response wrapper for a Chat2Data operation.
+      properties:
+        code:
+          type: integer
+          description: The response code. 200 indicates success.
+        msg:
+          type: string
+          description: A message describing the result.
+        result:
+          $ref: '#/components/schemas/Chat2DataResult'
+    Chat2DataResult:
+      type: object
+      description: The result of a Chat2Data SQL generation and execution.
+      properties:
+        question_id:
+          type: string
+          description: A unique identifier for this question and result pair.
+        sql:
+          type: string
+          description: The SQL statement that was generated from the natural language question.
+        rows:
+          type: array
+          description: The query result rows returned by executing the generated SQL.
+          items:
+            type: object
+            additionalProperties: true
+        columns:
+          type: array
+          description: The column definitions for the query result.
+          items:
+            $ref: '#/components/schemas/ColumnDefinition'
+    ColumnDefinition:
+      type: object
+      description: A column definition in a query result set.
+      properties:
+        col:
+          type: string
+          description: The column name.
+        data_type:
+          type: string
+          description: The SQL data type of the column.
+        nullable:
+          type: boolean
+          description: Whether the column can contain NULL values.
+    RefineSqlRequest:
+      type: object
+      description: Request body for refining a previously generated SQL query.
+      required:
+        - cluster_id
+        - database
+        - question
+        - sql
+        - task
+      properties:
+        cluster_id:
+          type: string
+          description: The ID of the TiDB Cloud cluster.
+        database:
+          type: string
+          description: The database within the cluster.
+        question:
+          type: string
+          description: The original natural language question that produced the SQL.
+        sql:
+          type: string
+          description: The SQL query to be refined.
+        task:
+          type: string
+          description: A description of how to refine the SQL query.
+    SuggestQuestionsRequest:
+      type: object
+      description: Request body for generating question suggestions for a database.
+      required:
+        - cluster_id
+        - database
+      properties:
+        cluster_id:
+          type: string
+          description: The ID of the TiDB Cloud cluster.
+        database:
+          type: string
+          description: The database to generate question suggestions for.
+    SuggestQuestionsResponse:
+      type: object
+      description: API response wrapper for question suggestions.
+      properties:
+        code:
+          type: integer
+          description: The response code. 200 indicates success.
+        msg:
+          type: string
+          description: A message describing the result.
+        result:
+          type: object
+          properties:
+            questions:
+              type: array
+              description: A list of suggested natural language questions for the database.
+              items:
+                type: string
+    CreateSessionRequest:
+      type: object
+      description: Request body for creating a multi-round chat session.
+      required:
+        - cluster_id
+        - database
+      properties:
+        cluster_id:
+          type: string
+          description: The ID of the TiDB Cloud cluster for this session.
+        database:
+          type: string
+          description: The database to use for this chat session.
+    ChatSession:
+      type: object
+      description: A multi-round conversational chat session.
+      properties:
+        code:
+          type: integer
+          description: The response code. 200 indicates success.
+        msg:
+          type: string
+          description: A message describing the result.
+        result:
+          type: object
+          properties:
+            session_id:
+              type: string
+              description: The unique session identifier to use in subsequent chat2data requests.
+    JobResponse:
+      type: object
+      description: Response for asynchronous v2 Chat2Query job creation.
+      properties:
+        code:
+          type: integer
+          description: The response code. 200 indicates success.
+        msg:
+          type: string
+          description: A message describing the result.
+        result:
+          type: object
+          properties:
+            job_id:
+              type: string
+              description: The unique identifier for polling the job status.
+    JobStatusResponse:
+      type: object
+      description: Status and result of an asynchronous Chat2Query v2 job.
+      properties:
+        code:
+          type: integer
+          description: The response code. 200 indicates success.
+        msg:
+          type: string
+          description: A message describing the result.
+        result:
+          type: object
+          properties:
+            job_id:
+              type: string
+              description: The job identifier.
+            status:
+              type: string
+              description: The current status of the job.
+              enum:
+                - RUNNING
+                - DONE
+                - FAILED
+            data:
+              $ref: '#/components/schemas/Chat2DataResult'
+    ErrorResponse:
+      type: object
+      description: Standard error response returned when an API request fails.
+      properties:
+        code:
+          type: integer
+          description: The error code.
+        msg:
+          type: string
+          description: A human-readable error message describing the failure.

@@ -1,0 +1,1389 @@
+openapi: 3.1.0
+info:
+  title: TiDB Cloud API
+  description: >-
+    The TiDB Cloud API is a REST interface that provides programmatic access to
+    manage administrative objects within TiDB Cloud. It supports managing
+    projects, clusters, backups, restores, data imports, billing, and private
+    endpoint connections across both TiDB Cloud Serverless and TiDB Cloud
+    Dedicated tiers. The API uses HTTP Digest Authentication with public and
+    private API keys and returns JSON-formatted responses. Available as both
+    v1beta and the newer v1beta1 versions, it enables automation of database
+    infrastructure lifecycle management at scale.
+  version: v1beta1
+  contact:
+    name: TiDB Cloud Support
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  termsOfService: https://www.pingcap.com/legal/privacy-policy/
+externalDocs:
+  description: TiDB Cloud API Overview
+  url: https://docs.pingcap.com/tidbcloud/api-overview/
+servers:
+  - url: https://dedicated.tidbapi.com/v1beta1
+    description: Dedicated Cluster API Server
+  - url: https://iam.tidbapi.com/v1beta1
+    description: IAM API Server
+  - url: https://billing.tidbapi.com/v1beta1
+    description: Billing API Server
+tags:
+  - name: Clusters
+    description: Operations for creating, listing, updating, and deleting TiDB Cloud Dedicated clusters.
+  - name: Regions
+    description: Operations for listing available cloud regions and node specifications.
+  - name: Private Endpoint Connections
+    description: Operations for managing private endpoint connections to dedicated clusters.
+  - name: Imports
+    description: Operations for creating and managing data import tasks into TiDB Cloud clusters.
+  - name: Integrations
+    description: Operations for managing third-party integrations with TiDB Cloud clusters.
+  - name: API Keys
+    description: Operations for creating, listing, updating, and deleting TiDB Cloud API keys.
+  - name: Audit Logs
+    description: Operations for retrieving organization-level console audit logs.
+  - name: Billing
+    description: Operations for retrieving monthly billing summaries, cost details, and usage trends.
+security:
+  - digestAuth: []
+paths:
+  /clusters:
+    get:
+      operationId: listClusters
+      summary: List clusters
+      description: >-
+        Returns a paginated list of TiDB Cloud Dedicated clusters within the
+        organization or a specific project. Supports filtering by project ID,
+        region, and cluster state. Results are paginated using page tokens.
+      tags:
+        - Clusters
+      parameters:
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/pageToken'
+        - name: projectId
+          in: query
+          description: Filter clusters by project ID.
+          required: false
+          schema:
+            type: string
+        - name: clusterStates
+          in: query
+          description: >-
+            Filter clusters by state. Possible values include CREATING, ACTIVE,
+            PAUSED, RESUMING, DELETING, and UPGRADING.
+          required: false
+          schema:
+            type: array
+            items:
+              type: string
+      responses:
+        '200':
+          description: A paginated list of clusters.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListClustersResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+    post:
+      operationId: createCluster
+      summary: Create a cluster
+      description: >-
+        Creates a new TiDB Cloud Dedicated cluster within the specified project.
+        The request body must specify the cluster name, cloud provider, region,
+        and component configuration including TiDB, TiKV, and optionally TiFlash
+        node sizes and counts. Use validateOnly to test a request without actually
+        creating the cluster.
+      tags:
+        - Clusters
+      parameters:
+        - name: validateOnly
+          in: query
+          description: If true, validates the request without creating the cluster.
+          required: false
+          schema:
+            type: boolean
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateClusterRequest'
+      responses:
+        '200':
+          description: Cluster created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cluster'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+  /clusters/{clusterId}:
+    get:
+      operationId: getCluster
+      summary: Get a cluster
+      description: >-
+        Returns the full configuration and current status of a specific TiDB Cloud
+        Dedicated cluster, including its nodes, network configuration, version,
+        and operational state.
+      tags:
+        - Clusters
+      parameters:
+        - $ref: '#/components/parameters/clusterId'
+      responses:
+        '200':
+          description: Cluster details retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cluster'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateCluster
+      summary: Update a cluster
+      description: >-
+        Modifies the configuration of an existing TiDB Cloud Dedicated cluster.
+        Supports scaling TiDB node count, TiKV storage size, and TiFlash node
+        count. Only fields included in the request body are updated; omitted
+        fields remain unchanged.
+      tags:
+        - Clusters
+      parameters:
+        - $ref: '#/components/parameters/clusterId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateClusterRequest'
+      responses:
+        '200':
+          description: Cluster updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cluster'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteCluster
+      summary: Delete a cluster
+      description: >-
+        Permanently deletes a TiDB Cloud Dedicated cluster and all associated
+        data. This operation is irreversible. The cluster must be in an active or
+        paused state before deletion.
+      tags:
+        - Clusters
+      parameters:
+        - $ref: '#/components/parameters/clusterId'
+      responses:
+        '200':
+          description: Cluster deletion initiated successfully.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /clusters/{clusterId}:pauseCluster:
+    post:
+      operationId: pauseCluster
+      summary: Pause a cluster
+      description: >-
+        Pauses a running TiDB Cloud Dedicated cluster, suspending compute
+        resources while retaining data in storage. Paused clusters do not incur
+        compute charges. The cluster must be in an ACTIVE state to be paused.
+      tags:
+        - Clusters
+      parameters:
+        - $ref: '#/components/parameters/clusterId'
+      responses:
+        '200':
+          description: Cluster pause initiated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cluster'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /clusters/{clusterId}:resumeCluster:
+    post:
+      operationId: resumeCluster
+      summary: Resume a cluster
+      description: >-
+        Resumes a paused TiDB Cloud Dedicated cluster, restoring compute resources
+        and making the cluster available for connections. The cluster must be in a
+        PAUSED state to be resumed.
+      tags:
+        - Clusters
+      parameters:
+        - $ref: '#/components/parameters/clusterId'
+      responses:
+        '200':
+          description: Cluster resume initiated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Cluster'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /clusters/{clusterId}:resetRootPassword:
+    post:
+      operationId: resetClusterRootPassword
+      summary: Reset root password
+      description: >-
+        Resets the root password for a TiDB Cloud Dedicated cluster. The new
+        password is specified in the request body. After the reset, existing
+        connections using the old password will be invalidated.
+      tags:
+        - Clusters
+      parameters:
+        - $ref: '#/components/parameters/clusterId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required:
+                - password
+              properties:
+                password:
+                  type: string
+                  description: The new root password for the cluster.
+      responses:
+        '200':
+          description: Root password reset successfully.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /regions:
+    get:
+      operationId: listRegions
+      summary: List regions
+      description: >-
+        Returns a list of all available cloud provider regions where TiDB Cloud
+        Dedicated clusters can be deployed. Each region includes cloud provider,
+        region identifier, display name, and availability status.
+      tags:
+        - Regions
+      parameters:
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/pageToken'
+      responses:
+        '200':
+          description: A paginated list of available regions.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListRegionsResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /regions/{regionId}:
+    get:
+      operationId: getRegion
+      summary: Get a region
+      description: >-
+        Returns detailed information about a specific cloud region, including its
+        cloud provider, display name, geographic location, and support for
+        specific TiDB Cloud features.
+      tags:
+        - Regions
+      parameters:
+        - $ref: '#/components/parameters/regionId'
+      responses:
+        '200':
+          description: Region details retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Region'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /regions/{regionId}/nodeSpecs:
+    get:
+      operationId: listNodeSpecs
+      summary: List node specifications
+      description: >-
+        Returns all available node specifications for a given region, including
+        TiDB, TiKV, and TiFlash component types. Each specification includes CPU,
+        memory, and storage details. Use this endpoint to determine valid node
+        configurations before creating or scaling a cluster.
+      tags:
+        - Regions
+      parameters:
+        - $ref: '#/components/parameters/regionId'
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/pageToken'
+      responses:
+        '200':
+          description: A paginated list of node specifications.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListNodeSpecsResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /clusters/{clusterId}/imports:
+    get:
+      operationId: listImports
+      summary: List import tasks
+      description: >-
+        Returns a paginated list of data import tasks for a specific TiDB Cloud
+        Dedicated cluster. Each import task includes status, source configuration,
+        progress information, and timestamps.
+      tags:
+        - Imports
+      parameters:
+        - $ref: '#/components/parameters/clusterId'
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/pageToken'
+      responses:
+        '200':
+          description: A paginated list of import tasks.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListImportsResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      operationId: createImport
+      summary: Create an import task
+      description: >-
+        Creates a new data import task for a specific TiDB Cloud Dedicated
+        cluster. Supports importing data from AWS S3, Google Cloud Storage, and
+        local file uploads in CSV, SQL, Parquet, and Aurora Snapshot formats.
+        Specify the source type, file format, target database, and any necessary
+        access credentials.
+      tags:
+        - Imports
+      parameters:
+        - $ref: '#/components/parameters/clusterId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateImportRequest'
+      responses:
+        '200':
+          description: Import task created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Import'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /clusters/{clusterId}/imports/{importId}:
+    get:
+      operationId: getImport
+      summary: Get an import task
+      description: >-
+        Returns the current status and configuration details of a specific data
+        import task. Includes progress percentage, estimated completion time,
+        error messages if any, and source file information.
+      tags:
+        - Imports
+      parameters:
+        - $ref: '#/components/parameters/clusterId'
+        - $ref: '#/components/parameters/importId'
+      responses:
+        '200':
+          description: Import task details retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Import'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /clusters/{clusterId}/imports/{importId}:cancel:
+    post:
+      operationId: cancelImport
+      summary: Cancel an import task
+      description: >-
+        Cancels an in-progress data import task for a specific cluster. Only
+        import tasks in a RUNNING or PENDING state can be cancelled. Cancelled
+        tasks cannot be resumed; a new import task must be created.
+      tags:
+        - Imports
+      parameters:
+        - $ref: '#/components/parameters/clusterId'
+        - $ref: '#/components/parameters/importId'
+      responses:
+        '200':
+          description: Import task cancelled successfully.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /clusters/{clusterId}/integrations:
+    get:
+      operationId: listIntegrations
+      summary: List integrations
+      description: >-
+        Returns all third-party integrations configured for a specific TiDB Cloud
+        Dedicated cluster. Supported integrations include Datadog, Prometheus,
+        and other observability platforms.
+      tags:
+        - Integrations
+      parameters:
+        - $ref: '#/components/parameters/clusterId'
+      responses:
+        '200':
+          description: List of integrations retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListIntegrationsResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      operationId: createIntegration
+      summary: Create an integration
+      description: >-
+        Configures a new third-party integration for a specific TiDB Cloud
+        Dedicated cluster. The integration type and credentials must be specified
+        in the request body. Once created, TiDB Cloud will begin sending metrics
+        and logs to the configured integration endpoint.
+      tags:
+        - Integrations
+      parameters:
+        - $ref: '#/components/parameters/clusterId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateIntegrationRequest'
+      responses:
+        '200':
+          description: Integration created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Integration'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /apikeys:
+    get:
+      operationId: listApiKeys
+      summary: List API keys
+      description: >-
+        Returns a paginated list of API keys for the organization or a specific
+        project. Each key entry includes its display name, access key, role, and
+        creation time. Secret keys are not returned after initial creation.
+      tags:
+        - API Keys
+      parameters:
+        - name: projectId
+          in: query
+          description: Filter API keys by project ID. Omit for organization-level keys.
+          required: false
+          schema:
+            type: integer
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/pageToken'
+      responses:
+        '200':
+          description: A paginated list of API keys.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListApiKeysResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+    post:
+      operationId: createApiKey
+      summary: Create an API key
+      description: >-
+        Creates a new API key with the specified display name, project scope, and
+        role. The response includes both the public access key and the private
+        secret key. The secret key is only returned at creation time and cannot
+        be retrieved afterwards; store it securely.
+      tags:
+        - API Keys
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateApiKeyRequest'
+      responses:
+        '200':
+          description: API key created successfully. Save the secret key now as it will not be shown again.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiKey'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /apikeys/{accessKey}:
+    get:
+      operationId: getApiKey
+      summary: Get an API key
+      description: >-
+        Returns the metadata and permissions for a specific API key identified by
+        its public access key. The private secret key is not returned.
+      tags:
+        - API Keys
+      parameters:
+        - $ref: '#/components/parameters/accessKey'
+      responses:
+        '200':
+          description: API key details retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ApiKey'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateApiKey
+      summary: Update an API key
+      description: >-
+        Updates the display name or role of an existing API key. Only the fields
+        provided in the request body are modified. The access key and secret key
+        remain unchanged.
+      tags:
+        - API Keys
+      parameters:
+        - $ref: '#/components/parameters/accessKey'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateApiKeyRequest'
+      responses:
+        '200':
+          description: API key updated successfully.
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteApiKey
+      summary: Delete an API key
+      description: >-
+        Permanently deletes an API key. Once deleted, any requests authenticated
+        with this key will be rejected. This action cannot be undone.
+      tags:
+        - API Keys
+      parameters:
+        - $ref: '#/components/parameters/accessKey'
+      responses:
+        '200':
+          description: API key deleted successfully.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /auditLogs:
+    get:
+      operationId: listAuditLogs
+      summary: List audit logs
+      description: >-
+        Returns a paginated list of console audit logs for the organization.
+        Audit logs capture administrative actions such as cluster creation,
+        deletion, and configuration changes, along with the user email, timestamp,
+        and result of each action. Supports filtering by time range, event type,
+        and keyword.
+      tags:
+        - Audit Logs
+      parameters:
+        - $ref: '#/components/parameters/pageSize'
+        - $ref: '#/components/parameters/pageToken'
+        - name: startTime
+          in: query
+          description: Filter audit logs starting from this ISO 8601 datetime.
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: endTime
+          in: query
+          description: Filter audit logs up to this ISO 8601 datetime.
+          required: false
+          schema:
+            type: string
+            format: date-time
+        - name: auditEventTypes
+          in: query
+          description: Comma-separated list of event types to filter by.
+          required: false
+          schema:
+            type: string
+        - name: keyword
+          in: query
+          description: Search term to filter audit log entries.
+          required: false
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A paginated list of audit log entries.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListAuditLogsResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /bills/{billedMonth}:
+    get:
+      operationId: getMonthlyBill
+      summary: Get monthly bill
+      description: >-
+        Returns the organization's billing summary for the specified month in
+        YYYY-MM format. Includes an overview of total charges, a breakdown by
+        project, and a breakdown by service type such as compute, storage,
+        and data transfer.
+      tags:
+        - Billing
+      parameters:
+        - $ref: '#/components/parameters/billedMonth'
+      responses:
+        '200':
+          description: Monthly bill retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillsExplorer'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /billsDetails/{billedMonth}:
+    get:
+      operationId: getMonthlyBillDetails
+      summary: Get monthly bill with daily details
+      description: >-
+        Returns the organization's detailed billing information for the specified
+        month, broken down by daily usage per project, cluster, and service path.
+        Includes credits applied, discounts, running totals, and total costs.
+      tags:
+        - Billing
+      parameters:
+        - $ref: '#/components/parameters/billedMonth'
+      responses:
+        '200':
+          description: Detailed monthly bill retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillsDetails'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /billsCostExplorer:
+    post:
+      operationId: queryCostExplorer
+      summary: Query cost explorer
+      description: >-
+        Returns usage cost details based on a custom cost explorer query.
+        Supports filtering and grouping by project, cluster, service, region,
+        and date range. Use this endpoint to build custom billing dashboards
+        and spending trend reports.
+      tags:
+        - Billing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CostExplorerRequest'
+      responses:
+        '200':
+          description: Cost explorer results retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillsCostExplorer'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  securitySchemes:
+    digestAuth:
+      type: http
+      scheme: digest
+      description: >-
+        HTTP Digest Authentication using a TiDB Cloud API public key as the
+        username and private key as the password. Keys are generated in the
+        TiDB Cloud console under Organization Settings > API Keys.
+  parameters:
+    clusterId:
+      name: clusterId
+      in: path
+      description: The unique identifier of the TiDB Cloud Dedicated cluster.
+      required: true
+      schema:
+        type: string
+    regionId:
+      name: regionId
+      in: path
+      description: The unique identifier of the cloud region.
+      required: true
+      schema:
+        type: string
+    importId:
+      name: importId
+      in: path
+      description: The unique identifier of the import task.
+      required: true
+      schema:
+        type: string
+    accessKey:
+      name: accessKey
+      in: path
+      description: The public access key portion of the API key pair.
+      required: true
+      schema:
+        type: string
+    billedMonth:
+      name: billedMonth
+      in: path
+      description: The billing month in YYYY-MM format (e.g., 2025-03).
+      required: true
+      schema:
+        type: string
+        pattern: '^\d{4}-\d{2}$'
+    pageSize:
+      name: pageSize
+      in: query
+      description: Maximum number of results to return per page. Default is 100, maximum is 100.
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 100
+    pageToken:
+      name: pageToken
+      in: query
+      description: Pagination token returned from a previous list request to retrieve the next page.
+      required: false
+      schema:
+        type: string
+  responses:
+    BadRequest:
+      description: The request body or parameters are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Authentication failed. Check your API key credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    RateLimitExceeded:
+      description: Rate limit exceeded. The API allows 100 requests per minute.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    Cluster:
+      type: object
+      description: A TiDB Cloud Dedicated cluster resource.
+      properties:
+        clusterId:
+          type: string
+          description: The unique identifier of the cluster.
+        displayName:
+          type: string
+          description: The human-readable display name of the cluster.
+        clusterType:
+          type: string
+          description: The cluster type, always DEDICATED for dedicated clusters.
+          enum:
+            - DEDICATED
+        cloudProvider:
+          type: string
+          description: The cloud provider hosting the cluster (AWS, GCP, or Azure).
+          enum:
+            - AWS
+            - GCP
+            - AZURE
+        regionId:
+          type: string
+          description: The region identifier where the cluster is deployed.
+        tidbVersion:
+          type: string
+          description: The TiDB database version running on the cluster.
+        state:
+          type: string
+          description: The current operational state of the cluster.
+          enum:
+            - CREATING
+            - ACTIVE
+            - PAUSED
+            - RESUMING
+            - DELETING
+            - UPGRADING
+            - MODIFYING
+        createTime:
+          type: string
+          format: date-time
+          description: The timestamp when the cluster was created.
+        updateTime:
+          type: string
+          format: date-time
+          description: The timestamp when the cluster was last modified.
+        components:
+          $ref: '#/components/schemas/ClusterComponents'
+        connectionStrings:
+          $ref: '#/components/schemas/ConnectionStrings'
+    ClusterComponents:
+      type: object
+      description: The component configuration for a TiDB Cloud cluster.
+      properties:
+        tidb:
+          $ref: '#/components/schemas/ComponentSpec'
+        tikv:
+          $ref: '#/components/schemas/StorageComponentSpec'
+        tiflash:
+          $ref: '#/components/schemas/StorageComponentSpec'
+    ComponentSpec:
+      type: object
+      description: Specification for a stateless TiDB compute node group.
+      properties:
+        nodeSize:
+          type: string
+          description: The node size key identifying the CPU and memory configuration.
+        nodeQuantity:
+          type: integer
+          description: The number of nodes in this component group.
+    StorageComponentSpec:
+      type: object
+      description: Specification for a TiKV or TiFlash storage node group.
+      properties:
+        nodeSize:
+          type: string
+          description: The node size key identifying the CPU and memory configuration.
+        nodeQuantity:
+          type: integer
+          description: The number of nodes in this component group.
+        storageSize:
+          type: integer
+          description: The storage capacity per node in GiB.
+    ConnectionStrings:
+      type: object
+      description: Connection string information for connecting to the cluster.
+      properties:
+        defaultUser:
+          type: string
+          description: The default database user for the cluster.
+        standard:
+          $ref: '#/components/schemas/ConnectionString'
+        vpcPeering:
+          $ref: '#/components/schemas/ConnectionString'
+        privateEndpoint:
+          $ref: '#/components/schemas/ConnectionString'
+    ConnectionString:
+      type: object
+      description: A specific type of connection string for accessing the cluster.
+      properties:
+        host:
+          type: string
+          description: The hostname for the connection.
+        port:
+          type: integer
+          description: The TCP port number for the connection.
+    CreateClusterRequest:
+      type: object
+      description: Request body for creating a new TiDB Cloud Dedicated cluster.
+      required:
+        - displayName
+        - cloudProvider
+        - regionId
+        - components
+      properties:
+        displayName:
+          type: string
+          description: The display name for the new cluster.
+        projectId:
+          type: string
+          description: The project ID to create the cluster in. Defaults to the default project.
+        cloudProvider:
+          type: string
+          description: The cloud provider for the cluster.
+          enum:
+            - AWS
+            - GCP
+            - AZURE
+        regionId:
+          type: string
+          description: The region identifier where the cluster will be deployed.
+        components:
+          $ref: '#/components/schemas/ClusterComponents'
+        rootPassword:
+          type: string
+          description: The initial root password for the cluster.
+        port:
+          type: integer
+          description: The SQL connection port. Default is 4000.
+    UpdateClusterRequest:
+      type: object
+      description: Request body for updating a TiDB Cloud Dedicated cluster configuration.
+      properties:
+        displayName:
+          type: string
+          description: The new display name for the cluster.
+        components:
+          $ref: '#/components/schemas/ClusterComponents'
+    ListClustersResponse:
+      type: object
+      description: Paginated list of TiDB Cloud clusters.
+      properties:
+        clusters:
+          type: array
+          description: The list of cluster objects on this page.
+          items:
+            $ref: '#/components/schemas/Cluster'
+        nextPageToken:
+          type: string
+          description: Token to retrieve the next page of results. Empty if on the last page.
+    Region:
+      type: object
+      description: A cloud region where TiDB Cloud Dedicated clusters can be deployed.
+      properties:
+        regionId:
+          type: string
+          description: The unique identifier of the region.
+        cloudProvider:
+          type: string
+          description: The cloud provider for this region.
+        displayName:
+          type: string
+          description: The human-readable display name of the region.
+    ListRegionsResponse:
+      type: object
+      description: Paginated list of available regions.
+      properties:
+        regions:
+          type: array
+          description: The list of region objects.
+          items:
+            $ref: '#/components/schemas/Region'
+        nextPageToken:
+          type: string
+          description: Token to retrieve the next page of results.
+    NodeSpec:
+      type: object
+      description: A node specification option for a cluster component.
+      properties:
+        nodeSpecKey:
+          type: string
+          description: The unique key identifying this node specification.
+        componentType:
+          type: string
+          description: The cluster component this spec applies to (tidb, tikv, tiflash).
+        cpu:
+          type: integer
+          description: The number of vCPU cores for this node spec.
+        memory:
+          type: integer
+          description: The memory in GiB for this node spec.
+    ListNodeSpecsResponse:
+      type: object
+      description: Paginated list of node specifications for a region.
+      properties:
+        nodeSpecs:
+          type: array
+          description: The list of available node specifications.
+          items:
+            $ref: '#/components/schemas/NodeSpec'
+        nextPageToken:
+          type: string
+          description: Token to retrieve the next page of results.
+    Import:
+      type: object
+      description: A data import task for a TiDB Cloud cluster.
+      properties:
+        importId:
+          type: string
+          description: The unique identifier of the import task.
+        clusterId:
+          type: string
+          description: The ID of the cluster receiving the imported data.
+        state:
+          type: string
+          description: The current state of the import task.
+          enum:
+            - PENDING
+            - RUNNING
+            - COMPLETED
+            - FAILED
+            - CANCELLED
+        sourceType:
+          type: string
+          description: The source type for the import (S3, GCS, LOCAL).
+        fileFormat:
+          type: string
+          description: The file format of the import data (CSV, SQL, PARQUET, AURORA_SNAPSHOT).
+        progress:
+          type: number
+          description: The completion percentage of the import task, from 0 to 100.
+        createTime:
+          type: string
+          format: date-time
+          description: The timestamp when the import task was created.
+        errorMessage:
+          type: string
+          description: Error message if the import task failed.
+    CreateImportRequest:
+      type: object
+      description: Request body for creating a new data import task.
+      required:
+        - sourceType
+        - fileFormat
+      properties:
+        sourceType:
+          type: string
+          description: The source of the import data.
+          enum:
+            - S3
+            - GCS
+            - LOCAL
+        fileFormat:
+          type: string
+          description: The format of the files to import.
+          enum:
+            - CSV
+            - SQL
+            - PARQUET
+            - AURORA_SNAPSHOT
+        targetDatabase:
+          type: string
+          description: The target database in the cluster to import data into.
+        s3Source:
+          $ref: '#/components/schemas/S3Source'
+    S3Source:
+      type: object
+      description: S3 source configuration for a data import task.
+      properties:
+        bucketUri:
+          type: string
+          description: The S3 bucket URI containing the import files (e.g., s3://bucket/path/).
+        roleArn:
+          type: string
+          description: The AWS IAM Role ARN granting TiDB Cloud access to the S3 bucket.
+    ListImportsResponse:
+      type: object
+      description: Paginated list of import tasks for a cluster.
+      properties:
+        imports:
+          type: array
+          description: The list of import task objects.
+          items:
+            $ref: '#/components/schemas/Import'
+        nextPageToken:
+          type: string
+          description: Token to retrieve the next page of results.
+    Integration:
+      type: object
+      description: A third-party monitoring or observability integration for a cluster.
+      properties:
+        id:
+          type: string
+          description: The unique identifier of the integration.
+        integrationType:
+          type: string
+          description: The type of integration (DATADOG, PROMETHEUS, etc.).
+        active:
+          type: boolean
+          description: Whether the integration is currently active.
+    CreateIntegrationRequest:
+      type: object
+      description: Request body for creating a new cluster integration.
+      required:
+        - integrationType
+      properties:
+        integrationType:
+          type: string
+          description: The type of integration to create.
+        config:
+          type: object
+          description: Integration-specific configuration properties such as API keys and region.
+          additionalProperties: true
+    ListIntegrationsResponse:
+      type: object
+      description: List of integrations for a cluster.
+      properties:
+        integrations:
+          type: array
+          description: The list of integration objects.
+          items:
+            $ref: '#/components/schemas/Integration'
+    ApiKey:
+      type: object
+      description: A TiDB Cloud API key used for authenticating API requests.
+      properties:
+        name:
+          type: string
+          description: The resource name of the API key.
+        accessKey:
+          type: string
+          description: The public access key used as the username in Digest Authentication.
+        secretKey:
+          type: string
+          description: The private secret key used as the password. Only returned at creation time.
+        displayName:
+          type: string
+          description: The human-readable display name for the API key.
+        role:
+          type: string
+          description: The role assigned to the API key (e.g., Organization Owner, Project Viewer).
+    CreateApiKeyRequest:
+      type: object
+      description: Request body for creating a new TiDB Cloud API key.
+      required:
+        - displayName
+        - role
+      properties:
+        displayName:
+          type: string
+          description: The display name for the new API key.
+        projectId:
+          type: integer
+          description: The project ID to scope the API key to. Use 0 for an organization-level key.
+        role:
+          type: string
+          description: The role to assign to the API key.
+    UpdateApiKeyRequest:
+      type: object
+      description: Request body for updating an existing API key.
+      properties:
+        displayName:
+          type: string
+          description: The new display name for the API key.
+        role:
+          type: string
+          description: The new role for the API key.
+    ListApiKeysResponse:
+      type: object
+      description: Paginated list of API keys.
+      properties:
+        apiKeys:
+          type: array
+          description: The list of API key objects.
+          items:
+            $ref: '#/components/schemas/ApiKey'
+        nextPageToken:
+          type: string
+          description: Token to retrieve the next page of results.
+    AuditLog:
+      type: object
+      description: A console audit log entry recording an administrative action.
+      properties:
+        eventType:
+          type: string
+          description: The type of event that was logged.
+        operationEmail:
+          type: string
+          description: The email address of the user who performed the action.
+        result:
+          type: string
+          description: The outcome of the action (SUCCESS or FAILURE).
+        timestamp:
+          type: string
+          format: date-time
+          description: The ISO 8601 timestamp when the event occurred.
+        clusterId:
+          type: string
+          description: The ID of the cluster involved in the event, if applicable.
+        projectId:
+          type: string
+          description: The ID of the project involved in the event, if applicable.
+        orgId:
+          type: string
+          description: The ID of the organization where the event occurred.
+    ListAuditLogsResponse:
+      type: object
+      description: Paginated list of audit log entries.
+      properties:
+        auditLogs:
+          type: array
+          description: The list of audit log entries.
+          items:
+            $ref: '#/components/schemas/AuditLog'
+        nextPageToken:
+          type: string
+          description: Token to retrieve the next page of results.
+    BillsExplorer:
+      type: object
+      description: An organization's monthly billing summary.
+      properties:
+        overview:
+          type: object
+          description: High-level billing totals for the month.
+          properties:
+            totalCost:
+              type: string
+              description: The total cost for the month.
+            currency:
+              type: string
+              description: The billing currency code.
+        summaryByProject:
+          type: array
+          description: Cost breakdown by project.
+          items:
+            type: object
+            properties:
+              projectName:
+                type: string
+                description: The name of the project.
+              totalCost:
+                type: string
+                description: The total cost for this project.
+        summaryByService:
+          type: array
+          description: Cost breakdown by service type.
+          items:
+            type: object
+            properties:
+              serviceName:
+                type: string
+                description: The name of the service (compute, storage, etc.).
+              totalCost:
+                type: string
+                description: The total cost for this service.
+    BillsDetails:
+      type: object
+      description: Detailed daily billing data for a month.
+      properties:
+        billsDetails:
+          type: array
+          description: List of daily billing detail records.
+          items:
+            $ref: '#/components/schemas/BillDetail'
+    BillDetail:
+      type: object
+      description: A single daily billing record for a cluster and service.
+      properties:
+        billedDate:
+          type: string
+          format: date
+          description: The date of this billing record.
+        projectName:
+          type: string
+          description: The name of the project.
+        clusterName:
+          type: string
+          description: The name of the cluster.
+        servicePathName:
+          type: string
+          description: The name of the service path (e.g., TiDB Serverless Compute).
+        credits:
+          type: string
+          description: Credits applied to this billing record.
+        discounts:
+          type: string
+          description: Discounts applied to this billing record.
+        runningTotal:
+          type: string
+          description: The running total cost up to and including this date.
+        totalCost:
+          type: string
+          description: The total cost for this specific record.
+    CostExplorerRequest:
+      type: object
+      description: Request body for querying the cost explorer.
+      properties:
+        filter:
+          type: object
+          description: Criteria to filter cost explorer results by project, cluster, or service.
+        groups:
+          type: array
+          description: Dimensions to group results by (project, cluster, service, region).
+          items:
+            type: string
+    BillsCostExplorer:
+      type: object
+      description: Results from a cost explorer query.
+      properties:
+        trends:
+          type: array
+          description: Array of cost trend data points.
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                description: The date for this trend data point.
+              cost:
+                type: string
+                description: The cost amount for this date.
+    ErrorResponse:
+      type: object
+      description: Standard error response returned when an API request fails.
+      properties:
+        code:
+          type: integer
+          description: The HTTP status code of the error.
+        status:
+          type: string
+          description: The error status string.
+        error:
+          type: string
+          description: A machine-readable error code identifier.
+        msgPrefix:
+          type: string
+          description: A human-readable error message describing the failure.
