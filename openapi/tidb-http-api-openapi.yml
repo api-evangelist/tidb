@@ -24,22 +24,22 @@ servers:
   - url: http://localhost:10080
     description: Local TiDB Node (default status port)
 tags:
-  - name: Status
-    description: Endpoints for retrieving the operational status of the TiDB server instance.
-  - name: Schema
-    description: Endpoints for retrieving database and table schema information from the TiDB information schema.
-  - name: Regions
-    description: Endpoints for retrieving TiKV region metadata associated with tables and the cluster.
-  - name: MVCC
-    description: Endpoints for retrieving multi-version concurrency control (MVCC) key details for debugging.
   - name: DDL
     description: Endpoints for managing and inspecting DDL jobs, including ownership and history.
+  - name: Diagnostics
+    description: Endpoints for downloading debug information and managing server diagnostics.
+  - name: MVCC
+    description: Endpoints for retrieving multi-version concurrency control (MVCC) key details for debugging.
+  - name: Regions
+    description: Endpoints for retrieving TiKV region metadata associated with tables and the cluster.
+  - name: Schema
+    description: Endpoints for retrieving database and table schema information from the TiDB information schema.
   - name: Settings
     description: Endpoints for retrieving and modifying TiDB server runtime settings.
   - name: Statistics
     description: Endpoints for exporting optimizer statistics used for query planning.
-  - name: Diagnostics
-    description: Endpoints for downloading debug information and managing server diagnostics.
+  - name: Status
+    description: Endpoints for retrieving the operational status of the TiDB server instance.
 paths:
   /status:
     get:

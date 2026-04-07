@@ -26,22 +26,20 @@ servers:
   - url: https://billing.tidbapi.com/v1beta1
     description: Billing API Server
 tags:
-  - name: Clusters
-    description: Operations for creating, listing, updating, and deleting TiDB Cloud Dedicated clusters.
-  - name: Regions
-    description: Operations for listing available cloud regions and node specifications.
-  - name: Private Endpoint Connections
-    description: Operations for managing private endpoint connections to dedicated clusters.
-  - name: Imports
-    description: Operations for creating and managing data import tasks into TiDB Cloud clusters.
-  - name: Integrations
-    description: Operations for managing third-party integrations with TiDB Cloud clusters.
   - name: API Keys
     description: Operations for creating, listing, updating, and deleting TiDB Cloud API keys.
   - name: Audit Logs
     description: Operations for retrieving organization-level console audit logs.
   - name: Billing
     description: Operations for retrieving monthly billing summaries, cost details, and usage trends.
+  - name: Clusters
+    description: Operations for creating, listing, updating, and deleting TiDB Cloud Dedicated clusters.
+  - name: Imports
+    description: Operations for creating and managing data import tasks into TiDB Cloud clusters.
+  - name: Integrations
+    description: Operations for managing third-party integrations with TiDB Cloud clusters.
+  - name: Regions
+    description: Operations for listing available cloud regions and node specifications.
 security:
   - digestAuth: []
 paths:

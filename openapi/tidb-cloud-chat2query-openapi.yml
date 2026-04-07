@@ -30,16 +30,14 @@ servers:
         description: The Chat2Query Data App ID assigned by TiDB Cloud.
         default: dataapp_default
 tags:
-  - name: Data Summaries
-    description: Operations for generating and managing AI summaries of database schemas used as context for SQL generation.
   - name: Chat2Data
     description: Operations for translating natural language questions into SQL and executing them against TiDB Cloud clusters.
-  - name: SQL Refinement
-    description: Operations for refining and improving previously generated SQL queries.
+  - name: Data Summaries
+    description: Operations for generating and managing AI summaries of database schemas used as context for SQL generation.
   - name: Sessions
     description: Operations for creating and managing multi-round conversational chat sessions.
-  - name: Knowledge Bases
-    description: Operations for managing knowledge bases that provide additional context for SQL generation.
+  - name: SQL Refinement
+    description: Operations for refining and improving previously generated SQL queries.
 security:
   - digestAuth: []
 paths:

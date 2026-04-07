@@ -1,16 +1,14 @@
 aid: tidb
-url: 
-  https://raw.githubusercontent.com/api-evangelist/tidb/refs/heads/main/apis.yml
+url: https://raw.githubusercontent.com/api-evangelist/tidb/refs/heads/main/apis.yml
 apis:
   - aid: tidb:tidb-cloud-api
     name: TiDB Cloud API
     tags:
-      - Database
       - Cloud
-      - Distributed SQL
       - Cluster Management
-    image: 
-      https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+      - Database
+      - Distributed SQL
+    image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
     baseURL: https://api.tidbcloud.com
     humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
     properties:
@@ -33,13 +31,12 @@ apis:
   - aid: tidb:tidb-cloud-data-service-api
     name: TiDB Cloud Data Service API
     tags:
-      - Database
       - Cloud
       - Data Access
-      - Serverless
+      - Database
       - REST
-    image: 
-      https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+      - Serverless
+    image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
     baseURL: https://data.tidbcloud.com
     humanURL: https://docs.pingcap.com/tidbcloud/data-service-overview/
     properties:
@@ -62,13 +59,12 @@ apis:
   - aid: tidb:tidb-cloud-chat2query-api
     name: TiDB Cloud Chat2Query API
     tags:
-      - Database
       - AI
-      - SQL Generation
-      - Natural Language
       - Cloud
-    image: 
-      https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+      - Database
+      - Natural Language
+      - SQL Generation
+    image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
     baseURL: https://data.tidbcloud.com
     humanURL: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
     properties:
@@ -87,11 +83,10 @@ apis:
     tags:
       - Database
       - Monitoring
-      - Self-Managed
       - Operations
+      - Self-Managed
       - Status
-    image: 
-      https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
     baseURL: http://localhost:10080
     humanURL: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
     properties:

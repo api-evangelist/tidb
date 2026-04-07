@@ -22,16 +22,16 @@ servers:
   - url: https://dataservice.tidbapi.com/v1beta1
     description: Data Service Management API Server
 tags:
+  - name: Data App API Keys
+    description: Operations for managing API keys scoped to a specific Data App.
   - name: Data Apps
     description: Operations for creating, listing, updating, and deleting Data Apps.
   - name: Data Sources
     description: Operations for linking and managing TiDB Cloud clusters as data sources within a Data App.
-  - name: Endpoints
-    description: Operations for creating, listing, updating, testing, and deleting custom SQL-backed API endpoints.
-  - name: Data App API Keys
-    description: Operations for managing API keys scoped to a specific Data App.
   - name: Deployments
     description: Operations for deploying and managing versions of a Data App.
+  - name: Endpoints
+    description: Operations for creating, listing, updating, testing, and deleting custom SQL-backed API endpoints.
 security:
   - digestAuth: []
 paths:
