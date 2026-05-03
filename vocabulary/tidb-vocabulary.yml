@@ -1,0 +1,164 @@
+title: TiDB Vocabulary
+description: >-
+  Domain vocabulary for TiDB and TiDB Cloud APIs covering distributed SQL
+  database architecture, cloud deployment, and data service concepts.
+provider: TiDB / PingCAP
+created: '2026-05-03'
+modified: '2026-05-03'
+tags:
+  - Cloud
+  - Database
+  - Distributed SQL
+  - HTAP
+  - Open Source
+
+terms:
+  - term: TiDB
+    label: TiDB
+    definition: >-
+      An open-source distributed SQL database that supports Hybrid Transactional
+      and Analytical Processing (HTAP) workloads. TiDB is MySQL-compatible and
+      offers horizontal scalability, strong consistency, and high availability
+      through its Raft-based consensus protocol.
+    tags:
+      - Database
+      - Open Source
+
+  - term: TiDB Cloud
+    label: TiDB Cloud
+    definition: >-
+      PingCAP's fully managed Database-as-a-Service (DBaaS) offering for TiDB.
+      Available in Serverless and Dedicated deployment tiers across AWS and GCP.
+    tags:
+      - Cloud
+      - DBaaS
+
+  - term: HTAP
+    label: Hybrid Transactional and Analytical Processing
+    definition: >-
+      A workload paradigm combining OLTP (transactional) and OLAP (analytical)
+      queries in a single database system. TiDB achieves HTAP via separate TiKV
+      (row-based) and TiFlash (columnar) storage engines that stay in sync.
+    tags:
+      - Database Architecture
+
+  - term: TiKV
+    label: TiKV
+    definition: >-
+      The distributed key-value storage engine underlying TiDB. Uses the Raft
+      consensus protocol for strong consistency and stores data in row format
+      optimized for transactional (OLTP) workloads.
+    tags:
+      - Storage Engine
+
+  - term: TiFlash
+    label: TiFlash
+    definition: >-
+      TiDB's columnar storage extension for analytical (OLAP) queries.
+      Asynchronously replicates data from TiKV and uses columnar format for
+      fast aggregations and table scans.
+    tags:
+      - Storage Engine
+      - Analytics
+
+  - term: PD
+    label: Placement Driver
+    definition: >-
+      The metadata management component of a TiDB cluster that stores cluster
+      topology, allocates transaction IDs, and handles data rebalancing across
+      TiKV nodes.
+    tags:
+      - Database Architecture
+
+  - term: Serverless
+    label: TiDB Serverless
+    definition: >-
+      TiDB Cloud's auto-scaling, pay-per-use deployment tier. Ideal for
+      development, testing, and variable-traffic workloads. No cluster
+      configuration required.
+    tags:
+      - Cloud
+      - Deployment
+
+  - term: Dedicated
+    label: TiDB Dedicated
+    definition: >-
+      TiDB Cloud's dedicated cluster deployment tier with isolated compute and
+      storage resources. Supports custom node sizes, VPC peering, and private
+      endpoints.
+    tags:
+      - Cloud
+      - Deployment
+
+  - term: Data App
+    label: Data App
+    definition: >-
+      A logical grouping in TiDB Cloud Data Service that contains custom API
+      endpoints backed by SQL queries. Each Data App is linked to one or more
+      TiDB Cloud clusters.
+    tags:
+      - Data Service
+
+  - term: Chat2Query
+    label: Chat2Query
+    definition: >-
+      TiDB Cloud's AI-powered feature that converts natural language instructions
+      into SQL queries, executes them against a cluster, and returns structured
+      results. Accessible via the Chat2Query Data App endpoint.
+    tags:
+      - AI
+      - Data Service
+
+  - term: Digest Authentication
+    label: Digest Authentication
+    definition: >-
+      The authentication scheme used by the TiDB Cloud Management API. Clients
+      provide a public key and private key; the private key signs the request
+      using MD5 digest.
+    tags:
+      - Authentication
+
+  - term: Raft
+    label: Raft Consensus Protocol
+    definition: >-
+      The distributed consensus algorithm used by TiKV for data replication.
+      TiKV stores data in 3-replica groups and uses Raft to ensure consistency
+      and failover.
+    tags:
+      - Database Architecture
+
+  - term: Region
+    label: TiKV Region
+    definition: >-
+      A contiguous range of key-value data in TiKV, typically 96 MiB in size.
+      The Placement Driver manages region distribution and rebalancing across
+      TiKV nodes.
+    tags:
+      - Database Architecture
+
+  - term: TiDB HTTP API
+    label: TiDB HTTP API
+    definition: >-
+      A built-in administrative HTTP interface available on self-managed TiDB
+      nodes (port 10080). Exposes endpoints for server status, schema info,
+      region metadata, and monitoring data.
+    tags:
+      - Operations
+      - Self-Managed
+
+  - term: Import Task
+    label: Import Task
+    definition: >-
+      A TiDB Cloud job for loading data from external sources (S3, GCS, local
+      files) into a cluster. Supports CSV, SQL, and Parquet formats.
+    tags:
+      - Data Import
+
+  - term: Private Endpoint
+    label: Private Endpoint
+    definition: >-
+      A TiDB Cloud Dedicated feature enabling private network connectivity between
+      a VPC and a TiDB cluster without traffic traversing the public internet.
+    tags:
+      - Networking
+      - Security

@@ -1,0 +1,42 @@
+{
+  "request": {
+    "method": "POST",
+    "url": "https://data.tidbcloud.com/api/v1beta/app/dataapp-abc123/endpoint/chat2data",
+    "headers": {
+      "Authorization": "Bearer YOUR_DATA_APP_API_KEY",
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "cluster_id": "1234567890123456789",
+      "database": "ecommerce",
+      "instruction": "Show me the top 10 customers by total order value in the last 30 days"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "type": "sql_endpoint",
+      "data": {
+        "columns": [
+          {"col": "customer_id", "data_type": "BIGINT", "nullable": false},
+          {"col": "customer_name", "data_type": "VARCHAR", "nullable": true},
+          {"col": "total_order_value", "data_type": "DECIMAL", "nullable": true}
+        ],
+        "rows": [
+          {"customer_id": "1001", "customer_name": "Acme Corp", "total_order_value": "485320.50"},
+          {"customer_id": "1042", "customer_name": "Global Tech LLC", "total_order_value": "312750.00"},
+          {"customer_id": "2003", "customer_name": "Summit Retail", "total_order_value": "287430.75"}
+        ],
+        "result": {
+          "code": 200,
+          "message": "Query executed successfully",
+          "row_count": 10,
+          "row_affect": 0,
+          "end_ms": 1714742400000,
+          "latency": "42ms",
+          "generated_sql": "SELECT c.id as customer_id, c.name as customer_name, SUM(o.total) as total_order_value FROM customers c JOIN orders o ON c.id = o.customer_id WHERE o.created_at >= DATE_SUB(NOW(), INTERVAL 30 DAY) GROUP BY c.id, c.name ORDER BY total_order_value DESC LIMIT 10"
+        }
+      }
+    }
+  }
+}

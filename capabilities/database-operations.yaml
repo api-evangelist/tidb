@@ -1,0 +1,191 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: TiDB Cloud Database Operations
+  description: >-
+    Unified capability for database administrators and developers to manage
+    TiDB Cloud clusters, backups, and data imports alongside executing SQL
+    queries via the Data Service API. Covers cluster lifecycle management,
+    backup scheduling, and data access workflows.
+  tags:
+    - TiDB
+    - Cloud
+    - Database
+    - Cluster Management
+    - Data Access
+    - Distributed SQL
+  created: "2026-05-03"
+  modified: "2026-05-03"
+
+binds:
+  - namespace: env
+    keys:
+      TIDB_CLOUD_PUBLIC_KEY: TIDB_CLOUD_PUBLIC_KEY
+      TIDB_CLOUD_PRIVATE_KEY: TIDB_CLOUD_PRIVATE_KEY
+      TIDB_DATA_APP_API_KEY: TIDB_DATA_APP_API_KEY
+
+capability:
+  consumes:
+    - import: tidb-cloud
+      location: ./shared/tidb-cloud-api.yaml
+    - import: tidb-data-service
+      location: ./shared/tidb-data-service.yaml
+
+  exposes:
+    - type: rest
+      port: 8080
+      namespace: tidb-operations-api
+      description: >-
+        Unified REST API for TiDB Cloud cluster management and data service operations.
+      resources:
+        - path: /v1/clusters
+          name: clusters
+          description: TiDB Cloud cluster management
+          operations:
+            - method: GET
+              name: list-clusters
+              description: List all TiDB Cloud clusters
+              call: "tidb-cloud.list-clusters"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/clusters/{clusterId}
+          name: cluster-detail
+          description: Individual cluster details
+          operations:
+            - method: GET
+              name: get-cluster
+              description: Get details for a specific cluster
+              call: "tidb-cloud.get-cluster"
+              with:
+                clusterId: "rest.clusterId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/clusters/{clusterId}/backups
+          name: cluster-backups
+          description: Cluster backups
+          operations:
+            - method: GET
+              name: list-backups
+              description: List backups for a cluster
+              call: "tidb-cloud.list-backups"
+              with:
+                clusterId: "rest.clusterId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/clusters/{clusterId}/imports
+          name: cluster-imports
+          description: Data import tasks
+          operations:
+            - method: GET
+              name: list-imports
+              description: List data import tasks for a cluster
+              call: "tidb-cloud.list-imports"
+              with:
+                clusterId: "rest.clusterId"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/query
+          name: natural-language-query
+          description: AI-powered SQL queries
+          operations:
+            - method: POST
+              name: chat2query
+              description: Execute a natural language query against a TiDB database
+              call: "tidb-data-service.chat2query"
+              with:
+                cluster_id: "rest.cluster_id"
+                database: "rest.database"
+                instruction: "rest.instruction"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9090
+      namespace: tidb-operations-mcp
+      transport: http
+      description: >-
+        MCP server for AI-assisted TiDB Cloud database operations and data access.
+      tools:
+        - name: list-clusters
+          description: List all TiDB Cloud clusters across projects
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "tidb-cloud.list-clusters"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: get-cluster
+          description: Get detailed configuration and status for a specific TiDB Cloud cluster
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "tidb-cloud.get-cluster"
+          with:
+            clusterId: "tools.clusterId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: list-cluster-backups
+          description: List all backups for a TiDB Cloud cluster
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "tidb-cloud.list-backups"
+          with:
+            clusterId: "tools.clusterId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: create-backup
+          description: Create a manual backup for a TiDB Cloud cluster
+          hints:
+            readOnly: false
+            idempotent: false
+          call: "tidb-cloud.create-backup"
+          with:
+            clusterId: "tools.clusterId"
+            name: "tools.name"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: list-import-tasks
+          description: List data import tasks for a TiDB Cloud cluster
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "tidb-cloud.list-imports"
+          with:
+            clusterId: "tools.clusterId"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: query-with-natural-language
+          description: >-
+            Execute a natural language instruction against a TiDB Cloud database.
+            The AI generates and runs SQL automatically. Ideal for ad-hoc analysis.
+          hints:
+            readOnly: true
+            openWorld: false
+          call: "tidb-data-service.chat2query"
+          with:
+            cluster_id: "tools.cluster_id"
+            database: "tools.database"
+            instruction: "tools.instruction"
+          outputParameters:
+            - type: object
+              mapping: "$."

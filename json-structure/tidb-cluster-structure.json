@@ -1,0 +1,81 @@
+{
+  "name": "TiDB Cloud Cluster",
+  "description": "Structure documentation for TiDB Cloud cluster objects",
+  "fields": [
+    {
+      "name": "id",
+      "type": "string",
+      "required": true,
+      "description": "Unique cluster identifier (numeric string)"
+    },
+    {
+      "name": "project_id",
+      "type": "string",
+      "required": true,
+      "description": "ID of the project this cluster belongs to"
+    },
+    {
+      "name": "name",
+      "type": "string",
+      "required": true,
+      "description": "Cluster name (lowercase letters, numbers, hyphens)"
+    },
+    {
+      "name": "cluster_type",
+      "type": "enum",
+      "required": true,
+      "values": ["SERVERLESS", "DEDICATED"],
+      "description": "Cluster deployment type"
+    },
+    {
+      "name": "cloud_provider",
+      "type": "enum",
+      "required": true,
+      "values": ["AWS", "GCP"],
+      "description": "Cloud provider for the cluster"
+    },
+    {
+      "name": "region",
+      "type": "string",
+      "required": true,
+      "description": "Cloud region (e.g., us-east-1, us-central1)"
+    },
+    {
+      "name": "status.cluster_status",
+      "type": "enum",
+      "required": false,
+      "values": ["AVAILABLE", "CREATING", "MODIFYING", "PAUSED", "RESUMING", "UNAVAILABLE", "IMPORTING", "DELETING"],
+      "description": "Current operational status of the cluster"
+    },
+    {
+      "name": "version",
+      "type": "string",
+      "required": false,
+      "description": "TiDB version running on the cluster (e.g., v7.1.0)"
+    },
+    {
+      "name": "created_timestamp",
+      "type": "string (date-time)",
+      "required": false,
+      "description": "ISO 8601 creation timestamp"
+    },
+    {
+      "name": "config.port",
+      "type": "integer",
+      "required": false,
+      "description": "MySQL-compatible port for database connections (default: 4000)"
+    },
+    {
+      "name": "config.components.tidb",
+      "type": "object",
+      "required": false,
+      "description": "TiDB compute node configuration (node_size, node_quantity)"
+    },
+    {
+      "name": "config.components.tikv",
+      "type": "object",
+      "required": false,
+      "description": "TiKV storage node configuration (node_size, storage_size_gib, node_quantity)"
+    }
+  ]
+}

@@ -1,0 +1,99 @@
+extends:
+  - spectral:oas
+
+rules:
+  tidb-operation-ids-camel-case:
+    description: Operation IDs must use camelCase
+    severity: warn
+    given: "$.paths[*][*].operationId"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[a-z][a-zA-Z0-9]+$"
+
+  tidb-tags-title-case:
+    description: All tags must use Title Case
+    severity: warn
+    given: "$.tags[*].name"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[A-Z][a-zA-Z0-9 &-]+$"
+
+  tidb-paths-kebab-case:
+    description: Path segments must use kebab-case (no underscores)
+    severity: warn
+    given: "$.paths[*]~"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^(/[a-z][a-z0-9-]*|/\\{[a-zA-Z][a-zA-Z0-9_]+\\})*$"
+
+  tidb-responses-200-on-get:
+    description: GET operations must have a 200 response
+    severity: error
+    given: "$.paths[*].get"
+    then:
+      field: responses.200
+      function: defined
+
+  tidb-responses-401-documented:
+    description: Operations should document 401 unauthorized response
+    severity: info
+    given: "$.paths[*][get,post,put,delete]"
+    then:
+      field: responses.401
+      function: defined
+
+  tidb-servers-https-for-cloud:
+    description: TiDB Cloud API server URLs must use HTTPS
+    severity: error
+    given: "$.servers[?(@.url =~ /tidbcloud\.com/)].url"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^https://"
+
+  tidb-info-version-defined:
+    description: API info must specify a version
+    severity: error
+    given: "$.info"
+    then:
+      field: version
+      function: defined
+
+  tidb-request-body-schema:
+    description: POST/PUT request bodies must define a JSON schema
+    severity: error
+    given: "$.paths[*][post,put].requestBody.content.application/json"
+    then:
+      field: schema
+      function: defined
+
+  tidb-component-schemas-defined:
+    description: Schemas should be defined in components/schemas
+    severity: info
+    given: "$.components"
+    then:
+      field: schemas
+      function: defined
+
+  tidb-paginated-responses-have-total:
+    description: List responses should include a total count field
+    severity: info
+    given: "$.components.schemas[?(@.properties.items)].properties"
+    then:
+      field: total
+      function: defined
+
+  tidb-timestamp-fields-format:
+    description: Timestamp fields should use date-time format
+    severity: info
+    given: "$.components.schemas[*].properties[created_timestamp,updated_timestamp]"
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          properties:
+            format:
+              const: date-time

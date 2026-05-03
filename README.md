@@ -1,101 +1,79 @@
-# TiDB (tidb)
-TiDB is an open-source, distributed SQL database developed by PingCAP that supports both OLTP and OLAP workloads on a single platform. TiDB Cloud is the fully managed cloud service offering, providing serverless and dedicated tiers with built-in scaling, high availability, and MySQL compatibility. PingCAP provides a developer platform with REST APIs for managing cloud infrastructure, accessing data, and querying databases using AI-powered natural language interfaces.
+# TiDB
 
-**URL:** [Visit APIs.json URL](https://raw.githubusercontent.com/api-evangelist/tidb/refs/heads/main/apis.yml)
+TiDB is an open-source, distributed SQL database developed by PingCAP that supports both OLTP and OLAP workloads (HTAP) on a single platform. TiDB Cloud is the fully managed cloud service offering, providing Serverless and Dedicated tiers with built-in scaling, high availability, and MySQL compatibility. PingCAP provides a developer platform with REST APIs for managing cloud infrastructure, accessing data, and querying databases using AI-powered natural language interfaces.
 
-## Scope
-
-- **Type:** Contract
-- **Position:** Consuming
-- **Access:** 3rd-Party
-
-## Tags:
-
- - Database, Cloud, Distributed SQL, AI, Serverless, Cluster Management
-
-## Timestamps
-
-- **Created:** 2026-03-21
-- **Modified:** 2026-03-21
+**Website:** [https://www.pingcap.com](https://www.pingcap.com)  
+**Cloud Portal:** [https://tidbcloud.com](https://tidbcloud.com)  
+**Documentation:** [https://docs.pingcap.com](https://docs.pingcap.com)
 
 ## APIs
 
-### TiDB Cloud API
-The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud. It supports managing projects, clusters, backups, restores, data imports, billing, and private endpoint connections across both TiDB Cloud Serverless and TiDB Cloud Dedicated tiers. The API uses digest authentication with public and private API keys and returns JSON-formatted responses.
+| API | Description | Docs |
+|-----|-------------|------|
+| TiDB Cloud API | Cluster, backup, import, and billing management | [Docs](https://docs.pingcap.com/tidbcloud/api-overview/) |
+| TiDB Cloud Data Service API | Custom SQL-backed API endpoints via Data Apps | [Docs](https://docs.pingcap.com/tidbcloud/data-service-overview/) |
+| TiDB Cloud Chat2Query API | AI-powered natural language to SQL execution | [Docs](https://docs.pingcap.com/tidbcloud/use-chat2query-api/) |
+| TiDB HTTP API | Self-managed node administration and monitoring | [Docs](https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md) |
 
-**Human URL:** [https://docs.pingcap.com/tidbcloud/api-overview/](https://docs.pingcap.com/tidbcloud/api-overview/)
+## OpenAPI Specifications
 
+| Spec | Path |
+|------|------|
+| TiDB Cloud API | [openapi/tidb-cloud-api-openapi.yml](openapi/tidb-cloud-api-openapi.yml) |
+| TiDB Cloud Data Service API | [openapi/tidb-cloud-data-service-openapi.yml](openapi/tidb-cloud-data-service-openapi.yml) |
+| TiDB Cloud Chat2Query API | [openapi/tidb-cloud-chat2query-openapi.yml](openapi/tidb-cloud-chat2query-openapi.yml) |
+| TiDB HTTP API | [openapi/tidb-http-api-openapi.yml](openapi/tidb-http-api-openapi.yml) |
 
-#### Tags:
+## JSON Schemas
 
- - Database, Cloud, Distributed SQL, Cluster Management
+| Schema | Path |
+|--------|------|
+| TiDB Cluster | [json-schema/tidb-cluster-schema.json](json-schema/tidb-cluster-schema.json) |
+| TiDB Data Service | [json-schema/tidb-data-service-schema.json](json-schema/tidb-data-service-schema.json) |
 
-#### Properties
+## JSON Structure
 
-- [Documentation](https://docs.pingcap.com/tidbcloud/api-overview/)
-- [Documentation](https://docs.pingcap.com/tidbcloud/api/v1beta/)
-- [OpenAPI](openapi/tidb-cloud-api-openapi.yml)
+| Structure | Path |
+|-----------|------|
+| TiDB Cluster Structure | [json-structure/tidb-cluster-structure.json](json-structure/tidb-cluster-structure.json) |
 
-### TiDB Cloud Data Service API
-TiDB Cloud Data Service enables developers to access TiDB Cloud data via HTTPS requests using custom API endpoints backed by SQL queries. Developers define endpoints within a Data App, specifying the HTTP method, path, and the SQL logic that the endpoint executes against a linked TiDB Cloud cluster. The service uses a serverless execution model, automatically handling compute resources and scaling without requiring infrastructure management.
+## JSON-LD
 
-**Human URL:** [https://docs.pingcap.com/tidbcloud/data-service-overview/](https://docs.pingcap.com/tidbcloud/data-service-overview/)
+| Context | Path |
+|---------|------|
+| TiDB Context | [json-ld/tidb-context.jsonld](json-ld/tidb-context.jsonld) |
 
+## Examples
 
-#### Tags:
+| Example | Path |
+|---------|------|
+| Cloud API List Clusters | [examples/tidb-cloud-api-list-clusters-example.json](examples/tidb-cloud-api-list-clusters-example.json) |
+| Chat2Query Execute | [examples/tidb-cloud-chat2query-example.json](examples/tidb-cloud-chat2query-example.json) |
+| HTTP API Get Status | [examples/tidb-http-api-get-status-example.json](examples/tidb-http-api-get-status-example.json) |
 
- - Database, Cloud, Data Access, Serverless, REST
+## Spectral Rules
 
-#### Properties
+| Ruleset | Path |
+|---------|------|
+| TiDB API Rules | [rules/tidb-rules.yml](rules/tidb-rules.yml) |
 
-- [Documentation](https://docs.pingcap.com/tidbcloud/data-service-overview/)
-- [Documentation](https://docs.pingcap.com/tidbcloud/data-service-get-started/)
-- [OpenAPI](openapi/tidb-cloud-data-service-openapi.yml)
+## Naftiko Capabilities
 
-### TiDB Cloud Chat2Query API
-The TiDB Cloud Chat2Query API is an AI-powered interface that allows developers to generate and execute SQL statements against TiDB Cloud clusters using natural language instructions. It is exposed as a special Data App within TiDB Cloud and provides endpoints for generating data summaries, translating natural language prompts into SQL, and executing the resulting queries. It is intended for building AI-assisted data exploration tools, reporting interfaces, and applications that need to query structured data without requiring users to write SQL directly.
+### Shared API Definitions
 
-**Human URL:** [https://docs.pingcap.com/tidbcloud/use-chat2query-api/](https://docs.pingcap.com/tidbcloud/use-chat2query-api/)
+| API | Path |
+|-----|------|
+| TiDB Cloud API | [capabilities/shared/tidb-cloud-api.yaml](capabilities/shared/tidb-cloud-api.yaml) |
+| TiDB Data Service | [capabilities/shared/tidb-data-service.yaml](capabilities/shared/tidb-data-service.yaml) |
 
+### Workflow Capabilities
 
-#### Tags:
+| Workflow | APIs | Description |
+|----------|------|-------------|
+| [Database Operations](capabilities/database-operations.yaml) | Cloud API + Data Service | Cluster management, backups, imports, and AI-assisted SQL queries |
 
- - Database, AI, SQL Generation, Natural Language, Cloud
+## Vocabulary
 
-#### Properties
-
-- [Documentation](https://docs.pingcap.com/tidbcloud/use-chat2query-api/)
-- [OpenAPI](openapi/tidb-cloud-chat2query-openapi.yml)
-
-### TiDB HTTP API
-The TiDB HTTP API is a built-in administrative interface available on self-managed TiDB server instances, accessible on port 10080 by default. It exposes endpoints for retrieving server status, database and table schema information, region metadata, MVCC key details, DDL job history, and hot region data. Operators and monitoring systems use this API to inspect the internal state of a running TiDB node, integrate with observability tooling, and troubleshoot distributed SQL execution.
-
-**Human URL:** [https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md](https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md)
-
-
-#### Tags:
-
- - Database, Monitoring, Self-Managed, Operations, Status
-
-#### Properties
-
-- [Documentation](https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md)
-- [Documentation](https://docs.pingcap.com/tidb/stable/tidb-monitoring-api/)
-- [OpenAPI](openapi/tidb-http-api-openapi.yml)
-
-## Common Properties
-
-- [Portal](https://tidbcloud.com/)
-- [Documentation](https://docs.pingcap.com/tidbcloud/overview)
-- [Website](https://www.pingcap.com/)
-- [PrivacyPolicy](https://www.pingcap.com/privacy-policy/)
-- [TermsOfService](https://www.pingcap.com/terms-of-service/)
-- [Support](https://tidbcloud.com/support)
-- [Blog](https://www.pingcap.com/blog/)
-- [Login](https://tidbcloud.com/console/login)
-
-## Maintainers
-
-**FN:** API Evangelist
-
-**Email:** info@apievangelist.com
+| Vocabulary | Path |
+|------------|------|
+| TiDB Vocabulary | [vocabulary/tidb-vocabulary.yml](vocabulary/tidb-vocabulary.yml) |

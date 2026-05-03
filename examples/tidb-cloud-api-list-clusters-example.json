@@ -1,0 +1,48 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "https://api.tidbcloud.com/api/v1beta/clusters?projectId=proj-abc123def456",
+    "headers": {
+      "Authorization": "Digest username=\"PUBLIC_KEY\", uri=\"...\", algorithm=MD5, response=\"...\"",
+      "Accept": "application/json"
+    }
+  },
+  "response": {
+    "status": 200,
+    "body": {
+      "items": [
+        {
+          "id": "1234567890123456789",
+          "project_id": "proj-abc123def456",
+          "name": "production-analytics",
+          "display_name": "Production Analytics Cluster",
+          "cluster_type": "DEDICATED",
+          "cloud_provider": "AWS",
+          "region": "us-east-1",
+          "status": {
+            "cluster_status": "AVAILABLE",
+            "connection_strings": {
+              "default_user": "root",
+              "standard": {
+                "host": "gateway01.us-east-1.prod.aws.tidbcloud.com",
+                "port": 4000
+              }
+            }
+          },
+          "config": {
+            "components": {
+              "tidb": {"node_size": "8C16G", "node_quantity": 2},
+              "tikv": {"node_size": "8C32G", "storage_size_gib": 500, "node_quantity": 3}
+            },
+            "port": 4000
+          },
+          "created_timestamp": "2026-01-15T10:30:00Z",
+          "version": "v7.1.0"
+        }
+      ],
+      "total": 1,
+      "page": 1,
+      "page_size": 10
+    }
+  }
+}

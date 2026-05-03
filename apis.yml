@@ -112,8 +112,12 @@ common:
     url: json-schema/tidb-cluster-schema.json
   - type: JSONSchema
     url: json-schema/tidb-data-service-schema.json
+  - type: Spectral
+    url: rules/tidb-rules.yml
+  - type: Vocabulary
+    url: vocabulary/tidb-vocabulary.yml
 
-modified: '2026-03-21'
+modified: '2026-05-03'
 description: >-
   TiDB is an open-source distributed SQL database that supports Hybrid Transactional
   and Analytical Processing workloads, with horizontal scalability, strong consistency,
