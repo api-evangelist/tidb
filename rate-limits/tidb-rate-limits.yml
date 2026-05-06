@@ -4,94 +4,59 @@ schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main
 provider: tidb
 providerId: tidb
 created: '2026-05-04'
-modified: '2026-05-04'
+modified: '2026-05-05'
+reconciled: false
 tags:
+  - Database
+  - Cloud
   - Rate Limiting
-  - Quotas
-  - Throttling
-description: Machine-readable rate limit definitions for the tidb API surface. Captures per-tier quotas,
-  burst behavior, response signaling, and recovery semantics. Defaults are scaffold values to be replaced
-  with published provider limits.
-headers:
-  limit: X-RateLimit-Limit
-  remaining: X-RateLimit-Remaining
-  reset: X-RateLimit-Reset
-  retryAfter: Retry-After
-  policy: RateLimit-Policy
+description: TiDB Cloud limits its workload by Request Units (RUs) and storage rather than per-second
+  HTTP rate caps. The Starter tier allots 250M RUs/month and 25 GiB row + 25 GiB column storage per organization;
+  the Essential preview autoscales up to 100K RUs and the Premium/Dedicated tiers scale further. TiDB
+  Cloud's Management API and Data Service do publish HTTP throttling, but those numbers are not summarized
+  on the public pricing page reviewed.
+sources:
+  - https://www.pingcap.com/pricing/
+notes: Public pricing page covers RU/storage quotas; per-second HTTP rate limits for the TiDB Cloud
+  Management API and Data Service live in product docs that were not fetched in this pass — leave reconciled
+  false until docs.pingcap.com/tidbcloud rate-limit pages are confirmed.
 responseCodes:
   throttled: 429
-  quotaExceeded: 429
-  serviceUnavailable: 503
 limits:
-  - tier: free
-    name: Free Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 10
-    burst: 20
-    timeFrame: minute
-    applies:
-      - TiDB Cloud API
-      - TiDB Cloud Data Service API
-      - TiDB Cloud Chat2Query API
-      - TiDB HTTP API
-  - tier: free
-    name: Free Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
-    limit: 1000
+  - name: Starter Free Request Units
+    scope: organization
+    metric: request_units_per_month
+    limit: 250000000
     timeFrame: month
-    applies:
-      - TiDB Cloud API
-      - TiDB Cloud Data Service API
-      - TiDB Cloud Chat2Query API
-      - TiDB HTTP API
-  - tier: professional
-    name: Professional Tier Default
-    scope: api-key
-    metric: requests_per_minute
-    limit: 100
-    burst: 200
-    timeFrame: minute
-    applies:
-      - TiDB Cloud API
-      - TiDB Cloud Data Service API
-      - TiDB Cloud Chat2Query API
-      - TiDB HTTP API
-  - tier: professional
-    name: Professional Tier Monthly Quota
-    scope: api-key
-    metric: requests_per_month
+    notes: Free monthly RU allowance per organization on the Starter tier.
+  - name: Starter Free Row Storage
+    scope: organization
+    metric: gb
+    limit: 25
+    timeFrame: month
+    notes: 25 GiB of row storage included free per organization on Starter.
+  - name: Starter Free Column Storage
+    scope: organization
+    metric: gb
+    limit: 25
+    timeFrame: month
+    notes: 25 GiB of column storage included free per organization on Starter.
+  - name: Essential Autoscale Ceiling
+    scope: cluster
+    metric: request_units_per_second
     limit: 100000
-    timeFrame: month
-    applies:
-      - TiDB Cloud API
-      - TiDB Cloud Data Service API
-      - TiDB Cloud Chat2Query API
-      - TiDB HTTP API
-  - tier: enterprise
-    name: Enterprise Negotiated Limit
-    scope: contract
-    metric: requests_per_minute
-    limit: 1000
-    burst: 5000
-    timeFrame: minute
-    applies:
-      - TiDB Cloud API
-      - TiDB Cloud Data Service API
-      - TiDB Cloud Chat2Query API
-      - TiDB HTTP API
+    timeFrame: second
+    notes: Essential preview autoscales up to 100K RUs per second.
 policies:
-  - name: Backoff Strategy
-    description: Clients should implement exponential backoff with jitter, honoring the Retry-After header
-      when present.
-  - name: Burst Handling
-    description: Short bursts above the steady-state limit are tolerated up to the documented burst ceiling
-      before throttling engages.
-  - name: Quota Reset
-    description: Monthly quotas reset at the start of each calendar month in UTC. Per-minute and per-second
-      windows reset on a sliding-window basis.
-  - name: Fair Use
-    description: Even on uncapped enterprise tiers, sustained usage that materially impacts shared infrastructure
-      may be subject to fair-use throttling.
-maintainers: []
+  - name: Request Units (RUs)
+    description: TiDB Cloud meters work in Request Units, not raw HTTP requests; an RU encapsulates the
+      compute and IO of a query and is the primary unit for both throttling and billing.
+  - name: Spend Limits
+    description: Starter exposes spend limits and scale-to-zero so customers can bound monthly cost while
+      remaining pay-as-you-go beyond the free allowance.
+  - name: Autoscaling
+    description: Essential and Premium scale RU capacity automatically; Premium has unlimited autoscaling
+      while Essential caps at ~100K RUs.
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com

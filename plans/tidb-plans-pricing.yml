@@ -4,160 +4,213 @@ schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main
 provider: tidb
 providerId: tidb
 created: '2026-05-04'
-modified: '2026-05-04'
-tags: []
-description: Machine-readable plans and pricing scaffold for this API provider. Conforms to the API Commons
-  Plans schema. Tier limits and prices are scaffold defaults; replace with provider-published values.
+modified: '2026-05-05'
+reconciled: true
+tags:
+  - Database
+  - HTAP
+  - Distributed SQL
+  - Cloud
+description: TiDB (PingCAP) sells TiDB Cloud across four shapes — Starter (free + pay-as-you-go on Request
+  Units and storage), Essential (preview, ~$20/day for typical small production), Premium (preview,
+  $1,800/month entry), and Dedicated ($0.22/hour, $1,376/month minimum) — with TiDB Self-Managed and
+  the open-source TiDB Community as additional options. Starter exposes a meaningful free tier (25 GiB
+  row + 25 GiB column storage, 250M RUs/month per organization).
+sources:
+  - https://www.pingcap.com/pricing/
 plans:
-  - id: tidb-free
-    name: Free
-    type: freemium
-    description: Free entry tier for the tidb API surface. Intended for evaluation, prototyping, and low-volume
-      integrations. Real limits and pricing must be reconciled with the provider's published plan documentation.
+  - id: tidb-cloud-starter
+    name: TiDB Cloud Starter
+    type: usage-based
+    description: Pay-as-you-go serverless tier with a free monthly allowance, spend limits, scale-to-zero,
+      and per-RU/per-GiB metering for variable workloads.
     entries:
-      - label: API Requests
-        description: Monthly API request quota across all included endpoints
-        name: api_requests
-        type: quota
-        metric: requests
-        limit: 1000
+      - label: Base
+        name: base
+        type: flat
+        metric: month
+        limit: -1
         timeFrame: month
         geo: global
-        domains:
-          - https://api.tidbcloud.com
-          - https://data.tidbcloud.com
-          - http://localhost:10080
         unit: 1
-        price: '0.00'
+        price: 'starts from $0/month'
         userMultiplied: false
-      - label: Rate Limit
-        description: Maximum requests per minute on the free tier
-        name: rate_limit
-        type: rate
-        metric: requests_per_minute
-        limit: 10
-        timeFrame: minute
-        geo: global
-        domains:
-          - https://api.tidbcloud.com
-          - https://data.tidbcloud.com
-          - http://localhost:10080
-        unit: 1
-        price: '0.00'
-        userMultiplied: false
-    elements:
-      - name: Public Documentation
-      - name: Community Support
-      - name: Sandbox Access
-      - name: TiDB Cloud API
-      - name: TiDB Cloud Data Service API
-      - name: TiDB Cloud Chat2Query API
-      - name: TiDB HTTP API
-  - id: tidb-pro
-    name: Professional
-    type: paid
-    description: Production tier for tidb. Provides higher quotas, priority support, and access to the
-      broader API portfolio. Pricing placeholder; align with the provider's pricing page.
-    entries:
-      - label: API Requests
-        description: Monthly API request quota
-        name: api_requests
+      - label: Free Row Storage
+        name: free_row_storage
         type: quota
-        metric: requests
-        limit: 100000
+        metric: gb
+        limit: 25
         timeFrame: month
         geo: global
-        domains:
-          - https://api.tidbcloud.com
-          - https://data.tidbcloud.com
-          - http://localhost:10080
         unit: 1
-        price: TBD
+        price: '0'
         userMultiplied: false
-      - label: Rate Limit
-        description: Maximum requests per minute on the professional tier
-        name: rate_limit
-        type: rate
-        metric: requests_per_minute
-        limit: 100
-        timeFrame: minute
+      - label: Free Column Storage
+        name: free_column_storage
+        type: quota
+        metric: gb
+        limit: 25
+        timeFrame: month
         geo: global
-        domains:
-          - https://api.tidbcloud.com
-          - https://data.tidbcloud.com
-          - http://localhost:10080
         unit: 1
-        price: '0.00'
+        price: '0'
         userMultiplied: false
-      - label: Overage
-        description: Per-request price after monthly quota is exceeded
-        name: overage
+      - label: Free Request Units
+        name: free_request_units
+        type: quota
+        metric: request-unit
+        limit: 250000000
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '0'
+        userMultiplied: false
+      - label: Additional Storage
+        name: additional_storage
         type: metered
-        metric: requests
+        metric: gb
         limit: -1
         timeFrame: month
         geo: global
-        domains:
-          - https://api.tidbcloud.com
-          - https://data.tidbcloud.com
-          - http://localhost:10080
-        unit: 1000
-        price: TBD
+        unit: 1
+        price: '$0.20 per GiB'
         userMultiplied: false
-    elements:
-      - name: All Production Endpoints
-      - name: Email Support
-      - name: SLA Targets
-      - name: Webhook Subscriptions
-      - name: TiDB Cloud API
-      - name: TiDB Cloud Data Service API
-      - name: TiDB Cloud Chat2Query API
-      - name: TiDB HTTP API
-  - id: tidb-enterprise
-    name: Enterprise
-    type: enterprise
-    description: Custom-negotiated tier for tidb. Includes dedicated capacity, contractual SLAs, security
-      review, data residency options, and named technical account management.
-    entries:
-      - label: API Requests
-        description: Negotiated request volume; -1 indicates uncapped subject to fair use
-        name: api_requests
-        type: quota
-        metric: requests
+      - label: Additional Request Units
+        name: additional_request_units
+        type: metered
+        metric: request-unit
         limit: -1
         timeFrame: month
-        geo: configurable
-        domains:
-          - https://api.tidbcloud.com
-          - https://data.tidbcloud.com
-          - http://localhost:10080
-        unit: 1
-        price: custom
-        userMultiplied: false
-      - label: Rate Limit
-        description: Negotiated burst and steady-state rate
-        name: rate_limit
-        type: rate
-        metric: requests_per_minute
-        limit: 1000
-        timeFrame: minute
-        geo: configurable
-        domains:
-          - https://api.tidbcloud.com
-          - https://data.tidbcloud.com
-          - http://localhost:10080
-        unit: 1
-        price: custom
+        geo: global
+        unit: 1000000
+        price: '$0.10 per 1M RUs'
         userMultiplied: false
     elements:
-      - name: Unlimited / Negotiated Volume
-      - name: 24/7 Dedicated Support
-      - name: Contractual SLA
-      - name: Security & Compliance Review
-      - name: Dedicated Account Manager
-      - name: Custom Data Residency
-      - name: TiDB Cloud API
-      - name: TiDB Cloud Data Service API
-      - name: TiDB Cloud Chat2Query API
-      - name: TiDB HTTP API
-maintainers: []
+      - name: Pay-as-you-go
+      - name: Spend Limits
+      - name: Scale to Zero
+      - name: Variable Workloads
+  - id: tidb-cloud-essential
+    name: TiDB Cloud Essential (Preview)
+    type: usage-based
+    description: Usage-based managed tier with autoscaling up to 100K RUs, point-in-time backup (30-day
+      retention), encryption, and 99.99% availability. Approximately $20/day for typical small production
+      instances.
+    entries:
+      - label: Typical Daily Cost
+        name: typical_daily_cost
+        type: tiered
+        metric: day
+        limit: -1
+        timeFrame: day
+        geo: global
+        unit: 1
+        price: '~$20/day for typical small production instance'
+        userMultiplied: false
+      - label: Autoscale Ceiling
+        name: autoscale_ceiling
+        type: quota
+        metric: request-unit
+        limit: 100000
+        timeFrame: second
+        geo: global
+        unit: 1
+        price: 'usage-based'
+        userMultiplied: false
+    elements:
+      - name: 30-day Point-in-Time Backup
+      - name: Encryption
+      - name: 99.99% Availability
+      - name: Predictable Costs
+  - id: tidb-cloud-premium
+    name: TiDB Cloud Premium (Preview)
+    type: usage-based
+    description: Enterprise security (CMEK, PrivateLink, VPC Peering), 99.99% availability, usage-based
+      with unlimited autoscaling.
+    entries:
+      - label: Entry Price
+        name: entry_price
+        type: tiered
+        metric: month
+        limit: -1
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: 'starts from $1800/month'
+        userMultiplied: false
+    elements:
+      - name: CMEK
+      - name: PrivateLink
+      - name: VPC Peering
+      - name: 99.99% Availability
+      - name: Unlimited Autoscaling
+  - id: tidb-cloud-dedicated
+    name: TiDB Cloud Dedicated
+    type: subscription
+    description: Dedicated cluster on AWS, Google Cloud, or Azure with 4–32 vCPU node options. PCI-DSS
+      and SOC 2 Type II compliant.
+    entries:
+      - label: Hourly Rate
+        name: hourly_rate
+        type: tiered
+        metric: instance-hour
+        limit: -1
+        timeFrame: hour
+        geo: global
+        unit: 1
+        price: 'starts from $0.22/hour'
+        userMultiplied: false
+      - label: Monthly Minimum
+        name: monthly_minimum
+        type: flat
+        metric: month
+        limit: -1
+        timeFrame: month
+        geo: global
+        unit: 1
+        price: '$1376/month minimum'
+        userMultiplied: false
+    elements:
+      - name: AWS / GCP / Azure
+      - name: 4–32 vCPU per node
+      - name: PCI-DSS
+      - name: SOC 2 Type II
+  - id: tidb-self-managed
+    name: TiDB Self-Managed
+    type: enterprise
+    description: Customer-deployed TiDB on multi-cloud, on-premises, or Kubernetes. Custom pricing per
+      contract.
+    entries:
+      - label: Custom License
+        name: custom_license
+        type: flat
+        metric: varies
+        limit: -1
+        timeFrame: usage
+        geo: global
+        unit: 1
+        price: contact sales
+        userMultiplied: false
+    elements:
+      - name: Multi-Cloud / On-Premises
+      - name: Kubernetes Compatible
+  - id: tidb-community
+    name: TiDB Community
+    type: freemium
+    description: Free, open-source distribution of TiDB.
+    entries:
+      - label: Open Source
+        name: open_source
+        type: flat
+        metric: usage
+        limit: -1
+        timeFrame: usage
+        geo: global
+        unit: 1
+        price: '0'
+        userMultiplied: false
+    elements:
+      - name: Open Source (Apache 2.0)
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com
