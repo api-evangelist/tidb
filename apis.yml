@@ -106,7 +106,7 @@ apis:
       SQL execution.
 
 common:
-  - type: JSON-LD
+  - type: JSONLD
     url: json-ld/tidb-context.jsonld
   - type: JSONSchema
     url: json-schema/tidb-cluster-schema.json
