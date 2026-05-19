@@ -1,0 +1,203 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: TiDB Cloud Chat2Query API — Chat2Data
+  description: 'TiDB Cloud Chat2Query API — Chat2Data. 4 operations. Lead operation: Generate and execute SQL from natural
+    language (v2). Self-contained Naftiko capability covering one Tidb business surface.'
+  tags:
+  - Tidb
+  - Chat2Data
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    TIDB_API_KEY: TIDB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: cloud-chat2query-chat2data
+    baseUri: https://data.tidbcloud.com/api/v1beta/app/{dataAppId}/endpoint
+    description: TiDB Cloud Chat2Query API — Chat2Data business capability. Self-contained, no shared references.
+    resources:
+    - name: v2-chat2data
+      path: /v2/chat2data
+      operations:
+      - name: generateandexecutesqlv2
+        method: POST
+        description: Generate and execute SQL from natural language (v2)
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v2-jobs-job_id
+      path: /v2/jobs/{job_id}
+      operations:
+      - name: getjobstatus
+        method: GET
+        description: Get job status
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: job_id
+          in: path
+          type: string
+          description: The unique identifier of the Chat2Query job.
+          required: true
+    - name: v3-chat2data
+      path: /v3/chat2data
+      operations:
+      - name: generateandexecutesql
+        method: POST
+        description: Generate and execute SQL from natural language
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: v3-suggestQuestions
+      path: /v3/suggestQuestions
+      operations:
+      - name: suggestquestions
+        method: POST
+        description: Suggest questions for a database
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  exposes:
+  - type: rest
+    namespace: cloud-chat2query-chat2data-rest
+    port: 8080
+    description: REST adapter for TiDB Cloud Chat2Query API — Chat2Data. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/v2/chat2data
+      name: v2-chat2data
+      description: REST surface for v2-chat2data.
+      operations:
+      - method: POST
+        name: generateandexecutesqlv2
+        description: Generate and execute SQL from natural language (v2)
+        call: cloud-chat2query-chat2data.generateandexecutesqlv2
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v2/jobs/{job-id}
+      name: v2-jobs-job-id
+      description: REST surface for v2-jobs-job_id.
+      operations:
+      - method: GET
+        name: getjobstatus
+        description: Get job status
+        call: cloud-chat2query-chat2data.getjobstatus
+        with:
+          job_id: rest.job_id
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v3/chat2data
+      name: v3-chat2data
+      description: REST surface for v3-chat2data.
+      operations:
+      - method: POST
+        name: generateandexecutesql
+        description: Generate and execute SQL from natural language
+        call: cloud-chat2query-chat2data.generateandexecutesql
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/v3/suggestquestions
+      name: v3-suggestquestions
+      description: REST surface for v3-suggestQuestions.
+      operations:
+      - method: POST
+        name: suggestquestions
+        description: Suggest questions for a database
+        call: cloud-chat2query-chat2data.suggestquestions
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: cloud-chat2query-chat2data-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for TiDB Cloud Chat2Query API — Chat2Data. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: generate-and-execute-sql-natural
+      description: Generate and execute SQL from natural language (v2)
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: cloud-chat2query-chat2data.generateandexecutesqlv2
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-job-status
+      description: Get job status
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: cloud-chat2query-chat2data.getjobstatus
+      with:
+        job_id: tools.job_id
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: generate-and-execute-sql-natural-2
+      description: Generate and execute SQL from natural language
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: cloud-chat2query-chat2data.generateandexecutesql
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: suggest-questions-database
+      description: Suggest questions for a database
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: cloud-chat2query-chat2data.suggestquestions
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

@@ -1,0 +1,159 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: TiDB Cloud Data Service API — Data Sources
+  description: 'TiDB Cloud Data Service API — Data Sources. 4 operations. Lead operation: List data sources. Self-contained
+    Naftiko capability covering one Tidb business surface.'
+  tags:
+  - Tidb
+  - Data Sources
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    TIDB_API_KEY: TIDB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: cloud-data-service-data-sources
+    baseUri: https://dataservice.tidbapi.com/v1beta1
+    description: TiDB Cloud Data Service API — Data Sources business capability. Self-contained, no shared references.
+    resources:
+    - name: dataApps-dataAppId-dataSources
+      path: /dataApps/{dataAppId}/dataSources
+      operations:
+      - name: listdatasources
+        method: GET
+        description: List data sources
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createdatasource
+        method: POST
+        description: Create a data source
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: dataApps-dataAppId-dataSources-clusterId
+      path: /dataApps/{dataAppId}/dataSources/{clusterId}
+      operations:
+      - name: getdatasource
+        method: GET
+        description: Get a data source
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: deletedatasource
+        method: DELETE
+        description: Delete a data source
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  exposes:
+  - type: rest
+    namespace: cloud-data-service-data-sources-rest
+    port: 8080
+    description: REST adapter for TiDB Cloud Data Service API — Data Sources. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/dataapps/{dataappid}/datasources
+      name: dataapps-dataappid-datasources
+      description: REST surface for dataApps-dataAppId-dataSources.
+      operations:
+      - method: GET
+        name: listdatasources
+        description: List data sources
+        call: cloud-data-service-data-sources.listdatasources
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createdatasource
+        description: Create a data source
+        call: cloud-data-service-data-sources.createdatasource
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/dataapps/{dataappid}/datasources/{clusterid}
+      name: dataapps-dataappid-datasources-clusterid
+      description: REST surface for dataApps-dataAppId-dataSources-clusterId.
+      operations:
+      - method: GET
+        name: getdatasource
+        description: Get a data source
+        call: cloud-data-service-data-sources.getdatasource
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletedatasource
+        description: Delete a data source
+        call: cloud-data-service-data-sources.deletedatasource
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: cloud-data-service-data-sources-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for TiDB Cloud Data Service API — Data Sources. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: list-data-sources
+      description: List data sources
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: cloud-data-service-data-sources.listdatasources
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-data-source
+      description: Create a data source
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: cloud-data-service-data-sources.createdatasource
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-data-source
+      description: Get a data source
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: cloud-data-service-data-sources.getdatasource
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-data-source
+      description: Delete a data source
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: cloud-data-service-data-sources.deletedatasource
+      outputParameters:
+      - type: object
+        mapping: $.

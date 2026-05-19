@@ -1,0 +1,226 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: TiDB Cloud Data Service API — Data Apps
+  description: 'TiDB Cloud Data Service API — Data Apps. 6 operations. Lead operation: List Data Apps. Self-contained Naftiko
+    capability covering one Tidb business surface.'
+  tags:
+  - Tidb
+  - Data Apps
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    TIDB_API_KEY: TIDB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: cloud-data-service-data-apps
+    baseUri: https://dataservice.tidbapi.com/v1beta1
+    description: TiDB Cloud Data Service API — Data Apps business capability. Self-contained, no shared references.
+    resources:
+    - name: dataApps
+      path: /dataApps
+      operations:
+      - name: listdataapps
+        method: GET
+        description: List Data Apps
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: createdataapp
+        method: POST
+        description: Create a Data App
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: dataApps-dataAppId
+      path: /dataApps/{dataAppId}
+      operations:
+      - name: getdataapp
+        method: GET
+        description: Get a Data App
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updatedataapp
+        method: PATCH
+        description: Update a Data App
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: deletedataapp
+        method: DELETE
+        description: Delete a Data App
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: dataApps-dataAppId-apiSpec
+      path: /dataApps/{dataAppId}/apiSpec
+      operations:
+      - name: getdataappapispec
+        method: GET
+        description: Get OpenAPI specification
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  exposes:
+  - type: rest
+    namespace: cloud-data-service-data-apps-rest
+    port: 8080
+    description: REST adapter for TiDB Cloud Data Service API — Data Apps. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/dataapps
+      name: dataapps
+      description: REST surface for dataApps.
+      operations:
+      - method: GET
+        name: listdataapps
+        description: List Data Apps
+        call: cloud-data-service-data-apps.listdataapps
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createdataapp
+        description: Create a Data App
+        call: cloud-data-service-data-apps.createdataapp
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/dataapps/{dataappid}
+      name: dataapps-dataappid
+      description: REST surface for dataApps-dataAppId.
+      operations:
+      - method: GET
+        name: getdataapp
+        description: Get a Data App
+        call: cloud-data-service-data-apps.getdataapp
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: updatedataapp
+        description: Update a Data App
+        call: cloud-data-service-data-apps.updatedataapp
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deletedataapp
+        description: Delete a Data App
+        call: cloud-data-service-data-apps.deletedataapp
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/dataapps/{dataappid}/apispec
+      name: dataapps-dataappid-apispec
+      description: REST surface for dataApps-dataAppId-apiSpec.
+      operations:
+      - method: GET
+        name: getdataappapispec
+        description: Get OpenAPI specification
+        call: cloud-data-service-data-apps.getdataappapispec
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: cloud-data-service-data-apps-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for TiDB Cloud Data Service API — Data Apps. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: list-data-apps
+      description: List Data Apps
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: cloud-data-service-data-apps.listdataapps
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-data-app
+      description: Create a Data App
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: cloud-data-service-data-apps.createdataapp
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-data-app
+      description: Get a Data App
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: cloud-data-service-data-apps.getdataapp
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-data-app
+      description: Update a Data App
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: cloud-data-service-data-apps.updatedataapp
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-data-app
+      description: Delete a Data App
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: cloud-data-service-data-apps.deletedataapp
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-openapi-specification
+      description: Get OpenAPI specification
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: cloud-data-service-data-apps.getdataappapispec
+      outputParameters:
+      - type: object
+        mapping: $.

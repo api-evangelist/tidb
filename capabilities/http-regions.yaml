@@ -1,0 +1,205 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: TiDB HTTP API — Regions
+  description: 'TiDB HTTP API — Regions. 5 operations. Lead operation: Get hot regions. Self-contained Naftiko capability
+    covering one Tidb business surface.'
+  tags:
+  - Tidb
+  - Regions
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    TIDB_API_KEY: TIDB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: http-regions
+    baseUri: http://localhost:10080
+    description: TiDB HTTP API — Regions business capability. Self-contained, no shared references.
+    resources:
+    - name: regions-hot
+      path: /regions/hot
+      operations:
+      - name: gethotregions
+        method: GET
+        description: Get hot regions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: regions-meta
+      path: /regions/meta
+      operations:
+      - name: listregionsmeta
+        method: GET
+        description: List all regions metadata
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: regions-regionID
+      path: /regions/{regionID}
+      operations:
+      - name: getregionbyid
+        method: GET
+        description: Get a region
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: regionID
+          in: path
+          type: integer
+          description: The numeric TiKV region ID.
+          required: true
+    - name: tables-db-table-regions
+      path: /tables/{db}/{table}/regions
+      operations:
+      - name: gettableregions
+        method: GET
+        description: Get table regions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: tables-db-table-scatter
+      path: /tables/{db}/{table}/scatter
+      operations:
+      - name: scattertableregions
+        method: POST
+        description: Scatter table regions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  exposes:
+  - type: rest
+    namespace: http-regions-rest
+    port: 8080
+    description: REST adapter for TiDB HTTP API — Regions. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/regions/hot
+      name: regions-hot
+      description: REST surface for regions-hot.
+      operations:
+      - method: GET
+        name: gethotregions
+        description: Get hot regions
+        call: http-regions.gethotregions
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/regions/meta
+      name: regions-meta
+      description: REST surface for regions-meta.
+      operations:
+      - method: GET
+        name: listregionsmeta
+        description: List all regions metadata
+        call: http-regions.listregionsmeta
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/regions/{regionid}
+      name: regions-regionid
+      description: REST surface for regions-regionID.
+      operations:
+      - method: GET
+        name: getregionbyid
+        description: Get a region
+        call: http-regions.getregionbyid
+        with:
+          regionID: rest.regionID
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/tables/{db}/{table}/regions
+      name: tables-db-table-regions
+      description: REST surface for tables-db-table-regions.
+      operations:
+      - method: GET
+        name: gettableregions
+        description: Get table regions
+        call: http-regions.gettableregions
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/tables/{db}/{table}/scatter
+      name: tables-db-table-scatter
+      description: REST surface for tables-db-table-scatter.
+      operations:
+      - method: POST
+        name: scattertableregions
+        description: Scatter table regions
+        call: http-regions.scattertableregions
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: http-regions-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for TiDB HTTP API — Regions. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: get-hot-regions
+      description: Get hot regions
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: http-regions.gethotregions
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-all-regions-metadata
+      description: List all regions metadata
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: http-regions.listregionsmeta
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-region
+      description: Get a region
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: http-regions.getregionbyid
+      with:
+        regionID: tools.regionID
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-table-regions
+      description: Get table regions
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: http-regions.gettableregions
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: scatter-table-regions
+      description: Scatter table regions
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: http-regions.scattertableregions
+      outputParameters:
+      - type: object
+        mapping: $.

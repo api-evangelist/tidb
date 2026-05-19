@@ -1,0 +1,141 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: TiDB Cloud API — Billing
+  description: 'TiDB Cloud API — Billing. 3 operations. Lead operation: Get monthly bill. Self-contained Naftiko capability
+    covering one Tidb business surface.'
+  tags:
+  - Tidb
+  - Billing
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    TIDB_API_KEY: TIDB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: cloud-billing
+    baseUri: https://dedicated.tidbapi.com/v1beta1
+    description: TiDB Cloud API — Billing business capability. Self-contained, no shared references.
+    resources:
+    - name: bills-billedMonth
+      path: /bills/{billedMonth}
+      operations:
+      - name: getmonthlybill
+        method: GET
+        description: Get monthly bill
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: billsCostExplorer
+      path: /billsCostExplorer
+      operations:
+      - name: querycostexplorer
+        method: POST
+        description: Query cost explorer
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: billsDetails-billedMonth
+      path: /billsDetails/{billedMonth}
+      operations:
+      - name: getmonthlybilldetails
+        method: GET
+        description: Get monthly bill with daily details
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  exposes:
+  - type: rest
+    namespace: cloud-billing-rest
+    port: 8080
+    description: REST adapter for TiDB Cloud API — Billing. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/bills/{billedmonth}
+      name: bills-billedmonth
+      description: REST surface for bills-billedMonth.
+      operations:
+      - method: GET
+        name: getmonthlybill
+        description: Get monthly bill
+        call: cloud-billing.getmonthlybill
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/billscostexplorer
+      name: billscostexplorer
+      description: REST surface for billsCostExplorer.
+      operations:
+      - method: POST
+        name: querycostexplorer
+        description: Query cost explorer
+        call: cloud-billing.querycostexplorer
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/billsdetails/{billedmonth}
+      name: billsdetails-billedmonth
+      description: REST surface for billsDetails-billedMonth.
+      operations:
+      - method: GET
+        name: getmonthlybilldetails
+        description: Get monthly bill with daily details
+        call: cloud-billing.getmonthlybilldetails
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: cloud-billing-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for TiDB Cloud API — Billing. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: get-monthly-bill
+      description: Get monthly bill
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: cloud-billing.getmonthlybill
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: query-cost-explorer
+      description: Query cost explorer
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: cloud-billing.querycostexplorer
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-monthly-bill-daily-details
+      description: Get monthly bill with daily details
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: cloud-billing.getmonthlybilldetails
+      outputParameters:
+      - type: object
+        mapping: $.

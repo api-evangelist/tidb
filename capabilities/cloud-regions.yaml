@@ -1,0 +1,131 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: TiDB Cloud API — Regions
+  description: 'TiDB Cloud API — Regions. 3 operations. Lead operation: List regions. Self-contained Naftiko capability covering
+    one Tidb business surface.'
+  tags:
+  - Tidb
+  - Regions
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    TIDB_API_KEY: TIDB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: cloud-regions
+    baseUri: https://dedicated.tidbapi.com/v1beta1
+    description: TiDB Cloud API — Regions business capability. Self-contained, no shared references.
+    resources:
+    - name: regions
+      path: /regions
+      operations:
+      - name: listregions
+        method: GET
+        description: List regions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: regions-regionId
+      path: /regions/{regionId}
+      operations:
+      - name: getregion
+        method: GET
+        description: Get a region
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: regions-regionId-nodeSpecs
+      path: /regions/{regionId}/nodeSpecs
+      operations:
+      - name: listnodespecs
+        method: GET
+        description: List node specifications
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  exposes:
+  - type: rest
+    namespace: cloud-regions-rest
+    port: 8080
+    description: REST adapter for TiDB Cloud API — Regions. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/regions
+      name: regions
+      description: REST surface for regions.
+      operations:
+      - method: GET
+        name: listregions
+        description: List regions
+        call: cloud-regions.listregions
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/regions/{regionid}
+      name: regions-regionid
+      description: REST surface for regions-regionId.
+      operations:
+      - method: GET
+        name: getregion
+        description: Get a region
+        call: cloud-regions.getregion
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/regions/{regionid}/nodespecs
+      name: regions-regionid-nodespecs
+      description: REST surface for regions-regionId-nodeSpecs.
+      operations:
+      - method: GET
+        name: listnodespecs
+        description: List node specifications
+        call: cloud-regions.listnodespecs
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: cloud-regions-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for TiDB Cloud API — Regions. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: list-regions
+      description: List regions
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: cloud-regions.listregions
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-region
+      description: Get a region
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: cloud-regions.getregion
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-node-specifications
+      description: List node specifications
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: cloud-regions.listnodespecs
+      outputParameters:
+      - type: object
+        mapping: $.

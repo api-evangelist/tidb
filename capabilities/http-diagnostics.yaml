@@ -1,0 +1,76 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: TiDB HTTP API — Diagnostics
+  description: 'TiDB HTTP API — Diagnostics. 1 operations. Lead operation: Download debug info zip. Self-contained Naftiko
+    capability covering one Tidb business surface.'
+  tags:
+  - Tidb
+  - Diagnostics
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    TIDB_API_KEY: TIDB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: http-diagnostics
+    baseUri: http://localhost:10080
+    description: TiDB HTTP API — Diagnostics business capability. Self-contained, no shared references.
+    resources:
+    - name: debug-zip
+      path: /debug/zip
+      operations:
+      - name: downloaddebugzip
+        method: GET
+        description: Download debug info zip
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: seconds
+          in: query
+          type: integer
+          description: Number of seconds to collect CPU profile and goroutine data before packaging.
+  exposes:
+  - type: rest
+    namespace: http-diagnostics-rest
+    port: 8080
+    description: REST adapter for TiDB HTTP API — Diagnostics. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/debug/zip
+      name: debug-zip
+      description: REST surface for debug-zip.
+      operations:
+      - method: GET
+        name: downloaddebugzip
+        description: Download debug info zip
+        call: http-diagnostics.downloaddebugzip
+        with:
+          seconds: rest.seconds
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: http-diagnostics-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for TiDB HTTP API — Diagnostics. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: download-debug-info-zip
+      description: Download debug info zip
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: http-diagnostics.downloaddebugzip
+      with:
+        seconds: tools.seconds
+      outputParameters:
+      - type: object
+        mapping: $.

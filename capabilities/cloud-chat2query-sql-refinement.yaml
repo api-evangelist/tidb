@@ -1,0 +1,77 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: TiDB Cloud Chat2Query API — SQL Refinement
+  description: 'TiDB Cloud Chat2Query API — SQL Refinement. 1 operations. Lead operation: Refine a SQL query. Self-contained
+    Naftiko capability covering one Tidb business surface.'
+  tags:
+  - Tidb
+  - SQL Refinement
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    TIDB_API_KEY: TIDB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: cloud-chat2query-sql-refinement
+    baseUri: https://data.tidbcloud.com/api/v1beta/app/{dataAppId}/endpoint
+    description: TiDB Cloud Chat2Query API — SQL Refinement business capability. Self-contained, no shared references.
+    resources:
+    - name: v3-refineSql
+      path: /v3/refineSql
+      operations:
+      - name: refinesql
+        method: POST
+        description: Refine a SQL query
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+  exposes:
+  - type: rest
+    namespace: cloud-chat2query-sql-refinement-rest
+    port: 8080
+    description: REST adapter for TiDB Cloud Chat2Query API — SQL Refinement. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/v3/refinesql
+      name: v3-refinesql
+      description: REST surface for v3-refineSql.
+      operations:
+      - method: POST
+        name: refinesql
+        description: Refine a SQL query
+        call: cloud-chat2query-sql-refinement.refinesql
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: cloud-chat2query-sql-refinement-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for TiDB Cloud Chat2Query API — SQL Refinement. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: refine-sql-query
+      description: Refine a SQL query
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: false
+      call: cloud-chat2query-sql-refinement.refinesql
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.

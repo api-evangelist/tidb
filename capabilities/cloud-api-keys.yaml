@@ -1,0 +1,203 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: TiDB Cloud API — API Keys
+  description: 'TiDB Cloud API — API Keys. 5 operations. Lead operation: List API keys. Self-contained Naftiko capability
+    covering one Tidb business surface.'
+  tags:
+  - Tidb
+  - API Keys
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    TIDB_API_KEY: TIDB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: cloud-api-keys
+    baseUri: https://dedicated.tidbapi.com/v1beta1
+    description: TiDB Cloud API — API Keys business capability. Self-contained, no shared references.
+    resources:
+    - name: apikeys
+      path: /apikeys
+      operations:
+      - name: listapikeys
+        method: GET
+        description: List API keys
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: projectId
+          in: query
+          type: integer
+          description: Filter API keys by project ID. Omit for organization-level keys.
+      - name: createapikey
+        method: POST
+        description: Create an API key
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+    - name: apikeys-accessKey
+      path: /apikeys/{accessKey}
+      operations:
+      - name: getapikey
+        method: GET
+        description: Get an API key
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+      - name: updateapikey
+        method: PATCH
+        description: Update an API key
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: body
+          in: body
+          type: object
+          description: Request body (JSON).
+          required: true
+      - name: deleteapikey
+        method: DELETE
+        description: Delete an API key
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+  exposes:
+  - type: rest
+    namespace: cloud-api-keys-rest
+    port: 8080
+    description: REST adapter for TiDB Cloud API — API Keys. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/apikeys
+      name: apikeys
+      description: REST surface for apikeys.
+      operations:
+      - method: GET
+        name: listapikeys
+        description: List API keys
+        call: cloud-api-keys.listapikeys
+        with:
+          projectId: rest.projectId
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: POST
+        name: createapikey
+        description: Create an API key
+        call: cloud-api-keys.createapikey
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/apikeys/{accesskey}
+      name: apikeys-accesskey
+      description: REST surface for apikeys-accessKey.
+      operations:
+      - method: GET
+        name: getapikey
+        description: Get an API key
+        call: cloud-api-keys.getapikey
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: PATCH
+        name: updateapikey
+        description: Update an API key
+        call: cloud-api-keys.updateapikey
+        with:
+          body: rest.body
+        outputParameters:
+        - type: object
+          mapping: $.
+      - method: DELETE
+        name: deleteapikey
+        description: Delete an API key
+        call: cloud-api-keys.deleteapikey
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: cloud-api-keys-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for TiDB Cloud API — API Keys. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: list-api-keys
+      description: List API keys
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: cloud-api-keys.listapikeys
+      with:
+        projectId: tools.projectId
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: create-api-key
+      description: Create an API key
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: false
+      call: cloud-api-keys.createapikey
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-api-key
+      description: Get an API key
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: cloud-api-keys.getapikey
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: update-api-key
+      description: Update an API key
+      hints:
+        readOnly: false
+        destructive: false
+        idempotent: true
+      call: cloud-api-keys.updateapikey
+      with:
+        body: tools.body
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: delete-api-key
+      description: Delete an API key
+      hints:
+        readOnly: false
+        destructive: true
+        idempotent: true
+      call: cloud-api-keys.deleteapikey
+      outputParameters:
+      - type: object
+        mapping: $.

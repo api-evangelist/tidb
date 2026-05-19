@@ -1,0 +1,191 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: TiDB HTTP API — Schema
+  description: 'TiDB HTTP API — Schema. 4 operations. Lead operation: Get table info by table ID. Self-contained Naftiko capability
+    covering one Tidb business surface.'
+  tags:
+  - Tidb
+  - Schema
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    TIDB_API_KEY: TIDB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: http-schema
+    baseUri: http://localhost:10080
+    description: TiDB HTTP API — Schema business capability. Self-contained, no shared references.
+    resources:
+    - name: db-table-tableID
+      path: /db-table/{tableID}
+      operations:
+      - name: gettablebyid
+        method: GET
+        description: Get table info by table ID
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: tableID
+          in: path
+          type: integer
+          description: The numeric TiDB internal table ID.
+          required: true
+    - name: schema
+      path: /schema
+      operations:
+      - name: getallschemas
+        method: GET
+        description: Get all database schemas
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: schema-db
+      path: /schema/{db}
+      operations:
+      - name: getdatabaseschema
+        method: GET
+        description: Get database schema
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: id_name_only
+          in: query
+          type: boolean
+          description: If true, returns only table IDs and names without full schema details.
+    - name: schema-db-table
+      path: /schema/{db}/{table}
+      operations:
+      - name: gettableschema
+        method: GET
+        description: Get table schema
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: table_id
+          in: query
+          type: integer
+          description: Optional numeric table ID for lookup by ID instead of name.
+  exposes:
+  - type: rest
+    namespace: http-schema-rest
+    port: 8080
+    description: REST adapter for TiDB HTTP API — Schema. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/db-table/{tableid}
+      name: db-table-tableid
+      description: REST surface for db-table-tableID.
+      operations:
+      - method: GET
+        name: gettablebyid
+        description: Get table info by table ID
+        call: http-schema.gettablebyid
+        with:
+          tableID: rest.tableID
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/schema
+      name: schema
+      description: REST surface for schema.
+      operations:
+      - method: GET
+        name: getallschemas
+        description: Get all database schemas
+        call: http-schema.getallschemas
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/schema/{db}
+      name: schema-db
+      description: REST surface for schema-db.
+      operations:
+      - method: GET
+        name: getdatabaseschema
+        description: Get database schema
+        call: http-schema.getdatabaseschema
+        with:
+          id_name_only: rest.id_name_only
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/schema/{db}/{table}
+      name: schema-db-table
+      description: REST surface for schema-db-table.
+      operations:
+      - method: GET
+        name: gettableschema
+        description: Get table schema
+        call: http-schema.gettableschema
+        with:
+          table_id: rest.table_id
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: http-schema-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for TiDB HTTP API — Schema. One tool per consumed operation, routed inline through this capability's
+      consumes block.
+    tools:
+    - name: get-table-info-table-id
+      description: Get table info by table ID
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: http-schema.gettablebyid
+      with:
+        tableID: tools.tableID
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-all-database-schemas
+      description: Get all database schemas
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: http-schema.getallschemas
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-database-schema
+      description: Get database schema
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: http-schema.getdatabaseschema
+      with:
+        id_name_only: tools.id_name_only
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-table-schema
+      description: Get table schema
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: http-schema.gettableschema
+      with:
+        table_id: tools.table_id
+      outputParameters:
+      - type: object
+        mapping: $.

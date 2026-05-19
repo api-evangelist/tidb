@@ -1,0 +1,94 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: TiDB Cloud API — Audit Logs
+  description: 'TiDB Cloud API — Audit Logs. 1 operations. Lead operation: List audit logs. Self-contained Naftiko capability
+    covering one Tidb business surface.'
+  tags:
+  - Tidb
+  - Audit Logs
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    TIDB_API_KEY: TIDB_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: cloud-audit-logs
+    baseUri: https://dedicated.tidbapi.com/v1beta1
+    description: TiDB Cloud API — Audit Logs business capability. Self-contained, no shared references.
+    resources:
+    - name: auditLogs
+      path: /auditLogs
+      operations:
+      - name: listauditlogs
+        method: GET
+        description: List audit logs
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: startTime
+          in: query
+          type: string
+          description: Filter audit logs starting from this ISO 8601 datetime.
+        - name: endTime
+          in: query
+          type: string
+          description: Filter audit logs up to this ISO 8601 datetime.
+        - name: auditEventTypes
+          in: query
+          type: string
+          description: Comma-separated list of event types to filter by.
+        - name: keyword
+          in: query
+          type: string
+          description: Search term to filter audit log entries.
+  exposes:
+  - type: rest
+    namespace: cloud-audit-logs-rest
+    port: 8080
+    description: REST adapter for TiDB Cloud API — Audit Logs. One Spectral-compliant resource per consumed operation, prefixed
+      with /v1.
+    resources:
+    - path: /v1/auditlogs
+      name: auditlogs
+      description: REST surface for auditLogs.
+      operations:
+      - method: GET
+        name: listauditlogs
+        description: List audit logs
+        call: cloud-audit-logs.listauditlogs
+        with:
+          startTime: rest.startTime
+          endTime: rest.endTime
+          auditEventTypes: rest.auditEventTypes
+          keyword: rest.keyword
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: cloud-audit-logs-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for TiDB Cloud API — Audit Logs. One tool per consumed operation, routed inline through this
+      capability's consumes block.
+    tools:
+    - name: list-audit-logs
+      description: List audit logs
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: cloud-audit-logs.listauditlogs
+      with:
+        startTime: tools.startTime
+        endTime: tools.endTime
+        auditEventTypes: tools.auditEventTypes
+        keyword: tools.keyword
+      outputParameters:
+      - type: object
+        mapping: $.
