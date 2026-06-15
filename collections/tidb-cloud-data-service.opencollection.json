@@ -1,0 +1,420 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud Data Service API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Data Apps",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Data Apps",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps",
+            "params": [
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per page. Default is 100, maximum is 100."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "Pagination token returned from a previous list request to retrieve the next page."
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of all Data Apps in the organization. Each Data App represents a collection of custom endpoints that are backed by SQL queries running against linked TiDB Cloud clusters. Results include the app ID, display name, description, and linked cluster information."
+        },
+        {
+          "info": {
+            "name": "Create a Data App",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new Data App within the organization. A Data App is a container for custom SQL-backed API endpoints. After creation, link a TiDB Cloud cluster as a data source and define endpoints to begin serving data via HTTPS."
+        },
+        {
+          "info": {
+            "name": "Get a Data App",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Data App."
+              }
+            ]
+          },
+          "docs": "Returns the configuration and metadata for a specific Data App, including its display name, description, linked data sources, system endpoint configuration, and Chat2Query settings if enabled."
+        },
+        {
+          "info": {
+            "name": "Update a Data App",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Data App."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the display name or description of an existing Data App. Only the fields provided in the request body are modified. Linked data sources and endpoints remain unchanged."
+        },
+        {
+          "info": {
+            "name": "Delete a Data App",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Data App."
+              }
+            ]
+          },
+          "docs": "Permanently deletes a Data App and all of its associated endpoints, API keys, and deployment history. This operation is irreversible. All clients calling endpoints within this Data App will receive errors after deletion."
+        },
+        {
+          "info": {
+            "name": "Get OpenAPI specification",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId/apiSpec",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Data App."
+              }
+            ]
+          },
+          "docs": "Returns the OpenAPI 3.0 specification for all endpoints defined within a Data App. The specification can be returned in JSON or YAML format by setting the Accept header accordingly. Use this spec to generate client SDKs, import into API testing tools, or publish API documentation."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Data Sources",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List data sources",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId/dataSources",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Data App."
+              }
+            ]
+          },
+          "docs": "Returns all TiDB Cloud clusters linked as data sources to a specific Data App. Each data source includes the cluster ID, cluster name, and the databases accessible from this Data App."
+        },
+        {
+          "info": {
+            "name": "Create a data source",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId/dataSources",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Data App."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Links a TiDB Cloud cluster to a Data App as a data source. Once linked, endpoints within the Data App can execute SQL queries against databases in the linked cluster. A Data App can be linked to multiple clusters."
+        },
+        {
+          "info": {
+            "name": "Get a data source",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId/dataSources/:clusterId",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Data App."
+              },
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the TiDB Cloud cluster used as a data source."
+              }
+            ]
+          },
+          "docs": "Returns the configuration of a specific cluster linked as a data source to a Data App, identified by the cluster ID."
+        },
+        {
+          "info": {
+            "name": "Delete a data source",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId/dataSources/:clusterId",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Data App."
+              },
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the TiDB Cloud cluster used as a data source."
+              }
+            ]
+          },
+          "docs": "Unlinks a TiDB Cloud cluster from a Data App. Endpoints that reference this cluster will stop working after the data source is removed."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Endpoints",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List endpoints",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId/endpoints",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Data App."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per page. Default is 100, maximum is 100."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "Pagination token returned from a previous list request to retrieve the next page."
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of all custom SQL-backed endpoints defined within a Data App. Each endpoint entry includes its HTTP method, path, SQL template, parameters, and configuration settings such as caching and pagination."
+        },
+        {
+          "info": {
+            "name": "Create an endpoint",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId/endpoints",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Data App."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Defines a new custom SQL-backed API endpoint within a Data App. Specify the HTTP method, URL path, target cluster, SQL template, and any path or query parameters. The endpoint will become available after the Data App is deployed."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Data App API Keys",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Data App API keys",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId/apiKeys",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Data App."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per page. Default is 100, maximum is 100."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "Pagination token returned from a previous list request to retrieve the next page."
+              }
+            ]
+          },
+          "docs": "Returns all API keys scoped to a specific Data App. These keys are used to authenticate calls to the custom endpoints defined within the Data App and are separate from organization-level API keys."
+        },
+        {
+          "info": {
+            "name": "Create a Data App API key",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId/apiKeys",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Data App."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new API key scoped to a specific Data App. Specify the key description, role (READ_ONLY or READ_AND_WRITE), rate limit in requests per minute, and optional expiration settings. The private key is only returned at creation time."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Deployments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List deployments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId/deployments",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Data App."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per page. Default is 100, maximum is 100."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "Pagination token returned from a previous list request to retrieve the next page."
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of deployment records for a Data App. Each deployment captures a versioned snapshot of the Data App's endpoints at the time of deployment, enabling rollback and audit of configuration changes."
+        },
+        {
+          "info": {
+            "name": "Create a deployment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dataservice.tidbapi.com/v1beta1/dataApps/:dataAppId/deployments",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Data App."
+              }
+            ]
+          },
+          "docs": "Deploys the current configuration of a Data App, making all defined endpoints live. Creates an immutable deployment record that can be referenced for rollback. Endpoints are not publicly accessible until a successful deployment is created."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

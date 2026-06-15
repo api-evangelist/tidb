@@ -1,0 +1,219 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud Chat2Query API",
+    "version": "v3"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Data Summaries",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List data summaries",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://data.tidbcloud.com/api/v1beta/app/{dataAppId}/endpoint/v3/dataSummaries"
+          },
+          "docs": "Returns all AI-generated data summaries for the Chat2Query Data App. A data summary captures the schema structure and statistical profile of a database, providing context that the AI uses to generate more accurate SQL statements. Summaries must be created before calling the chat2data endpoint with a data_summary_id."
+        },
+        {
+          "info": {
+            "name": "Create a data summary",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://data.tidbcloud.com/api/v1beta/app/{dataAppId}/endpoint/v3/dataSummaries",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generates an AI-powered summary of the specified database schema on a linked TiDB Cloud cluster. The summary analyzes table structures, relationships, and data distributions to provide context for subsequent SQL generation. Set reuse to true to return an existing summary if one already exists for this database."
+        },
+        {
+          "info": {
+            "name": "Get a data summary",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://data.tidbcloud.com/api/v1beta/app/{dataAppId}/endpoint/v3/dataSummaries/:data_summary_id",
+            "params": [
+              {
+                "name": "data_summary_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the data summary."
+              }
+            ]
+          },
+          "docs": "Returns the details and current generation status of a specific data summary by its ID. Data summary generation is asynchronous; poll this endpoint until the status is DONE before using the summary_id in a chat2data request."
+        },
+        {
+          "info": {
+            "name": "Update a data summary",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://data.tidbcloud.com/api/v1beta/app/{dataAppId}/endpoint/v3/dataSummaries/:data_summary_id",
+            "params": [
+              {
+                "name": "data_summary_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the data summary."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Regenerates or updates an existing data summary for a database. Use this endpoint to refresh a summary after significant schema or data changes to keep AI-generated SQL accurate."
+        },
+        {
+          "info": {
+            "name": "Create a data summary (v2)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://data.tidbcloud.com/api/v1beta/app/{dataAppId}/endpoint/v2/dataSummaries",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Generates a data summary of the specified database schema using the v2 Chat2Query API. This is the v2 version of the data summary endpoint. The v3 endpoint is recommended for new integrations as it supports additional features including knowledge bases and session management."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Chat2Data",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Generate and execute SQL from natural language",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://data.tidbcloud.com/api/v1beta/app/{dataAppId}/endpoint/v3/chat2data",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Translates a natural language question into a SQL statement and executes it against the specified TiDB Cloud cluster and database. The AI model uses the data summary to understand schema context. Supports two generation modes: direct for simple queries, and auto_breakdown for complex questions that benefit from decomposed multi-step query plans."
+        },
+        {
+          "info": {
+            "name": "Suggest questions for a database",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://data.tidbcloud.com/api/v1beta/app/{dataAppId}/endpoint/v3/suggestQuestions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns a list of suggested natural language questions that are relevant and answerable given the schema of the specified database. Use this endpoint to populate question suggestion UI in data exploration tools."
+        },
+        {
+          "info": {
+            "name": "Generate and execute SQL from natural language (v2)",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://data.tidbcloud.com/api/v1beta/app/{dataAppId}/endpoint/v2/chat2data",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Translates a natural language question into SQL and executes it using the v2 Chat2Query API. This is an asynchronous operation that returns a job ID. Poll the /v2/jobs/{job_id} endpoint to retrieve results. The v3 endpoint is recommended for new integrations as it returns results synchronously and supports more features."
+        },
+        {
+          "info": {
+            "name": "Get job status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://data.tidbcloud.com/api/v1beta/app/{dataAppId}/endpoint/v2/jobs/:job_id",
+            "params": [
+              {
+                "name": "job_id",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Chat2Query job."
+              }
+            ]
+          },
+          "docs": "Returns the current status and result of an asynchronous Chat2Query v2 job. Poll this endpoint after calling the v2 chat2data endpoint until the job status is DONE or FAILED. The query results are included in the response once the job is complete."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "SQL Refinement",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Refine a SQL query",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://data.tidbcloud.com/api/v1beta/app/{dataAppId}/endpoint/v3/refineSql",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Takes a previously generated SQL query and a refinement instruction, then produces an improved SQL statement. Use this endpoint to iteratively improve query accuracy based on user feedback without starting a new query generation from scratch."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Sessions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a chat session",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://data.tidbcloud.com/api/v1beta/app/{dataAppId}/endpoint/v3/sessions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new multi-round conversational chat session. Sessions maintain conversation context across multiple chat2data calls, enabling follow-up questions that reference prior results. Use the returned session ID in subsequent chat2data requests to continue the conversation."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

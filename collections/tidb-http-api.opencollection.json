@@ -1,0 +1,457 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB HTTP API",
+    "version": "1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Status",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get server status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:10080/status"
+          },
+          "docs": "Returns the current operational status of the TiDB server instance, including the number of active connections, the TiDB version string, and the git commit hash of the binary. This endpoint is commonly used by load balancers and health check systems to verify that the TiDB process is running and accepting connections."
+        },
+        {
+          "info": {
+            "name": "Get Prometheus metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:10080/metrics"
+          },
+          "docs": "Returns all Prometheus-format performance metrics for the TiDB server instance. This endpoint is consumed by Prometheus scrape jobs to collect TiDB-specific metrics including query latency, error rates, connection pool utilization, and internal component performance counters."
+        },
+        {
+          "info": {
+            "name": "Get server information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:10080/info"
+          },
+          "docs": "Returns detailed information about the TiDB server instance including version, IP address, listening port, status port, and the git hash of the binary. This endpoint is useful for service discovery and identifying specific nodes in a TiDB cluster."
+        },
+        {
+          "info": {
+            "name": "Get all cluster server information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:10080/info/all"
+          },
+          "docs": "Returns information about all TiDB server instances in the cluster as registered with the Placement Driver (PD). This provides a cluster-wide view of all running TiDB nodes and their connection endpoints."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Schema",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all database schemas",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:10080/schema"
+          },
+          "docs": "Returns schema information for all databases known to this TiDB instance. The response includes table names, column definitions, and index information as represented in the TiDB information schema."
+        },
+        {
+          "info": {
+            "name": "Get database schema",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:10080/schema/:db",
+            "params": [
+              {
+                "name": "db",
+                "value": "",
+                "type": "path",
+                "description": "The database name."
+              },
+              {
+                "name": "id_name_only",
+                "value": "",
+                "type": "query",
+                "description": "If true, returns only table IDs and names without full schema details."
+              }
+            ]
+          },
+          "docs": "Returns schema information for all tables in the specified database. Optionally set id_name_only to true to return only table IDs and names without the full column and index details, which is faster for large schemas."
+        },
+        {
+          "info": {
+            "name": "Get table schema",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:10080/schema/:db/:table",
+            "params": [
+              {
+                "name": "db",
+                "value": "",
+                "type": "path",
+                "description": "The database name."
+              },
+              {
+                "name": "table",
+                "value": "",
+                "type": "path",
+                "description": "The table name within the specified database."
+              },
+              {
+                "name": "table_id",
+                "value": "",
+                "type": "query",
+                "description": "Optional numeric table ID for lookup by ID instead of name."
+              }
+            ]
+          },
+          "docs": "Returns the full schema definition for the specified table, including all column names, types, default values, and index definitions. Can also look up a table by numeric table_id or multiple table_ids for batch retrieval."
+        },
+        {
+          "info": {
+            "name": "Get table info by table ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:10080/db-table/:tableID",
+            "params": [
+              {
+                "name": "tableID",
+                "value": "",
+                "type": "path",
+                "description": "The numeric TiDB internal table ID."
+              }
+            ]
+          },
+          "docs": "Returns database information, table information, and the current TiDB info schema version for a specific table identified by its numeric table ID. This is useful for reverse lookups when you have a table ID from region information but need the associated database and table names."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Regions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List all regions metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:10080/regions/meta"
+          },
+          "docs": "Returns the metadata for all TiKV regions known to this TiDB instance. Each region entry includes region ID, start and end keys, epoch information, and peer assignments. This endpoint is primarily used for cluster topology inspection and debugging region distribution issues."
+        },
+        {
+          "info": {
+            "name": "Get hot regions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:10080/regions/hot"
+          },
+          "docs": "Returns the top hot read and write regions for each TiKV store, along with the associated table and index names. This endpoint is used for identifying hotspot issues in data access patterns, which can cause uneven load distribution across TiKV nodes."
+        },
+        {
+          "info": {
+            "name": "Get a region",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:10080/regions/:regionID",
+            "params": [
+              {
+                "name": "regionID",
+                "value": "",
+                "type": "path",
+                "description": "The numeric TiKV region ID."
+              }
+            ]
+          },
+          "docs": "Returns detailed information about a specific TiKV region identified by its numeric region ID. Includes peer locations, epoch, and the associated frame information mapping the region to TiDB tables and indexes."
+        },
+        {
+          "info": {
+            "name": "Get table regions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:10080/tables/:db/:table/regions",
+            "params": [
+              {
+                "name": "db",
+                "value": "",
+                "type": "path",
+                "description": "The database name."
+              },
+              {
+                "name": "table",
+                "value": "",
+                "type": "path",
+                "description": "The table name within the specified database."
+              }
+            ]
+          },
+          "docs": "Returns the list of TiKV regions that store data for a specific TiDB table. Each region entry includes the region ID, start key, end key, leader peer, and follower peers. Use this endpoint to understand the physical data layout of a table across TiKV stores."
+        },
+        {
+          "info": {
+            "name": "Scatter table regions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:10080/tables/:db/:table/scatter",
+            "params": [
+              {
+                "name": "db",
+                "value": "",
+                "type": "path",
+                "description": "The database name."
+              },
+              {
+                "name": "table",
+                "value": "",
+                "type": "path",
+                "description": "The table name within the specified database."
+              }
+            ]
+          },
+          "docs": "Initiates region scatter for the specified table, redistributing its TiKV regions across stores to improve data balance. This is typically used after bulk data loads that may have caused uneven region distribution."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "MVCC",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get MVCC info by row handle",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:10080/mvcc/key/:db/:table/:handle",
+            "params": [
+              {
+                "name": "db",
+                "value": "",
+                "type": "path",
+                "description": "The database name."
+              },
+              {
+                "name": "table",
+                "value": "",
+                "type": "path",
+                "description": "The table name within the specified database."
+              },
+              {
+                "name": "handle",
+                "value": "",
+                "type": "path",
+                "description": "The row handle (primary key value or internal row ID) for the target row."
+              }
+            ]
+          },
+          "docs": "Returns multi-version concurrency control (MVCC) information for the key corresponding to the specified row handle in a table. Shows all versions of the key across transactions, including start timestamp, commit timestamp, and value. Used for debugging transaction conflicts and stale data issues."
+        },
+        {
+          "info": {
+            "name": "Get MVCC info by hex key",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:10080/mvcc/hex/:hexKey",
+            "params": [
+              {
+                "name": "hexKey",
+                "value": "",
+                "type": "path",
+                "description": "The raw key encoded as a hexadecimal string."
+              }
+            ]
+          },
+          "docs": "Returns MVCC information for a key specified as a hexadecimal string. This endpoint is used when you have the raw encoded key from TiKV region information and need to look up the MVCC history for that specific key."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "DDL",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get DDL job history",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:10080/ddl/history",
+            "params": [
+              {
+                "name": "start_job_id",
+                "value": "",
+                "type": "query",
+                "description": "The DDL job ID to start listing from, for pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of DDL job history records to return."
+              }
+            ]
+          },
+          "docs": "Returns the history of DDL (Data Definition Language) jobs executed on the cluster, such as CREATE TABLE, ALTER TABLE, DROP INDEX, and similar schema change operations. Results are paginated using start_job_id and limit parameters. DDL history is useful for auditing schema changes and diagnosing failed schema modifications."
+        },
+        {
+          "info": {
+            "name": "Resign DDL owner",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:10080/ddl/owner/resign"
+          },
+          "docs": "Forces the current TiDB server to resign its role as the DDL owner, triggering a new DDL owner election among all TiDB servers in the cluster. Only one TiDB server is the DDL owner at any time and is responsible for executing schema change jobs. Use this endpoint when the current DDL owner is experiencing issues."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Settings",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get server settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:10080/settings"
+          },
+          "docs": "Returns the current runtime settings of the TiDB server instance, including log level, general log status, and DDL slow threshold. These settings can be modified without restarting the server via the POST method of this endpoint."
+        },
+        {
+          "info": {
+            "name": "Update server settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "http://localhost:10080/settings",
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "Modifies one or more runtime settings of the TiDB server without requiring a restart. Supports updating general_log to enable or disable the general query log, log_level to change the server log verbosity, and ddl_slow_threshold to adjust the DDL slow operation threshold in milliseconds."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Statistics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Dump table statistics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:10080/stats/dump/:db/:table",
+            "params": [
+              {
+                "name": "db",
+                "value": "",
+                "type": "path",
+                "description": "The database name."
+              },
+              {
+                "name": "table",
+                "value": "",
+                "type": "path",
+                "description": "The table name within the specified database."
+              },
+              {
+                "name": "timestamp",
+                "value": "",
+                "type": "query",
+                "description": "Optional Unix timestamp to retrieve historical statistics at a specific point in time."
+              }
+            ]
+          },
+          "docs": "Returns the optimizer statistics for the specified table in JSON format. Statistics include histogram data, count-min sketch approximations, and correlation coefficients used by the TiDB query optimizer when generating execution plans. Optionally specify a timestamp to retrieve historical statistics."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Diagnostics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Download debug info zip",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:10080/debug/zip",
+            "params": [
+              {
+                "name": "seconds",
+                "value": "",
+                "type": "query",
+                "description": "Number of seconds to collect CPU profile and goroutine data before packaging."
+              }
+            ]
+          },
+          "docs": "Returns a zip archive containing TiDB debug information useful for diagnosing production issues. The archive includes heap profile, CPU profile, goroutine dump, and configuration information collected over the specified number of seconds. This endpoint is used when filing bug reports or investigating performance problems with PingCAP support."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

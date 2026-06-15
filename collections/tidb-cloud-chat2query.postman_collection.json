@@ -1,0 +1,3119 @@
+{
+  "item": [
+    {
+      "id": "2c532f10-9938-415c-8f1e-ca70e184349b",
+      "name": "Chat2Data",
+      "description": {
+        "content": "Operations for translating natural language questions into SQL and executing them against TiDB Cloud clusters.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f78eb75b-a537-4dda-881f-66fe26944b6c",
+          "name": "Generate and execute SQL from natural language",
+          "request": {
+            "name": "Generate and execute SQL from natural language",
+            "description": {
+              "content": "Translates a natural language question into a SQL statement and executes it against the specified TiDB Cloud cluster and database. The AI model uses the data summary to understand schema context. Supports two generation modes: direct for simple queries, and auto_breakdown for complex questions that benefit from decomposed multi-step query plans.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v3",
+                "chat2data"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                  "type": "any",
+                  "value": "{{dataAppId}}",
+                  "key": "dataAppId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"question\": \"<string>\",\n  \"data_summary_id\": \"<integer>\",\n  \"sql_generate_mode\": \"direct\",\n  \"session_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b5ad4387-71a5-4e41-9608-14c27efc5942",
+              "name": "SQL generated and executed successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "chat2data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"question\": \"<string>\",\n  \"data_summary_id\": \"<integer>\",\n  \"sql_generate_mode\": \"direct\",\n  \"session_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 8665,\n  \"msg\": \"string\",\n  \"result\": {\n    \"question_id\": \"string\",\n    \"sql\": \"string\",\n    \"rows\": [\n      {\n        \"key_0\": 7434.065486406151,\n        \"key_1\": 3557.3351409840348\n      },\n      {\n        \"key_0\": 3546.259896560272\n      }\n    ],\n    \"columns\": [\n      {\n        \"col\": \"string\",\n        \"data_type\": \"string\",\n        \"nullable\": false\n      },\n      {\n        \"col\": \"string\",\n        \"data_type\": \"string\",\n        \"nullable\": false\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5d410c7a-9d1a-4ef0-a981-7c23bab26fb2",
+              "name": "The request body or parameters are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "chat2data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"question\": \"<string>\",\n  \"data_summary_id\": \"<integer>\",\n  \"sql_generate_mode\": \"direct\",\n  \"session_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4259,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5ac59272-3431-4f1f-a948-0d3ea8f8249c",
+              "name": "Authentication failed. Check your Chat2Query API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "chat2data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"question\": \"<string>\",\n  \"data_summary_id\": \"<integer>\",\n  \"sql_generate_mode\": \"direct\",\n  \"session_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4259,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5d5ddeea-7a54-4fcc-99e8-6a7350014eee",
+              "name": "Rate limit exceeded. The Chat2Query API allows 100 requests per day per Data App. Contact TiDB Cloud support to request a higher limit.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "chat2data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"question\": \"<string>\",\n  \"data_summary_id\": \"<integer>\",\n  \"sql_generate_mode\": \"direct\",\n  \"session_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4259,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "51b6172c-bb18-4fc8-9023-b7551e6f1ca3",
+          "name": "Suggest questions for a database",
+          "request": {
+            "name": "Suggest questions for a database",
+            "description": {
+              "content": "Returns a list of suggested natural language questions that are relevant and answerable given the schema of the specified database. Use this endpoint to populate question suggestion UI in data exploration tools.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v3",
+                "suggestQuestions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                  "type": "any",
+                  "value": "{{dataAppId}}",
+                  "key": "dataAppId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "5dda7ace-4cbe-4dcd-badd-d7e902d2625d",
+              "name": "Question suggestions returned successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "suggestQuestions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 7710,\n  \"msg\": \"string\",\n  \"result\": {\n    \"questions\": [\n      \"string\",\n      \"string\"\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ba979f49-5e63-4829-a818-44aac1aa4201",
+              "name": "The request body or parameters are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "suggestQuestions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4259,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "51cf5689-405e-4d40-b12d-4196935ba392",
+              "name": "Authentication failed. Check your Chat2Query API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "suggestQuestions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4259,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8b7e4b7c-5c1f-4fb4-b177-b840670b103a",
+              "name": "Rate limit exceeded. The Chat2Query API allows 100 requests per day per Data App. Contact TiDB Cloud support to request a higher limit.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "suggestQuestions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4259,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0df19c06-4d79-45e3-9318-4a2a0735dd23",
+          "name": "Generate and execute SQL from natural language (v2)",
+          "request": {
+            "name": "Generate and execute SQL from natural language (v2)",
+            "description": {
+              "content": "Translates a natural language question into SQL and executes it using the v2 Chat2Query API. This is an asynchronous operation that returns a job ID. Poll the /v2/jobs/{job_id} endpoint to retrieve results. The v3 endpoint is recommended for new integrations as it returns results synchronously and supports more features.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "chat2data"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                  "type": "any",
+                  "value": "{{dataAppId}}",
+                  "key": "dataAppId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"question\": \"<string>\",\n  \"data_summary_id\": \"<integer>\",\n  \"sql_generate_mode\": \"direct\",\n  \"session_id\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "41a30fdd-dc97-4e29-8cfa-551483e4741e",
+              "name": "SQL generation job created successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "chat2data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"question\": \"<string>\",\n  \"data_summary_id\": \"<integer>\",\n  \"sql_generate_mode\": \"direct\",\n  \"session_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 8168,\n  \"msg\": \"string\",\n  \"result\": {\n    \"job_id\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "597e1b23-718b-4497-be6c-81ac35725bfb",
+              "name": "The request body or parameters are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "chat2data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"question\": \"<string>\",\n  \"data_summary_id\": \"<integer>\",\n  \"sql_generate_mode\": \"direct\",\n  \"session_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4259,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "26c803cb-40d5-4963-9079-a0c0ad9168d0",
+              "name": "Authentication failed. Check your Chat2Query API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "chat2data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"question\": \"<string>\",\n  \"data_summary_id\": \"<integer>\",\n  \"sql_generate_mode\": \"direct\",\n  \"session_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4259,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d3665d4e-7ae2-4f75-8930-7e7d7862bb1f",
+              "name": "Rate limit exceeded. The Chat2Query API allows 100 requests per day per Data App. Contact TiDB Cloud support to request a higher limit.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "chat2data"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"question\": \"<string>\",\n  \"data_summary_id\": \"<integer>\",\n  \"sql_generate_mode\": \"direct\",\n  \"session_id\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4259,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "92c5b393-df4e-4761-92b3-acbe9dfc1570",
+          "name": "Get job status",
+          "request": {
+            "name": "Get job status",
+            "description": {
+              "content": "Returns the current status and result of an asynchronous Chat2Query v2 job. Poll this endpoint after calling the v2 chat2data endpoint until the job status is DONE or FAILED. The query results are included in the response once the job is complete.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "jobs",
+                ":job_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "job_id",
+                  "description": "(Required) The unique identifier of the Chat2Query job."
+                },
+                {
+                  "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                  "type": "any",
+                  "value": "{{dataAppId}}",
+                  "key": "dataAppId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ee1fcd47-7ac7-4a10-9922-06f6455065f2",
+              "name": "Job status retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "jobs",
+                    ":job_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "job_id",
+                      "description": "(Required) The unique identifier of the Chat2Query job."
+                    },
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 7801,\n  \"msg\": \"string\",\n  \"result\": {\n    \"job_id\": \"string\",\n    \"status\": \"FAILED\",\n    \"data\": {\n      \"question_id\": \"string\",\n      \"sql\": \"string\",\n      \"rows\": [\n        {\n          \"key_0\": false,\n          \"key_1\": 9958.233085716265,\n          \"key_2\": 4871.094807678885,\n          \"key_3\": 5756\n        },\n        {\n          \"key_0\": 8078,\n          \"key_1\": \"string\"\n        }\n      ],\n      \"columns\": [\n        {\n          \"col\": \"string\",\n          \"data_type\": \"string\",\n          \"nullable\": false\n        },\n        {\n          \"col\": \"string\",\n          \"data_type\": \"string\",\n          \"nullable\": false\n        }\n      ]\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8a0a0bf4-a0e8-4e16-8a5c-17db45cd900e",
+              "name": "Authentication failed. Check your Chat2Query API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "jobs",
+                    ":job_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "job_id",
+                      "description": "(Required) The unique identifier of the Chat2Query job."
+                    },
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4259,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1f95bb3d-2d33-405e-8c74-25cef2bc0021",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "jobs",
+                    ":job_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "job_id",
+                      "description": "(Required) The unique identifier of the Chat2Query job."
+                    },
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4259,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "f016bff4-db2d-4ec1-a6a6-f883414fc38e",
+      "name": "Data Summaries",
+      "description": {
+        "content": "Operations for generating and managing AI summaries of database schemas used as context for SQL generation.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "83aea260-cf76-4da6-8bd9-0010af1ab361",
+          "name": "List data summaries",
+          "request": {
+            "name": "List data summaries",
+            "description": {
+              "content": "Returns all AI-generated data summaries for the Chat2Query Data App. A data summary captures the schema structure and statistical profile of a database, providing context that the AI uses to generate more accurate SQL statements. Summaries must be created before calling the chat2data endpoint with a data_summary_id.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v3",
+                "dataSummaries"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                  "type": "any",
+                  "value": "{{dataAppId}}",
+                  "key": "dataAppId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a39ec644-594d-4035-846a-ddfc28b9f42b",
+              "name": "List of data summaries retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "dataSummaries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 1685,\n  \"msg\": \"string\",\n  \"result\": [\n    {\n      \"data_summary_id\": 1797,\n      \"cluster_id\": \"string\",\n      \"database\": \"string\",\n      \"status\": \"RUNNING\"\n    },\n    {\n      \"data_summary_id\": 1271,\n      \"cluster_id\": \"string\",\n      \"database\": \"string\",\n      \"status\": \"FAILED\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3f0090c9-f312-4d5b-8b10-8db68dfa1bc1",
+              "name": "Authentication failed. Check your Chat2Query API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "dataSummaries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4259,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "eaea9379-262a-4cc0-86a9-531529fcfbe6",
+              "name": "Rate limit exceeded. The Chat2Query API allows 100 requests per day per Data App. Contact TiDB Cloud support to request a higher limit.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "dataSummaries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4259,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d4ce9c37-7332-48c8-ba29-f3f2f860f3e0",
+          "name": "Create a data summary",
+          "request": {
+            "name": "Create a data summary",
+            "description": {
+              "content": "Generates an AI-powered summary of the specified database schema on a linked TiDB Cloud cluster. The summary analyzes table structures, relationships, and data distributions to provide context for subsequent SQL generation. Set reuse to true to return an existing summary if one already exists for this database.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v3",
+                "dataSummaries"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                  "type": "any",
+                  "value": "{{dataAppId}}",
+                  "key": "dataAppId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"description\": \"<string>\",\n  \"reuse\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b0c6cb8c-1b84-4d4c-bd70-489afb93cdfc",
+              "name": "Data summary creation initiated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "dataSummaries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"description\": \"<string>\",\n  \"reuse\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9916,\n  \"msg\": \"string\",\n  \"result\": {\n    \"data_summary_id\": 4339,\n    \"cluster_id\": \"string\",\n    \"database\": \"string\",\n    \"status\": \"DONE\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f5dcdb1a-7243-40fb-a3d1-7024276a5333",
+              "name": "The request body or parameters are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "dataSummaries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"description\": \"<string>\",\n  \"reuse\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4259,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "acd0597c-2bd4-4861-9e87-44ca0b96bcbf",
+              "name": "Authentication failed. Check your Chat2Query API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "dataSummaries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"description\": \"<string>\",\n  \"reuse\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4259,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4f175b65-bb05-4e50-a1d6-f1b60592ebea",
+              "name": "Rate limit exceeded. The Chat2Query API allows 100 requests per day per Data App. Contact TiDB Cloud support to request a higher limit.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "dataSummaries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"description\": \"<string>\",\n  \"reuse\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4259,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b7f3a5b6-f1e7-4ced-a202-03fbf63c5b38",
+          "name": "Get a data summary",
+          "request": {
+            "name": "Get a data summary",
+            "description": {
+              "content": "Returns the details and current generation status of a specific data summary by its ID. Data summary generation is asynchronous; poll this endpoint until the status is DONE before using the summary_id in a chat2data request.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v3",
+                "dataSummaries",
+                ":data_summary_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "data_summary_id",
+                  "description": "(Required) The unique identifier of the data summary."
+                },
+                {
+                  "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                  "type": "any",
+                  "value": "{{dataAppId}}",
+                  "key": "dataAppId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "33d516ea-91ac-45d2-9727-4eb2f2e9b19c",
+              "name": "Data summary retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "dataSummaries",
+                    ":data_summary_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "data_summary_id",
+                      "description": "(Required) The unique identifier of the data summary."
+                    },
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9916,\n  \"msg\": \"string\",\n  \"result\": {\n    \"data_summary_id\": 4339,\n    \"cluster_id\": \"string\",\n    \"database\": \"string\",\n    \"status\": \"DONE\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ee410927-3c1f-4e73-8e2f-d388c68b0411",
+              "name": "Authentication failed. Check your Chat2Query API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "dataSummaries",
+                    ":data_summary_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "data_summary_id",
+                      "description": "(Required) The unique identifier of the data summary."
+                    },
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4259,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "952aea5c-7af7-41d9-80d3-ec9e87811db5",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "dataSummaries",
+                    ":data_summary_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "data_summary_id",
+                      "description": "(Required) The unique identifier of the data summary."
+                    },
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4259,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7af0e0fa-6c33-4fb7-83ee-9932089d14b3",
+          "name": "Update a data summary",
+          "request": {
+            "name": "Update a data summary",
+            "description": {
+              "content": "Regenerates or updates an existing data summary for a database. Use this endpoint to refresh a summary after significant schema or data changes to keep AI-generated SQL accurate.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v3",
+                "dataSummaries",
+                ":data_summary_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "data_summary_id",
+                  "description": "(Required) The unique identifier of the data summary."
+                },
+                {
+                  "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                  "type": "any",
+                  "value": "{{dataAppId}}",
+                  "key": "dataAppId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"description\": \"<string>\",\n  \"reuse\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c5b3fa7a-0e8b-4dfe-899d-faffd05e2d38",
+              "name": "Data summary updated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "dataSummaries",
+                    ":data_summary_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "data_summary_id",
+                      "description": "(Required) The unique identifier of the data summary."
+                    },
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"description\": \"<string>\",\n  \"reuse\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9916,\n  \"msg\": \"string\",\n  \"result\": {\n    \"data_summary_id\": 4339,\n    \"cluster_id\": \"string\",\n    \"database\": \"string\",\n    \"status\": \"DONE\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bdd3acf7-c561-4353-950d-0543633f654d",
+              "name": "The request body or parameters are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "dataSummaries",
+                    ":data_summary_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "data_summary_id",
+                      "description": "(Required) The unique identifier of the data summary."
+                    },
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"description\": \"<string>\",\n  \"reuse\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4259,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6e167ffb-3bf7-4b04-8071-6a0a4a9168ed",
+              "name": "Authentication failed. Check your Chat2Query API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "dataSummaries",
+                    ":data_summary_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "data_summary_id",
+                      "description": "(Required) The unique identifier of the data summary."
+                    },
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"description\": \"<string>\",\n  \"reuse\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4259,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "baa5f574-d7cf-42c4-8d26-2171bb8b240f",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "dataSummaries",
+                    ":data_summary_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "data_summary_id",
+                      "description": "(Required) The unique identifier of the data summary."
+                    },
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"description\": \"<string>\",\n  \"reuse\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4259,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "63a4557b-fca4-436d-b8cc-feea9b990622",
+          "name": "Create a data summary (v2)",
+          "request": {
+            "name": "Create a data summary (v2)",
+            "description": {
+              "content": "Generates a data summary of the specified database schema using the v2 Chat2Query API. This is the v2 version of the data summary endpoint. The v3 endpoint is recommended for new integrations as it supports additional features including knowledge bases and session management.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v2",
+                "dataSummaries"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                  "type": "any",
+                  "value": "{{dataAppId}}",
+                  "key": "dataAppId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"description\": \"<string>\",\n  \"reuse\": \"<boolean>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "fe27d17c-0bdc-4d1a-8311-c47febf94cd2",
+              "name": "Data summary creation initiated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "dataSummaries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"description\": \"<string>\",\n  \"reuse\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9916,\n  \"msg\": \"string\",\n  \"result\": {\n    \"data_summary_id\": 4339,\n    \"cluster_id\": \"string\",\n    \"database\": \"string\",\n    \"status\": \"DONE\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "51b4f9be-e0fa-4fd9-96bf-23b9517b9ca6",
+              "name": "The request body or parameters are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "dataSummaries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"description\": \"<string>\",\n  \"reuse\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4259,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d613fe75-b4d7-4661-9109-616db65770a3",
+              "name": "Authentication failed. Check your Chat2Query API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "dataSummaries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"description\": \"<string>\",\n  \"reuse\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4259,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "37933a7e-63e1-4aa2-af33-98a73a902876",
+              "name": "Rate limit exceeded. The Chat2Query API allows 100 requests per day per Data App. Contact TiDB Cloud support to request a higher limit.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v2",
+                    "dataSummaries"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"description\": \"<string>\",\n  \"reuse\": \"<boolean>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4259,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "47640047-03e9-42cd-91bc-315f4ebc03e2",
+      "name": "Sessions",
+      "description": {
+        "content": "Operations for creating and managing multi-round conversational chat sessions.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3e0800b5-3837-44db-8df1-be930d2e34bd",
+          "name": "Create a chat session",
+          "request": {
+            "name": "Create a chat session",
+            "description": {
+              "content": "Creates a new multi-round conversational chat session. Sessions maintain conversation context across multiple chat2data calls, enabling follow-up questions that reference prior results. Use the returned session ID in subsequent chat2data requests to continue the conversation.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v3",
+                "sessions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                  "type": "any",
+                  "value": "{{dataAppId}}",
+                  "key": "dataAppId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "cf0d554b-2696-48ac-a27b-292a95a55c76",
+              "name": "Chat session created successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "sessions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 8317,\n  \"msg\": \"string\",\n  \"result\": {\n    \"session_id\": \"string\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1de783b4-ac65-43ae-b02c-3467a36b95e5",
+              "name": "The request body or parameters are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "sessions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4259,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "55e2bd10-b501-451e-91e9-b29a2d685366",
+              "name": "Authentication failed. Check your Chat2Query API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "sessions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4259,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "8395815f-e15f-4c11-af36-b6ed91863479",
+              "name": "Rate limit exceeded. The Chat2Query API allows 100 requests per day per Data App. Contact TiDB Cloud support to request a higher limit.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "sessions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4259,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "1abf11fc-0a9a-44cf-886a-da72533e2d2b",
+      "name": "SQL Refinement",
+      "description": {
+        "content": "Operations for refining and improving previously generated SQL queries.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "f10cf731-6cb3-4bcb-8ffc-0dd8c4e08c3f",
+          "name": "Refine a SQL query",
+          "request": {
+            "name": "Refine a SQL query",
+            "description": {
+              "content": "Takes a previously generated SQL query and a refinement instruction, then produces an improved SQL statement. Use this endpoint to iteratively improve query accuracy based on user feedback without starting a new query generation from scratch.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v3",
+                "refineSql"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                  "type": "any",
+                  "value": "{{dataAppId}}",
+                  "key": "dataAppId"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"question\": \"<string>\",\n  \"sql\": \"<string>\",\n  \"task\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "fa17cf68-cefc-40f6-acc1-1e1d9b93dd4c",
+              "name": "SQL refined successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "refineSql"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"question\": \"<string>\",\n  \"sql\": \"<string>\",\n  \"task\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 8665,\n  \"msg\": \"string\",\n  \"result\": {\n    \"question_id\": \"string\",\n    \"sql\": \"string\",\n    \"rows\": [\n      {\n        \"key_0\": 7434.065486406151,\n        \"key_1\": 3557.3351409840348\n      },\n      {\n        \"key_0\": 3546.259896560272\n      }\n    ],\n    \"columns\": [\n      {\n        \"col\": \"string\",\n        \"data_type\": \"string\",\n        \"nullable\": false\n      },\n      {\n        \"col\": \"string\",\n        \"data_type\": \"string\",\n        \"nullable\": false\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1acc87b6-90c7-460e-b38f-96cb75273a15",
+              "name": "The request body or parameters are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "refineSql"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"question\": \"<string>\",\n  \"sql\": \"<string>\",\n  \"task\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4259,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "321a386a-ff32-4c7b-905e-a7ea02d993c5",
+              "name": "Authentication failed. Check your Chat2Query API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "refineSql"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"question\": \"<string>\",\n  \"sql\": \"<string>\",\n  \"task\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4259,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7482002c-f396-4b3a-bdb8-b2b7a6ac2d33",
+              "name": "Rate limit exceeded. The Chat2Query API allows 100 requests per day per Data App. Contact TiDB Cloud support to request a higher limit.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "refineSql"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "description": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+                      "type": "any",
+                      "value": "{{dataAppId}}",
+                      "key": "dataAppId"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"question\": \"<string>\",\n  \"sql\": \"<string>\",\n  \"task\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4259,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "The Chat2Query Data App ID assigned by TiDB Cloud.",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "dataapp_default",
+      "key": "dataAppId"
+    },
+    {
+      "type": "string",
+      "value": "https://data.tidbcloud.com/api/v1beta/app/{{dataAppId}}/endpoint",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "digest",
+    "digest": [
+      {
+        "key": "username",
+        "value": "{{digestAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{digestAuthPassword}}"
+      },
+      {
+        "key": "realm",
+        "value": "{{realm}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "be8c951a-c39f-41fd-950b-417cad5deed4",
+    "name": "TiDB Cloud Chat2Query API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The TiDB Cloud Chat2Query API is an AI-powered interface that enables developers to generate and execute SQL statements against TiDB Cloud clusters using natural language instructions. It is exposed as a special Data App within TiDB Cloud, authenticated via API keys scoped to the Chat2Query Data App. The API provides endpoints for generating data summaries of database schemas, translating natural language prompts into SQL via the v2 and v3 chat2data endpoints, refining existing queries, managing multi-round chat sessions, and suggesting questions for data exploration. It is intended for building AI-assisted data exploration tools, reporting interfaces, and applications that need to query structured data without requiring users to write SQL directly. The API uses HTTP Digest Authentication and is rate limited to 100 requests per day per Data App.\n\nContact Support:\n Name: TiDB Cloud Support",
+      "type": "text/plain"
+    }
+  }
+}

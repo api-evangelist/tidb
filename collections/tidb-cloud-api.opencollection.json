@@ -1,0 +1,678 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Clusters",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List clusters",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters",
+            "params": [
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per page. Default is 100, maximum is 100."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "Pagination token returned from a previous list request to retrieve the next page."
+              },
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "query",
+                "description": "Filter clusters by project ID."
+              },
+              {
+                "name": "clusterStates",
+                "value": "",
+                "type": "query",
+                "description": "Filter clusters by state. Possible values include CREATING, ACTIVE, PAUSED, RESUMING, DELETING, and UPGRADING."
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of TiDB Cloud Dedicated clusters within the organization or a specific project. Supports filtering by project ID, region, and cluster state. Results are paginated using page tokens."
+        },
+        {
+          "info": {
+            "name": "Create a cluster",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters",
+            "params": [
+              {
+                "name": "validateOnly",
+                "value": "",
+                "type": "query",
+                "description": "If true, validates the request without creating the cluster."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new TiDB Cloud Dedicated cluster within the specified project. The request body must specify the cluster name, cloud provider, region, and component configuration including TiDB, TiKV, and optionally TiFlash node sizes and counts. Use validateOnly to test a request without actually creating the cluster."
+        },
+        {
+          "info": {
+            "name": "Get a cluster",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the TiDB Cloud Dedicated cluster."
+              }
+            ]
+          },
+          "docs": "Returns the full configuration and current status of a specific TiDB Cloud Dedicated cluster, including its nodes, network configuration, version, and operational state."
+        },
+        {
+          "info": {
+            "name": "Update a cluster",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the TiDB Cloud Dedicated cluster."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Modifies the configuration of an existing TiDB Cloud Dedicated cluster. Supports scaling TiDB node count, TiKV storage size, and TiFlash node count. Only fields included in the request body are updated; omitted fields remain unchanged."
+        },
+        {
+          "info": {
+            "name": "Delete a cluster",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the TiDB Cloud Dedicated cluster."
+              }
+            ]
+          },
+          "docs": "Permanently deletes a TiDB Cloud Dedicated cluster and all associated data. This operation is irreversible. The cluster must be in an active or paused state before deletion."
+        },
+        {
+          "info": {
+            "name": "Pause a cluster",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId:pauseCluster",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the TiDB Cloud Dedicated cluster."
+              }
+            ]
+          },
+          "docs": "Pauses a running TiDB Cloud Dedicated cluster, suspending compute resources while retaining data in storage. Paused clusters do not incur compute charges. The cluster must be in an ACTIVE state to be paused."
+        },
+        {
+          "info": {
+            "name": "Resume a cluster",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId:resumeCluster",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the TiDB Cloud Dedicated cluster."
+              }
+            ]
+          },
+          "docs": "Resumes a paused TiDB Cloud Dedicated cluster, restoring compute resources and making the cluster available for connections. The cluster must be in a PAUSED state to be resumed."
+        },
+        {
+          "info": {
+            "name": "Reset root password",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId:resetRootPassword",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the TiDB Cloud Dedicated cluster."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Resets the root password for a TiDB Cloud Dedicated cluster. The new password is specified in the request body. After the reset, existing connections using the old password will be invalidated."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Regions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List regions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/regions",
+            "params": [
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per page. Default is 100, maximum is 100."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "Pagination token returned from a previous list request to retrieve the next page."
+              }
+            ]
+          },
+          "docs": "Returns a list of all available cloud provider regions where TiDB Cloud Dedicated clusters can be deployed. Each region includes cloud provider, region identifier, display name, and availability status."
+        },
+        {
+          "info": {
+            "name": "Get a region",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/regions/:regionId",
+            "params": [
+              {
+                "name": "regionId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the cloud region."
+              }
+            ]
+          },
+          "docs": "Returns detailed information about a specific cloud region, including its cloud provider, display name, geographic location, and support for specific TiDB Cloud features."
+        },
+        {
+          "info": {
+            "name": "List node specifications",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/regions/:regionId/nodeSpecs",
+            "params": [
+              {
+                "name": "regionId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the cloud region."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per page. Default is 100, maximum is 100."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "Pagination token returned from a previous list request to retrieve the next page."
+              }
+            ]
+          },
+          "docs": "Returns all available node specifications for a given region, including TiDB, TiKV, and TiFlash component types. Each specification includes CPU, memory, and storage details. Use this endpoint to determine valid node configurations before creating or scaling a cluster."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Imports",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List import tasks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId/imports",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the TiDB Cloud Dedicated cluster."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per page. Default is 100, maximum is 100."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "Pagination token returned from a previous list request to retrieve the next page."
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of data import tasks for a specific TiDB Cloud Dedicated cluster. Each import task includes status, source configuration, progress information, and timestamps."
+        },
+        {
+          "info": {
+            "name": "Create an import task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId/imports",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the TiDB Cloud Dedicated cluster."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new data import task for a specific TiDB Cloud Dedicated cluster. Supports importing data from AWS S3, Google Cloud Storage, and local file uploads in CSV, SQL, Parquet, and Aurora Snapshot formats. Specify the source type, file format, target database, and any necessary access credentials."
+        },
+        {
+          "info": {
+            "name": "Get an import task",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId/imports/:importId",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the TiDB Cloud Dedicated cluster."
+              },
+              {
+                "name": "importId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the import task."
+              }
+            ]
+          },
+          "docs": "Returns the current status and configuration details of a specific data import task. Includes progress percentage, estimated completion time, error messages if any, and source file information."
+        },
+        {
+          "info": {
+            "name": "Cancel an import task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId/imports/:importId:cancel",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the TiDB Cloud Dedicated cluster."
+              },
+              {
+                "name": "importId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the import task."
+              }
+            ]
+          },
+          "docs": "Cancels an in-progress data import task for a specific cluster. Only import tasks in a RUNNING or PENDING state can be cancelled. Cancelled tasks cannot be resumed; a new import task must be created."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Integrations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List integrations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId/integrations",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the TiDB Cloud Dedicated cluster."
+              }
+            ]
+          },
+          "docs": "Returns all third-party integrations configured for a specific TiDB Cloud Dedicated cluster. Supported integrations include Datadog, Prometheus, and other observability platforms."
+        },
+        {
+          "info": {
+            "name": "Create an integration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId/integrations",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the TiDB Cloud Dedicated cluster."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Configures a new third-party integration for a specific TiDB Cloud Dedicated cluster. The integration type and credentials must be specified in the request body. Once created, TiDB Cloud will begin sending metrics and logs to the configured integration endpoint."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "API Keys",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List API keys",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/apikeys",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "query",
+                "description": "Filter API keys by project ID. Omit for organization-level keys."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per page. Default is 100, maximum is 100."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "Pagination token returned from a previous list request to retrieve the next page."
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of API keys for the organization or a specific project. Each key entry includes its display name, access key, role, and creation time. Secret keys are not returned after initial creation."
+        },
+        {
+          "info": {
+            "name": "Create an API key",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/apikeys",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new API key with the specified display name, project scope, and role. The response includes both the public access key and the private secret key. The secret key is only returned at creation time and cannot be retrieved afterwards; store it securely."
+        },
+        {
+          "info": {
+            "name": "Get an API key",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/apikeys/:accessKey",
+            "params": [
+              {
+                "name": "accessKey",
+                "value": "",
+                "type": "path",
+                "description": "The public access key portion of the API key pair."
+              }
+            ]
+          },
+          "docs": "Returns the metadata and permissions for a specific API key identified by its public access key. The private secret key is not returned."
+        },
+        {
+          "info": {
+            "name": "Update an API key",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://dedicated.tidbapi.com/v1beta1/apikeys/:accessKey",
+            "params": [
+              {
+                "name": "accessKey",
+                "value": "",
+                "type": "path",
+                "description": "The public access key portion of the API key pair."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the display name or role of an existing API key. Only the fields provided in the request body are modified. The access key and secret key remain unchanged."
+        },
+        {
+          "info": {
+            "name": "Delete an API key",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://dedicated.tidbapi.com/v1beta1/apikeys/:accessKey",
+            "params": [
+              {
+                "name": "accessKey",
+                "value": "",
+                "type": "path",
+                "description": "The public access key portion of the API key pair."
+              }
+            ]
+          },
+          "docs": "Permanently deletes an API key. Once deleted, any requests authenticated with this key will be rejected. This action cannot be undone."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Audit Logs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List audit logs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/auditLogs",
+            "params": [
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per page. Default is 100, maximum is 100."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "Pagination token returned from a previous list request to retrieve the next page."
+              },
+              {
+                "name": "startTime",
+                "value": "",
+                "type": "query",
+                "description": "Filter audit logs starting from this ISO 8601 datetime."
+              },
+              {
+                "name": "endTime",
+                "value": "",
+                "type": "query",
+                "description": "Filter audit logs up to this ISO 8601 datetime."
+              },
+              {
+                "name": "auditEventTypes",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of event types to filter by."
+              },
+              {
+                "name": "keyword",
+                "value": "",
+                "type": "query",
+                "description": "Search term to filter audit log entries."
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of console audit logs for the organization. Audit logs capture administrative actions such as cluster creation, deletion, and configuration changes, along with the user email, timestamp, and result of each action. Supports filtering by time range, event type, and keyword."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Billing",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get monthly bill",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/bills/:billedMonth",
+            "params": [
+              {
+                "name": "billedMonth",
+                "value": "",
+                "type": "path",
+                "description": "The billing month in YYYY-MM format (e.g., 2025-03)."
+              }
+            ]
+          },
+          "docs": "Returns the organization's billing summary for the specified month in YYYY-MM format. Includes an overview of total charges, a breakdown by project, and a breakdown by service type such as compute, storage, and data transfer."
+        },
+        {
+          "info": {
+            "name": "Get monthly bill with daily details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/billsDetails/:billedMonth",
+            "params": [
+              {
+                "name": "billedMonth",
+                "value": "",
+                "type": "path",
+                "description": "The billing month in YYYY-MM format (e.g., 2025-03)."
+              }
+            ]
+          },
+          "docs": "Returns the organization's detailed billing information for the specified month, broken down by daily usage per project, cluster, and service path. Includes credits applied, discounts, running totals, and total costs."
+        },
+        {
+          "info": {
+            "name": "Query cost explorer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/billsCostExplorer",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns usage cost details based on a custom cost explorer query. Supports filtering and grouping by project, cluster, service, region, and date range. Use this endpoint to build custom billing dashboards and spending trend reports."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

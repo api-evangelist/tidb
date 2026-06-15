@@ -1,0 +1,2386 @@
+{
+  "item": [
+    {
+      "id": "143f49f6-4337-40ff-a67a-752078f37f06",
+      "name": "DDL",
+      "description": {
+        "content": "Endpoints for managing and inspecting DDL jobs, including ownership and history.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "bf67fc19-f733-4d19-b654-79387e0f86d0",
+          "name": "Get DDL job history",
+          "request": {
+            "name": "Get DDL job history",
+            "description": {
+              "content": "Returns the history of DDL (Data Definition Language) jobs executed on the cluster, such as CREATE TABLE, ALTER TABLE, DROP INDEX, and similar schema change operations. Results are paginated using start_job_id and limit parameters. DDL history is useful for auditing schema changes and diagnosing failed schema modifications.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "ddl",
+                "history"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "start_job_id",
+                  "value": "<integer>",
+                  "description": "The DDL job ID to start listing from, for pagination."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Maximum number of DDL job history records to return."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ec084144-5a12-4804-96b0-8cc93695cfca",
+              "name": "DDL job history retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ddl",
+                    "history"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_job_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": 6761,\n    \"type\": \"string\",\n    \"schema_id\": 4184,\n    \"table_id\": 5687,\n    \"schema_name\": \"string\",\n    \"table_name\": \"string\",\n    \"state\": \"string\",\n    \"start_time\": 3656,\n    \"error\": \"string\"\n  },\n  {\n    \"id\": 1858,\n    \"type\": \"string\",\n    \"schema_id\": 1592,\n    \"table_id\": 4214,\n    \"schema_name\": \"string\",\n    \"table_name\": \"string\",\n    \"state\": \"string\",\n    \"start_time\": 3126,\n    \"error\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "38b77fe4-c447-4c3c-bec1-5ee8c4b41c21",
+          "name": "Resign DDL owner",
+          "request": {
+            "name": "Resign DDL owner",
+            "description": {
+              "content": "Forces the current TiDB server to resign its role as the DDL owner, triggering a new DDL owner election among all TiDB servers in the cluster. Only one TiDB server is the DDL owner at any time and is responsible for executing schema change jobs. Use this endpoint when the current DDL owner is experiencing issues.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "ddl",
+                "owner",
+                "resign"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "05154a65-6a23-493d-9cfd-c07a5b020416",
+              "name": "DDL owner resignation initiated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ddl",
+                    "owner",
+                    "resign"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "c7bfcab2-c46e-42b8-96be-98bc8850ac93",
+      "name": "Diagnostics",
+      "description": {
+        "content": "Endpoints for downloading debug information and managing server diagnostics.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "77120739-63e3-41e6-a586-d651c3e3ef4b",
+          "name": "Download debug info zip",
+          "request": {
+            "name": "Download debug info zip",
+            "description": {
+              "content": "Returns a zip archive containing TiDB debug information useful for diagnosing production issues. The archive includes heap profile, CPU profile, goroutine dump, and configuration information collected over the specified number of seconds. This endpoint is used when filing bug reports or investigating performance problems with PingCAP support.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "debug",
+                "zip"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "seconds",
+                  "value": "10",
+                  "description": "Number of seconds to collect CPU profile and goroutine data before packaging."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/zip"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3f1afa24-ffe0-4f65-a39e-945ffdc7046e",
+              "name": "Debug zip archive returned successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "debug",
+                    "zip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "seconds",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/zip"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/zip"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "0e18a17d-f2cc-4318-94b6-9d46584177c4",
+      "name": "MVCC",
+      "description": {
+        "content": "Endpoints for retrieving multi-version concurrency control (MVCC) key details for debugging.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3fabb449-f359-4db0-a93f-b4a945c93e58",
+          "name": "Get MVCC info by row handle",
+          "request": {
+            "name": "Get MVCC info by row handle",
+            "description": {
+              "content": "Returns multi-version concurrency control (MVCC) information for the key corresponding to the specified row handle in a table. Shows all versions of the key across transactions, including start timestamp, commit timestamp, and value. Used for debugging transaction conflicts and stale data issues.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "mvcc",
+                "key",
+                ":db",
+                ":table",
+                ":handle"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "db",
+                  "description": "(Required) The database name."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "table",
+                  "description": "(Required) The table name within the specified database."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "handle",
+                  "description": "(Required) The row handle (primary key value or internal row ID) for the target row."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "73dd095d-961d-447d-88ce-b6ac797ce75f",
+              "name": "MVCC information retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "mvcc",
+                    "key",
+                    ":db",
+                    ":table",
+                    ":handle"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "db",
+                      "description": "(Required) The database name."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "table",
+                      "description": "(Required) The table name within the specified database."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "handle",
+                      "description": "(Required) The row handle (primary key value or internal row ID) for the target row."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"key\": \"string\",\n  \"mvcc\": {\n    \"info\": {}\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "164dba3e-1906-4979-9fbb-d8dc54eb8e4b",
+              "name": "The specified database, table, or handle was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "mvcc",
+                    "key",
+                    ":db",
+                    ":table",
+                    ":handle"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "db",
+                      "description": "(Required) The database name."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "table",
+                      "description": "(Required) The table name within the specified database."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "handle",
+                      "description": "(Required) The row handle (primary key value or internal row ID) for the target row."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e735bd97-9027-4e6c-a5cc-b07196c7002e",
+          "name": "Get MVCC info by hex key",
+          "request": {
+            "name": "Get MVCC info by hex key",
+            "description": {
+              "content": "Returns MVCC information for a key specified as a hexadecimal string. This endpoint is used when you have the raw encoded key from TiKV region information and need to look up the MVCC history for that specific key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "mvcc",
+                "hex",
+                ":hexKey"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "hexKey",
+                  "description": "(Required) The raw key encoded as a hexadecimal string."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "967bd2bc-8163-476d-8473-b8aa3607e317",
+              "name": "MVCC information retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "mvcc",
+                    "hex",
+                    ":hexKey"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "hexKey",
+                      "description": "(Required) The raw key encoded as a hexadecimal string."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"key\": \"string\",\n  \"mvcc\": {\n    \"info\": {}\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "11742907-0066-4b9e-a488-5bafe04c9cf6",
+      "name": "Regions",
+      "description": {
+        "content": "Endpoints for retrieving TiKV region metadata associated with tables and the cluster.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "2e908d1c-ca4c-4657-9223-0f416e5745c8",
+          "name": "List all regions metadata",
+          "request": {
+            "name": "List all regions metadata",
+            "description": {
+              "content": "Returns the metadata for all TiKV regions known to this TiDB instance. Each region entry includes region ID, start and end keys, epoch information, and peer assignments. This endpoint is primarily used for cluster topology inspection and debugging region distribution issues.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "regions",
+                "meta"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "77765fac-7ce1-4163-8088-08205a7960f1",
+              "name": "Region metadata retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "regions",
+                    "meta"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"region_id\": 7901,\n    \"start_key\": \"string\",\n    \"end_key\": \"string\",\n    \"frames\": [\n      {\n        \"db_name\": \"string\",\n        \"table_name\": \"string\",\n        \"table_id\": 4638,\n        \"is_record\": false,\n        \"record_id\": 7065,\n        \"index_name\": \"string\",\n        \"index_id\": 6084\n      },\n      {\n        \"db_name\": \"string\",\n        \"table_name\": \"string\",\n        \"table_id\": 2090,\n        \"is_record\": false,\n        \"record_id\": 4930,\n        \"index_name\": \"string\",\n        \"index_id\": 730\n      }\n    ]\n  },\n  {\n    \"region_id\": 605,\n    \"start_key\": \"string\",\n    \"end_key\": \"string\",\n    \"frames\": [\n      {\n        \"db_name\": \"string\",\n        \"table_name\": \"string\",\n        \"table_id\": 2144,\n        \"is_record\": true,\n        \"record_id\": 9391,\n        \"index_name\": \"string\",\n        \"index_id\": 9905\n      },\n      {\n        \"db_name\": \"string\",\n        \"table_name\": \"string\",\n        \"table_id\": 3303,\n        \"is_record\": true,\n        \"record_id\": 5066,\n        \"index_name\": \"string\",\n        \"index_id\": 5796\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a955f686-61f1-4600-80a3-d37ecab594dc",
+          "name": "Get hot regions",
+          "request": {
+            "name": "Get hot regions",
+            "description": {
+              "content": "Returns the top hot read and write regions for each TiKV store, along with the associated table and index names. This endpoint is used for identifying hotspot issues in data access patterns, which can cause uneven load distribution across TiKV nodes.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "regions",
+                "hot"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0ce0dd24-d0a8-4391-9a65-e7400a8f8407",
+              "name": "Hot regions data retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "regions",
+                    "hot"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"as_peer\": [\n    {\n      \"store_id\": 1033,\n      \"hot_region_list\": [\n        {\n          \"region_id\": 3114,\n          \"flow_bytes\": 4041.7715645602625\n        },\n        {\n          \"region_id\": 4824,\n          \"flow_bytes\": 2550.7415046811097\n        }\n      ]\n    },\n    {\n      \"store_id\": 3146,\n      \"hot_region_list\": [\n        {\n          \"region_id\": 7566,\n          \"flow_bytes\": 5829.6198288405885\n        },\n        {\n          \"region_id\": 5667,\n          \"flow_bytes\": 2655.0483864713724\n        }\n      ]\n    }\n  ],\n  \"as_leader\": [\n    {\n      \"store_id\": 2625,\n      \"hot_region_list\": [\n        {\n          \"region_id\": 4944,\n          \"flow_bytes\": 3848.029193803175\n        },\n        {\n          \"region_id\": 3733,\n          \"flow_bytes\": 2614.6221289486402\n        }\n      ]\n    },\n    {\n      \"store_id\": 9725,\n      \"hot_region_list\": [\n        {\n          \"region_id\": 432,\n          \"flow_bytes\": 9844.080404022438\n        },\n        {\n          \"region_id\": 1501,\n          \"flow_bytes\": 2837.2015148824235\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "781f1003-3740-4804-acd5-86cacb0b9e36",
+          "name": "Get a region",
+          "request": {
+            "name": "Get a region",
+            "description": {
+              "content": "Returns detailed information about a specific TiKV region identified by its numeric region ID. Includes peer locations, epoch, and the associated frame information mapping the region to TiDB tables and indexes.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "regions",
+                ":regionID"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "regionID",
+                  "description": "(Required) The numeric TiKV region ID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0e6aaa4e-f7dd-4e61-8561-795d5866cd18",
+              "name": "Region information retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "regions",
+                    ":regionID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "regionID",
+                      "description": "(Required) The numeric TiKV region ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 9504,\n  \"start_key\": \"string\",\n  \"end_key\": \"string\",\n  \"frames\": [\n    {\n      \"db_name\": \"string\",\n      \"table_name\": \"string\",\n      \"table_id\": 7883,\n      \"is_record\": false,\n      \"record_id\": 8942,\n      \"index_name\": \"string\",\n      \"index_id\": 6063\n    },\n    {\n      \"db_name\": \"string\",\n      \"table_name\": \"string\",\n      \"table_id\": 9755,\n      \"is_record\": false,\n      \"record_id\": 3854,\n      \"index_name\": \"string\",\n      \"index_id\": 3746\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ab4d6393-57ad-4a14-a2b1-0be5399f0f33",
+              "name": "No region with the specified ID was found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "regions",
+                    ":regionID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "regionID",
+                      "description": "(Required) The numeric TiKV region ID."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3d162fd0-72c3-4aff-b529-f970ba74bbde",
+          "name": "Get table regions",
+          "request": {
+            "name": "Get table regions",
+            "description": {
+              "content": "Returns the list of TiKV regions that store data for a specific TiDB table. Each region entry includes the region ID, start key, end key, leader peer, and follower peers. Use this endpoint to understand the physical data layout of a table across TiKV stores.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "tables",
+                ":db",
+                ":table",
+                "regions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "db",
+                  "description": "(Required) The database name."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "table",
+                  "description": "(Required) The table name within the specified database."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4024e8e7-bde0-4521-ae19-85f1461bb69c",
+              "name": "Table regions retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tables",
+                    ":db",
+                    ":table",
+                    "regions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "db",
+                      "description": "(Required) The database name."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "table",
+                      "description": "(Required) The table name within the specified database."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"table_name\": \"string\",\n  \"table_id\": 7131,\n  \"record_regions\": [\n    {\n      \"region_id\": 8317,\n      \"leader\": {\n        \"id\": 2448,\n        \"store_id\": 242\n      },\n      \"peers\": [\n        {\n          \"id\": 492,\n          \"store_id\": 5080\n        },\n        {\n          \"id\": 7813,\n          \"store_id\": 2581\n        }\n      ],\n      \"start_key\": \"string\",\n      \"end_key\": \"string\"\n    },\n    {\n      \"region_id\": 4725,\n      \"leader\": {\n        \"id\": 7231,\n        \"store_id\": 5647\n      },\n      \"peers\": [\n        {\n          \"id\": 4793,\n          \"store_id\": 7841\n        },\n        {\n          \"id\": 3241,\n          \"store_id\": 9945\n        }\n      ],\n      \"start_key\": \"string\",\n      \"end_key\": \"string\"\n    }\n  ],\n  \"indices\": [\n    {\n      \"name\": \"string\",\n      \"id\": 9938,\n      \"regions\": [\n        {\n          \"region_id\": 4352,\n          \"leader\": {\n            \"id\": 4039,\n            \"store_id\": 7350\n          },\n          \"peers\": [\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"store_id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"store_id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"start_key\": \"string\",\n          \"end_key\": \"string\"\n        },\n        {\n          \"region_id\": 6526,\n          \"leader\": {\n            \"id\": 8009,\n            \"store_id\": 8227\n          },\n          \"peers\": [\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"store_id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"store_id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"start_key\": \"string\",\n          \"end_key\": \"string\"\n        }\n      ]\n    },\n    {\n      \"name\": \"string\",\n      \"id\": 3201,\n      \"regions\": [\n        {\n          \"region_id\": 6853,\n          \"leader\": {\n            \"id\": 7488,\n            \"store_id\": 2494\n          },\n          \"peers\": [\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"store_id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"store_id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"start_key\": \"string\",\n          \"end_key\": \"string\"\n        },\n        {\n          \"region_id\": 1107,\n          \"leader\": {\n            \"id\": 6695,\n            \"store_id\": 7902\n          },\n          \"peers\": [\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"store_id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"store_id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"start_key\": \"string\",\n          \"end_key\": \"string\"\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e80df4d1-aef6-41b4-8fab-0a57d9f4abbb",
+              "name": "The specified database or table was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tables",
+                    ":db",
+                    ":table",
+                    "regions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "db",
+                      "description": "(Required) The database name."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "table",
+                      "description": "(Required) The table name within the specified database."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2107cc73-67cc-436c-89fe-d4a4cdc108f3",
+          "name": "Scatter table regions",
+          "request": {
+            "name": "Scatter table regions",
+            "description": {
+              "content": "Initiates region scatter for the specified table, redistributing its TiKV regions across stores to improve data balance. This is typically used after bulk data loads that may have caused uneven region distribution.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "tables",
+                ":db",
+                ":table",
+                "scatter"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "db",
+                  "description": "(Required) The database name."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "table",
+                  "description": "(Required) The table name within the specified database."
+                }
+              ]
+            },
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "084eef8a-456d-4dd6-ad7d-18b33b060a6a",
+              "name": "Region scatter initiated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tables",
+                    ":db",
+                    ":table",
+                    "scatter"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "db",
+                      "description": "(Required) The database name."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "table",
+                      "description": "(Required) The table name within the specified database."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b568f8ad-002e-4e34-87c9-99c44239c9d3",
+              "name": "The specified database or table was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tables",
+                    ":db",
+                    ":table",
+                    "scatter"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "db",
+                      "description": "(Required) The database name."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "table",
+                      "description": "(Required) The table name within the specified database."
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "16f2dd7f-8257-4279-b864-5bd833168965",
+      "name": "Schema",
+      "description": {
+        "content": "Endpoints for retrieving database and table schema information from the TiDB information schema.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "68b98ac1-27a4-4fac-beaf-73fb502947f1",
+          "name": "Get all database schemas",
+          "request": {
+            "name": "Get all database schemas",
+            "description": {
+              "content": "Returns schema information for all databases known to this TiDB instance. The response includes table names, column definitions, and index information as represented in the TiDB information schema.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "schema"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9316faae-e9d9-4798-8059-43a60157e2dc",
+              "name": "All database schemas retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "schema"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"db_name\": {\n      \"O\": \"string\",\n      \"L\": \"string\"\n    },\n    \"charset\": \"string\",\n    \"collate\": \"string\"\n  },\n  {\n    \"db_name\": {\n      \"O\": \"string\",\n      \"L\": \"string\"\n    },\n    \"charset\": \"string\",\n    \"collate\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4a8faf8a-e63e-4de6-9ce8-f21bfe7efc5e",
+          "name": "Get database schema",
+          "request": {
+            "name": "Get database schema",
+            "description": {
+              "content": "Returns schema information for all tables in the specified database. Optionally set id_name_only to true to return only table IDs and names without the full column and index details, which is faster for large schemas.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "schema",
+                ":db"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "id_name_only",
+                  "value": "<boolean>",
+                  "description": "If true, returns only table IDs and names without full schema details."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "db",
+                  "description": "(Required) The database name."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "4fdf7c2f-f654-4d38-b2aa-92fe6b8ac7eb",
+              "name": "Database schema retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "schema",
+                    ":db"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "id_name_only",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "db",
+                      "description": "(Required) The database name."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": 9978,\n    \"name\": {\n      \"O\": \"string\",\n      \"L\": \"string\"\n    },\n    \"charset\": \"string\",\n    \"collate\": \"string\",\n    \"cols\": [\n      {\n        \"id\": 4684,\n        \"name\": {\n          \"O\": \"string\",\n          \"L\": \"string\"\n        },\n        \"field_type\": {}\n      },\n      {\n        \"id\": 9037,\n        \"name\": {\n          \"O\": \"string\",\n          \"L\": \"string\"\n        },\n        \"field_type\": {}\n      }\n    ],\n    \"index_info\": [\n      {\n        \"id\": 4080,\n        \"idx_name\": {\n          \"O\": \"string\",\n          \"L\": \"string\"\n        },\n        \"tbl_name\": {\n          \"O\": \"string\",\n          \"L\": \"string\"\n        },\n        \"is_unique\": false,\n        \"is_primary\": false\n      },\n      {\n        \"id\": 9798,\n        \"idx_name\": {\n          \"O\": \"string\",\n          \"L\": \"string\"\n        },\n        \"tbl_name\": {\n          \"O\": \"string\",\n          \"L\": \"string\"\n        },\n        \"is_unique\": false,\n        \"is_primary\": false\n      }\n    ]\n  },\n  {\n    \"id\": 5692,\n    \"name\": {\n      \"O\": \"string\",\n      \"L\": \"string\"\n    },\n    \"charset\": \"string\",\n    \"collate\": \"string\",\n    \"cols\": [\n      {\n        \"id\": 5034,\n        \"name\": {\n          \"O\": \"string\",\n          \"L\": \"string\"\n        },\n        \"field_type\": {}\n      },\n      {\n        \"id\": 8394,\n        \"name\": {\n          \"O\": \"string\",\n          \"L\": \"string\"\n        },\n        \"field_type\": {}\n      }\n    ],\n    \"index_info\": [\n      {\n        \"id\": 7238,\n        \"idx_name\": {\n          \"O\": \"string\",\n          \"L\": \"string\"\n        },\n        \"tbl_name\": {\n          \"O\": \"string\",\n          \"L\": \"string\"\n        },\n        \"is_unique\": true,\n        \"is_primary\": true\n      },\n      {\n        \"id\": 1824,\n        \"idx_name\": {\n          \"O\": \"string\",\n          \"L\": \"string\"\n        },\n        \"tbl_name\": {\n          \"O\": \"string\",\n          \"L\": \"string\"\n        },\n        \"is_unique\": true,\n        \"is_primary\": true\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4de50eb3-1a11-449e-b7f4-25281c7c7e6c",
+              "name": "The specified database was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "schema",
+                    ":db"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "id_name_only",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "db",
+                      "description": "(Required) The database name."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "08b8a772-3ce9-474f-9b66-528ea69ce966",
+          "name": "Get table schema",
+          "request": {
+            "name": "Get table schema",
+            "description": {
+              "content": "Returns the full schema definition for the specified table, including all column names, types, default values, and index definitions. Can also look up a table by numeric table_id or multiple table_ids for batch retrieval.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "schema",
+                ":db",
+                ":table"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "table_id",
+                  "value": "<integer>",
+                  "description": "Optional numeric table ID for lookup by ID instead of name."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "db",
+                  "description": "(Required) The database name."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "table",
+                  "description": "(Required) The table name within the specified database."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7352502f-7d68-468d-bc13-aa7684e9025d",
+              "name": "Table schema retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "schema",
+                    ":db",
+                    ":table"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "table_id",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "db",
+                      "description": "(Required) The database name."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "table",
+                      "description": "(Required) The table name within the specified database."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 6585,\n  \"name\": {\n    \"O\": \"string\",\n    \"L\": \"string\"\n  },\n  \"charset\": \"string\",\n  \"collate\": \"string\",\n  \"cols\": [\n    {\n      \"id\": 1635,\n      \"name\": {\n        \"O\": \"string\",\n        \"L\": \"string\"\n      },\n      \"field_type\": {}\n    },\n    {\n      \"id\": 427,\n      \"name\": {\n        \"O\": \"string\",\n        \"L\": \"string\"\n      },\n      \"field_type\": {}\n    }\n  ],\n  \"index_info\": [\n    {\n      \"id\": 2527,\n      \"idx_name\": {\n        \"O\": \"string\",\n        \"L\": \"string\"\n      },\n      \"tbl_name\": {\n        \"O\": \"string\",\n        \"L\": \"string\"\n      },\n      \"is_unique\": true,\n      \"is_primary\": false\n    },\n    {\n      \"id\": 8430,\n      \"idx_name\": {\n        \"O\": \"string\",\n        \"L\": \"string\"\n      },\n      \"tbl_name\": {\n        \"O\": \"string\",\n        \"L\": \"string\"\n      },\n      \"is_unique\": false,\n      \"is_primary\": false\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f457f033-e7e3-4417-83c3-b32103f0a946",
+              "name": "The specified database or table was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "schema",
+                    ":db",
+                    ":table"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "table_id",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "db",
+                      "description": "(Required) The database name."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "table",
+                      "description": "(Required) The table name within the specified database."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "20f48f46-8aae-4694-8817-fa4e23472afa",
+          "name": "Get table info by table ID",
+          "request": {
+            "name": "Get table info by table ID",
+            "description": {
+              "content": "Returns database information, table information, and the current TiDB info schema version for a specific table identified by its numeric table ID. This is useful for reverse lookups when you have a table ID from region information but need the associated database and table names.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "db-table",
+                ":tableID"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "tableID",
+                  "description": "(Required) The numeric TiDB internal table ID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "46873d72-07a8-4270-9895-7d56478fd276",
+              "name": "Table information retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "db-table",
+                    ":tableID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "tableID",
+                      "description": "(Required) The numeric TiDB internal table ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"db_info\": {\n    \"db_name\": {\n      \"O\": \"string\",\n      \"L\": \"string\"\n    },\n    \"charset\": \"string\",\n    \"collate\": \"string\"\n  },\n  \"table_info\": {\n    \"id\": 8959,\n    \"name\": {\n      \"O\": \"string\",\n      \"L\": \"string\"\n    },\n    \"charset\": \"string\",\n    \"collate\": \"string\",\n    \"cols\": [\n      {\n        \"id\": 218,\n        \"name\": {\n          \"O\": \"string\",\n          \"L\": \"string\"\n        },\n        \"field_type\": {}\n      },\n      {\n        \"id\": 7924,\n        \"name\": {\n          \"O\": \"string\",\n          \"L\": \"string\"\n        },\n        \"field_type\": {}\n      }\n    ],\n    \"index_info\": [\n      {\n        \"id\": 7589,\n        \"idx_name\": {\n          \"O\": \"string\",\n          \"L\": \"string\"\n        },\n        \"tbl_name\": {\n          \"O\": \"string\",\n          \"L\": \"string\"\n        },\n        \"is_unique\": true,\n        \"is_primary\": true\n      },\n      {\n        \"id\": 2288,\n        \"idx_name\": {\n          \"O\": \"string\",\n          \"L\": \"string\"\n        },\n        \"tbl_name\": {\n          \"O\": \"string\",\n          \"L\": \"string\"\n        },\n        \"is_unique\": true,\n        \"is_primary\": false\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "595b91d4-edeb-49c2-9157-c45a276fccd7",
+              "name": "No table with the specified ID was found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "db-table",
+                    ":tableID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "tableID",
+                      "description": "(Required) The numeric TiDB internal table ID."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "e08a215b-75fb-423e-82fe-805813e7471d",
+      "name": "Settings",
+      "description": {
+        "content": "Endpoints for retrieving and modifying TiDB server runtime settings.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "53123187-4216-49af-bf3e-42e7fe8c2a1a",
+          "name": "Get server settings",
+          "request": {
+            "name": "Get server settings",
+            "description": {
+              "content": "Returns the current runtime settings of the TiDB server instance, including log level, general log status, and DDL slow threshold. These settings can be modified without restarting the server via the POST method of this endpoint.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "settings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1754c3a5-9883-4e16-bbd4-7690168a3544",
+              "name": "Server settings retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"general_log\": false,\n  \"log_level\": \"string\",\n  \"ddl_slow_threshold\": 9668\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "7fc970bf-1d4b-4593-9c0c-e431a3bdccd2",
+          "name": "Update server settings",
+          "request": {
+            "name": "Update server settings",
+            "description": {
+              "content": "Modifies one or more runtime settings of the TiDB server without requiring a restart. Supports updating general_log to enable or disable the general query log, log_level to change the server log verbosity, and ddl_slow_threshold to adjust the DDL slow operation threshold in milliseconds.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "settings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "tidb_general_log",
+                  "value": "<integer>",
+                  "description": "Set to 1 to enable general query logging, 0 to disable."
+                },
+                {
+                  "disabled": false,
+                  "key": "log_level",
+                  "value": "<string>",
+                  "description": "The new log level (debug, info, warn, error, fatal)."
+                },
+                {
+                  "disabled": false,
+                  "key": "ddl_slow_threshold",
+                  "value": "<integer>",
+                  "description": "New DDL slow threshold in milliseconds."
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "2cda9745-254c-4aad-bd34-f5385dd50945",
+              "name": "Server settings updated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set to 1 to enable general query logging, 0 to disable.",
+                        "type": "text/plain"
+                      },
+                      "key": "tidb_general_log",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The new log level (debug, info, warn, error, fatal).",
+                        "type": "text/plain"
+                      },
+                      "key": "log_level",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "New DDL slow threshold in milliseconds.",
+                        "type": "text/plain"
+                      },
+                      "key": "ddl_slow_threshold",
+                      "value": "<integer>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b5230e76-2f9f-494d-ac50-1b318f70b6d1",
+              "name": "Invalid setting name or value provided.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set to 1 to enable general query logging, 0 to disable.",
+                        "type": "text/plain"
+                      },
+                      "key": "tidb_general_log",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The new log level (debug, info, warn, error, fatal).",
+                        "type": "text/plain"
+                      },
+                      "key": "log_level",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "New DDL slow threshold in milliseconds.",
+                        "type": "text/plain"
+                      },
+                      "key": "ddl_slow_threshold",
+                      "value": "<integer>"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "1031de7f-4d53-49d6-b421-e55c68d5fc67",
+      "name": "Statistics",
+      "description": {
+        "content": "Endpoints for exporting optimizer statistics used for query planning.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "14779911-da26-4a7e-b0ef-75935cb9ced7",
+          "name": "Dump table statistics",
+          "request": {
+            "name": "Dump table statistics",
+            "description": {
+              "content": "Returns the optimizer statistics for the specified table in JSON format. Statistics include histogram data, count-min sketch approximations, and correlation coefficients used by the TiDB query optimizer when generating execution plans. Optionally specify a timestamp to retrieve historical statistics.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "stats",
+                "dump",
+                ":db",
+                ":table"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "timestamp",
+                  "value": "<integer>",
+                  "description": "Optional Unix timestamp to retrieve historical statistics at a specific point in time."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "db",
+                  "description": "(Required) The database name."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "table",
+                  "description": "(Required) The table name within the specified database."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3cfc0468-d69e-4542-a64a-12eb98bbef63",
+              "name": "Table statistics dumped successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "stats",
+                    "dump",
+                    ":db",
+                    ":table"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "timestamp",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "db",
+                      "description": "(Required) The database name."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "table",
+                      "description": "(Required) The table name within the specified database."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"database\": \"string\",\n  \"table_name\": \"string\",\n  \"columns\": {\n    \"key_0\": {}\n  },\n  \"indices\": {\n    \"key_0\": {}\n  },\n  \"count\": 3205,\n  \"modify_count\": 8661\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "477ce2e2-2df7-4e42-9856-080023fde00f",
+              "name": "The specified database or table was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "stats",
+                    "dump",
+                    ":db",
+                    ":table"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "timestamp",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "db",
+                      "description": "(Required) The database name."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "table",
+                      "description": "(Required) The table name within the specified database."
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    },
+    {
+      "id": "ba229479-e0b6-4e45-aaab-723407b4cd7c",
+      "name": "Status",
+      "description": {
+        "content": "Endpoints for retrieving the operational status of the TiDB server instance.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "4b07b8ba-92aa-4eb6-9f13-3a1e9a04d11a",
+          "name": "Get server status",
+          "request": {
+            "name": "Get server status",
+            "description": {
+              "content": "Returns the current operational status of the TiDB server instance, including the number of active connections, the TiDB version string, and the git commit hash of the binary. This endpoint is commonly used by load balancers and health check systems to verify that the TiDB process is running and accepting connections.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "status"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "0f7fb0cc-6796-4e74-a40b-4e622b03c2db",
+              "name": "Server status retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"connections\": 240,\n  \"version\": \"string\",\n  \"git_hash\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c01b25a7-5605-41e9-b3ee-49a47241b2ba",
+          "name": "Get Prometheus metrics",
+          "request": {
+            "name": "Get Prometheus metrics",
+            "description": {
+              "content": "Returns all Prometheus-format performance metrics for the TiDB server instance. This endpoint is consumed by Prometheus scrape jobs to collect TiDB-specific metrics including query latency, error rates, connection pool utilization, and internal component performance counters.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "metrics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d20bb541-184c-4b9b-a316-f6f49311692b",
+              "name": "Prometheus metrics returned in text exposition format.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e4a4fd2b-1dad-48aa-a919-9d38163bb617",
+          "name": "Get server information",
+          "request": {
+            "name": "Get server information",
+            "description": {
+              "content": "Returns detailed information about the TiDB server instance including version, IP address, listening port, status port, and the git hash of the binary. This endpoint is useful for service discovery and identifying specific nodes in a TiDB cluster.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "info"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "664d99e5-de2f-4dbc-ba1c-19c9ae6ea2f1",
+              "name": "Server information retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ddl_id\": \"string\",\n  \"ip\": \"string\",\n  \"listening_port\": 737,\n  \"status_port\": 6772,\n  \"lease\": \"string\",\n  \"binlog_status\": \"string\",\n  \"start_timestamp\": 1370,\n  \"git_hash\": \"string\",\n  \"is_owner\": true,\n  \"op_scope_level\": 8943\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "becf4b30-a7c0-4cce-a57d-d67d7553dc6c",
+          "name": "Get all cluster server information",
+          "request": {
+            "name": "Get all cluster server information",
+            "description": {
+              "content": "Returns information about all TiDB server instances in the cluster as registered with the Placement Driver (PD). This provides a cluster-wide view of all running TiDB nodes and their connection endpoints.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "info",
+                "all"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a2b4fb92-dcb2-45a1-85fc-ad8b850d0565",
+              "name": "All TiDB server information retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "info",
+                    "all"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"servers_num\": 598,\n  \"owner_id\": \"string\",\n  \"is_all_server_version_consistent\": false,\n  \"all_servers_info\": {\n    \"key_0\": {\n      \"ddl_id\": \"string\",\n      \"ip\": \"string\",\n      \"listening_port\": 2873,\n      \"status_port\": 7689,\n      \"lease\": \"string\",\n      \"binlog_status\": \"string\",\n      \"start_timestamp\": 932,\n      \"git_hash\": \"string\",\n      \"is_owner\": false,\n      \"op_scope_level\": 6737\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "http://localhost:10080",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "72482cd6-b438-4c3e-9099-aacc3634a2a7",
+    "name": "TiDB HTTP API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The TiDB HTTP API is a built-in administrative interface available on self-managed TiDB server instances, accessible on port 10080 by default. It exposes endpoints for retrieving server status, database and table schema information, region metadata, MVCC key details, DDL job history, hot region data, and server configuration. Operators and monitoring systems use this API to inspect the internal state of a running TiDB node, integrate with observability tooling, and troubleshoot distributed SQL execution. The API does not require authentication by default and is intended for use within trusted internal networks. The port can be configured in tidb.toml via the status.status-port setting.\n\nContact Support:\n Name: TiDB GitHub",
+      "type": "text/plain"
+    }
+  }
+}
