@@ -8,7 +8,7 @@ apis:
       - Cluster Management
       - Database
       - Distributed SQL
-    image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     baseURL: https://api.tidbcloud.com
     humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
     properties:
@@ -33,7 +33,7 @@ apis:
       - Database
       - REST
       - Serverless
-    image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     baseURL: https://data.tidbcloud.com
     humanURL: https://docs.pingcap.com/tidbcloud/data-service-overview/
     properties:
@@ -58,7 +58,7 @@ apis:
       - Database
       - Natural Language
       - SQL Generation
-    image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     baseURL: https://data.tidbcloud.com
     humanURL: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
     properties:
@@ -78,7 +78,7 @@ apis:
       - Operations
       - Self-Managed
       - Status
-    image: https://kinlane-productions2.s3.amazonaws.com/apis-json/apis-json-logo.jpg
+    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
     baseURL: http://localhost:10080
     humanURL: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
     properties:
