@@ -95,6 +95,10 @@ apis:
       systems use this API to inspect the internal state of a running TiDB node, integrate with observability tooling,
       and troubleshoot distributed SQL execution.
 common:
+  - type: DomainSecurity
+    url: security/tidb-domain-security.yml
+  - type: Authentication
+    url: authentication/tidb-authentication.yml
   - type: LinkedIn
     url: https://www.linkedin.com/company/pingcap
   - type: JSONLD

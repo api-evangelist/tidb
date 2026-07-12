@@ -1,0 +1,32 @@
+generated: '2026-07-11'
+method: probed
+source: live DNS/TLS/HTTP probes of apis.yml + OpenAPI hosts
+hosts:
+- host: docs.pingcap.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Aug 21 23:59:59 2026 GMT
+  hsts: false
+- host: api.tidbcloud.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct  2 23:59:59 2026 GMT
+  hsts: null
+- host: data.tidbcloud.com
+  https: true
+  tls_version: TLSv1.3
+  cert_expires: Oct  2 23:59:59 2026 GMT
+  hsts: null
+domains:
+- domain: pingcap.com
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: reject
+- domain: tidbcloud.com
+  dnssec: false
+  caa: []
+  spf: true
+  dmarc: true
+  dmarc_policy: none

@@ -1,0 +1,17 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/tidb-cloud-api-openapi.yml, openapi/tidb-cloud-chat2query-openapi.yml, openapi/tidb-cloud-data-service-openapi.yml
+summary:
+  types:
+  - http
+schemes:
+- name: digestAuth
+  type: http
+  scheme: digest
+  description: HTTP Digest Authentication using a TiDB Cloud API public key as the username
+    and private key as the password. Keys are generated in the TiDB Cloud console under Organization
+    Settings > API Keys.
+  sources:
+  - openapi/tidb-cloud-api-openapi.yml
+  - openapi/tidb-cloud-chat2query-openapi.yml
+  - openapi/tidb-cloud-data-service-openapi.yml
