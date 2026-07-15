@@ -95,6 +95,8 @@ apis:
       systems use this API to inspect the internal state of a running TiDB node, integrate with observability tooling,
       and troubleshoot distributed SQL execution.
 common:
+  - type: AgenticAccess
+    url: agentic-access/tidb-agentic-access.yml
   - type: DomainSecurity
     url: security/tidb-domain-security.yml
   - type: Authentication
