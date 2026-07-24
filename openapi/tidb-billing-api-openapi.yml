@@ -1,0 +1,238 @@
+openapi: 3.1.0
+info:
+  title: TiDB Cloud API Keys Billing API
+  description: The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud. It supports managing projects, clusters, backups, restores, data imports, billing, and private endpoint connections across both TiDB Cloud Serverless and TiDB Cloud Dedicated tiers. The API uses HTTP Digest Authentication with public and private API keys and returns JSON-formatted responses. Available as both v1beta and the newer v1beta1 versions, it enables automation of database infrastructure lifecycle management at scale.
+  version: v1beta1
+  contact:
+    name: TiDB Cloud Support
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  termsOfService: https://www.pingcap.com/legal/privacy-policy/
+servers:
+- url: https://dedicated.tidbapi.com/v1beta1
+  description: Dedicated Cluster API Server
+- url: https://iam.tidbapi.com/v1beta1
+  description: IAM API Server
+- url: https://billing.tidbapi.com/v1beta1
+  description: Billing API Server
+security:
+- digestAuth: []
+tags:
+- name: Billing
+  description: Operations for retrieving monthly billing summaries, cost details, and usage trends.
+paths:
+  /bills/{billedMonth}:
+    get:
+      operationId: getMonthlyBill
+      summary: Get monthly bill
+      description: Returns the organization's billing summary for the specified month in YYYY-MM format. Includes an overview of total charges, a breakdown by project, and a breakdown by service type such as compute, storage, and data transfer.
+      tags:
+      - Billing
+      parameters:
+      - $ref: '#/components/parameters/billedMonth'
+      responses:
+        '200':
+          description: Monthly bill retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillsExplorer'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /billsDetails/{billedMonth}:
+    get:
+      operationId: getMonthlyBillDetails
+      summary: Get monthly bill with daily details
+      description: Returns the organization's detailed billing information for the specified month, broken down by daily usage per project, cluster, and service path. Includes credits applied, discounts, running totals, and total costs.
+      tags:
+      - Billing
+      parameters:
+      - $ref: '#/components/parameters/billedMonth'
+      responses:
+        '200':
+          description: Detailed monthly bill retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillsDetails'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /billsCostExplorer:
+    post:
+      operationId: queryCostExplorer
+      summary: Query cost explorer
+      description: Returns usage cost details based on a custom cost explorer query. Supports filtering and grouping by project, cluster, service, region, and date range. Use this endpoint to build custom billing dashboards and spending trend reports.
+      tags:
+      - Billing
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CostExplorerRequest'
+      responses:
+        '200':
+          description: Cost explorer results retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BillsCostExplorer'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    BillsExplorer:
+      type: object
+      description: An organization's monthly billing summary.
+      properties:
+        overview:
+          type: object
+          description: High-level billing totals for the month.
+          properties:
+            totalCost:
+              type: string
+              description: The total cost for the month.
+            currency:
+              type: string
+              description: The billing currency code.
+        summaryByProject:
+          type: array
+          description: Cost breakdown by project.
+          items:
+            type: object
+            properties:
+              projectName:
+                type: string
+                description: The name of the project.
+              totalCost:
+                type: string
+                description: The total cost for this project.
+        summaryByService:
+          type: array
+          description: Cost breakdown by service type.
+          items:
+            type: object
+            properties:
+              serviceName:
+                type: string
+                description: The name of the service (compute, storage, etc.).
+              totalCost:
+                type: string
+                description: The total cost for this service.
+    BillsDetails:
+      type: object
+      description: Detailed daily billing data for a month.
+      properties:
+        billsDetails:
+          type: array
+          description: List of daily billing detail records.
+          items:
+            $ref: '#/components/schemas/BillDetail'
+    BillsCostExplorer:
+      type: object
+      description: Results from a cost explorer query.
+      properties:
+        trends:
+          type: array
+          description: Array of cost trend data points.
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                description: The date for this trend data point.
+              cost:
+                type: string
+                description: The cost amount for this date.
+    ErrorResponse:
+      type: object
+      description: Standard error response returned when an API request fails.
+      properties:
+        code:
+          type: integer
+          description: The HTTP status code of the error.
+        status:
+          type: string
+          description: The error status string.
+        error:
+          type: string
+          description: A machine-readable error code identifier.
+        msgPrefix:
+          type: string
+          description: A human-readable error message describing the failure.
+    CostExplorerRequest:
+      type: object
+      description: Request body for querying the cost explorer.
+      properties:
+        filter:
+          type: object
+          description: Criteria to filter cost explorer results by project, cluster, or service.
+        groups:
+          type: array
+          description: Dimensions to group results by (project, cluster, service, region).
+          items:
+            type: string
+    BillDetail:
+      type: object
+      description: A single daily billing record for a cluster and service.
+      properties:
+        billedDate:
+          type: string
+          format: date
+          description: The date of this billing record.
+        projectName:
+          type: string
+          description: The name of the project.
+        clusterName:
+          type: string
+          description: The name of the cluster.
+        servicePathName:
+          type: string
+          description: The name of the service path (e.g., TiDB Serverless Compute).
+        credits:
+          type: string
+          description: Credits applied to this billing record.
+        discounts:
+          type: string
+          description: Discounts applied to this billing record.
+        runningTotal:
+          type: string
+          description: The running total cost up to and including this date.
+        totalCost:
+          type: string
+          description: The total cost for this specific record.
+  parameters:
+    billedMonth:
+      name: billedMonth
+      in: path
+      description: The billing month in YYYY-MM format (e.g., 2025-03).
+      required: true
+      schema:
+        type: string
+        pattern: ^\d{4}-\d{2}$
+  responses:
+    Unauthorized:
+      description: Authentication failed. Check your API key credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: The request body or parameters are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  securitySchemes:
+    digestAuth:
+      type: http
+      scheme: digest
+      description: HTTP Digest Authentication using a TiDB Cloud API public key as the username and private key as the password. Keys are generated in the TiDB Cloud console under Organization Settings > API Keys.
+externalDocs:
+  description: TiDB Cloud API Overview
+  url: https://docs.pingcap.com/tidbcloud/api-overview/

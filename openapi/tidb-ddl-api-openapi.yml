@@ -1,0 +1,102 @@
+openapi: 3.1.0
+info:
+  title: TiDB Cloud API Keys DDL API
+  description: The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud. It supports managing projects, clusters, backups, restores, data imports, billing, and private endpoint connections across both TiDB Cloud Serverless and TiDB Cloud Dedicated tiers. The API uses HTTP Digest Authentication with public and private API keys and returns JSON-formatted responses. Available as both v1beta and the newer v1beta1 versions, it enables automation of database infrastructure lifecycle management at scale.
+  version: v1beta1
+  contact:
+    name: TiDB Cloud Support
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  termsOfService: https://www.pingcap.com/legal/privacy-policy/
+servers:
+- url: https://dedicated.tidbapi.com/v1beta1
+  description: Dedicated Cluster API Server
+- url: https://iam.tidbapi.com/v1beta1
+  description: IAM API Server
+- url: https://billing.tidbapi.com/v1beta1
+  description: Billing API Server
+security:
+- digestAuth: []
+tags:
+- name: DDL
+  description: Endpoints for managing and inspecting DDL jobs, including ownership and history.
+paths:
+  /ddl/history:
+    get:
+      operationId: getDdlHistory
+      summary: Get DDL job history
+      description: Returns the history of DDL (Data Definition Language) jobs executed on the cluster, such as CREATE TABLE, ALTER TABLE, DROP INDEX, and similar schema change operations. Results are paginated using start_job_id and limit parameters. DDL history is useful for auditing schema changes and diagnosing failed schema modifications.
+      tags:
+      - DDL
+      parameters:
+      - name: start_job_id
+        in: query
+        description: The DDL job ID to start listing from, for pagination.
+        required: false
+        schema:
+          type: integer
+      - name: limit
+        in: query
+        description: Maximum number of DDL job history records to return.
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: DDL job history retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DdlJob'
+  /ddl/owner/resign:
+    post:
+      operationId: resignDdlOwner
+      summary: Resign DDL owner
+      description: Forces the current TiDB server to resign its role as the DDL owner, triggering a new DDL owner election among all TiDB servers in the cluster. Only one TiDB server is the DDL owner at any time and is responsible for executing schema change jobs. Use this endpoint when the current DDL owner is experiencing issues.
+      tags:
+      - DDL
+      responses:
+        '200':
+          description: DDL owner resignation initiated successfully.
+components:
+  schemas:
+    DdlJob:
+      type: object
+      description: A DDL job record from TiDB's schema change history.
+      properties:
+        id:
+          type: integer
+          description: The unique numeric DDL job ID.
+        type:
+          type: string
+          description: The DDL job type (e.g., create table, add index, drop column).
+        schema_id:
+          type: integer
+          description: The ID of the database schema affected by this DDL job.
+        table_id:
+          type: integer
+          description: The ID of the table affected by this DDL job.
+        schema_name:
+          type: string
+          description: The database name affected by this DDL job.
+        table_name:
+          type: string
+          description: The table name affected by this DDL job.
+        state:
+          type: string
+          description: The current state of the DDL job (done, synced, cancelled, etc.).
+        start_time:
+          type: integer
+          description: The Unix timestamp when the DDL job started.
+        error:
+          type: string
+          description: Error message if the DDL job failed.
+  securitySchemes:
+    digestAuth:
+      type: http
+      scheme: digest
+      description: HTTP Digest Authentication using a TiDB Cloud API public key as the username and private key as the password. Keys are generated in the TiDB Cloud console under Organization Settings > API Keys.
+externalDocs:
+  description: TiDB Cloud API Overview
+  url: https://docs.pingcap.com/tidbcloud/api-overview/

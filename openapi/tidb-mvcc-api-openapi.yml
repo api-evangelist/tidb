@@ -1,0 +1,107 @@
+openapi: 3.1.0
+info:
+  title: TiDB Cloud API Keys MVCC API
+  description: The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud. It supports managing projects, clusters, backups, restores, data imports, billing, and private endpoint connections across both TiDB Cloud Serverless and TiDB Cloud Dedicated tiers. The API uses HTTP Digest Authentication with public and private API keys and returns JSON-formatted responses. Available as both v1beta and the newer v1beta1 versions, it enables automation of database infrastructure lifecycle management at scale.
+  version: v1beta1
+  contact:
+    name: TiDB Cloud Support
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  termsOfService: https://www.pingcap.com/legal/privacy-policy/
+servers:
+- url: https://dedicated.tidbapi.com/v1beta1
+  description: Dedicated Cluster API Server
+- url: https://iam.tidbapi.com/v1beta1
+  description: IAM API Server
+- url: https://billing.tidbapi.com/v1beta1
+  description: Billing API Server
+security:
+- digestAuth: []
+tags:
+- name: MVCC
+  description: Endpoints for retrieving multi-version concurrency control (MVCC) key details for debugging.
+paths:
+  /mvcc/key/{db}/{table}/{handle}:
+    get:
+      operationId: getMvccByHandle
+      summary: Get MVCC info by row handle
+      description: Returns multi-version concurrency control (MVCC) information for the key corresponding to the specified row handle in a table. Shows all versions of the key across transactions, including start timestamp, commit timestamp, and value. Used for debugging transaction conflicts and stale data issues.
+      tags:
+      - MVCC
+      parameters:
+      - $ref: '#/components/parameters/db'
+      - $ref: '#/components/parameters/table'
+      - name: handle
+        in: path
+        description: The row handle (primary key value or internal row ID) for the target row.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: MVCC information retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MvccInfo'
+        '404':
+          description: The specified database, table, or handle was not found.
+  /mvcc/hex/{hexKey}:
+    get:
+      operationId: getMvccByHexKey
+      summary: Get MVCC info by hex key
+      description: Returns MVCC information for a key specified as a hexadecimal string. This endpoint is used when you have the raw encoded key from TiKV region information and need to look up the MVCC history for that specific key.
+      tags:
+      - MVCC
+      parameters:
+      - name: hexKey
+        in: path
+        description: The raw key encoded as a hexadecimal string.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: MVCC information retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MvccInfo'
+components:
+  parameters:
+    db:
+      name: db
+      in: path
+      description: The database name.
+      required: true
+      schema:
+        type: string
+    table:
+      name: table
+      in: path
+      description: The table name within the specified database.
+      required: true
+      schema:
+        type: string
+  schemas:
+    MvccInfo:
+      type: object
+      description: MVCC version history for a TiKV key.
+      properties:
+        key:
+          type: string
+          description: The hexadecimal-encoded key.
+        mvcc:
+          type: object
+          description: The MVCC data for this key.
+          properties:
+            info:
+              type: object
+              description: Raw MVCC information including lock, writes, and values.
+  securitySchemes:
+    digestAuth:
+      type: http
+      scheme: digest
+      description: HTTP Digest Authentication using a TiDB Cloud API public key as the username and private key as the password. Keys are generated in the TiDB Cloud console under Organization Settings > API Keys.
+externalDocs:
+  description: TiDB Cloud API Overview
+  url: https://docs.pingcap.com/tidbcloud/api-overview/

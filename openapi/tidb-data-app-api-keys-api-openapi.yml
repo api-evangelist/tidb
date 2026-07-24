@@ -1,0 +1,200 @@
+openapi: 3.1.0
+info:
+  title: TiDB Cloud API Keys Data App API Keys API
+  description: The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud. It supports managing projects, clusters, backups, restores, data imports, billing, and private endpoint connections across both TiDB Cloud Serverless and TiDB Cloud Dedicated tiers. The API uses HTTP Digest Authentication with public and private API keys and returns JSON-formatted responses. Available as both v1beta and the newer v1beta1 versions, it enables automation of database infrastructure lifecycle management at scale.
+  version: v1beta1
+  contact:
+    name: TiDB Cloud Support
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  termsOfService: https://www.pingcap.com/legal/privacy-policy/
+servers:
+- url: https://dedicated.tidbapi.com/v1beta1
+  description: Dedicated Cluster API Server
+- url: https://iam.tidbapi.com/v1beta1
+  description: IAM API Server
+- url: https://billing.tidbapi.com/v1beta1
+  description: Billing API Server
+security:
+- digestAuth: []
+tags:
+- name: Data App API Keys
+  description: Operations for managing API keys scoped to a specific Data App.
+paths:
+  /dataApps/{dataAppId}/apiKeys:
+    get:
+      operationId: listDataAppApiKeys
+      summary: List Data App API keys
+      description: Returns all API keys scoped to a specific Data App. These keys are used to authenticate calls to the custom endpoints defined within the Data App and are separate from organization-level API keys.
+      tags:
+      - Data App API Keys
+      parameters:
+      - $ref: '#/components/parameters/dataAppId'
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/pageToken'
+      responses:
+        '200':
+          description: List of Data App API keys retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListDataAppApiKeysResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    post:
+      operationId: createDataAppApiKey
+      summary: Create a Data App API key
+      description: Creates a new API key scoped to a specific Data App. Specify the key description, role (READ_ONLY or READ_AND_WRITE), rate limit in requests per minute, and optional expiration settings. The private key is only returned at creation time.
+      tags:
+      - Data App API Keys
+      parameters:
+      - $ref: '#/components/parameters/dataAppId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDataAppApiKeyRequest'
+      responses:
+        '200':
+          description: Data App API key created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataAppApiKey'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  parameters:
+    pageSize:
+      name: pageSize
+      in: query
+      description: Maximum number of results to return per page. Default is 100, maximum is 100.
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 100
+    pageToken:
+      name: pageToken
+      in: query
+      description: Pagination token returned from a previous list request to retrieve the next page.
+      required: false
+      schema:
+        type: string
+    dataAppId:
+      name: dataAppId
+      in: path
+      description: The unique identifier of the Data App.
+      required: true
+      schema:
+        type: string
+  responses:
+    BadRequest:
+      description: The request body or parameters are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Authentication failed. Check your API key credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  schemas:
+    ListDataAppApiKeysResponse:
+      type: object
+      description: List of API keys for a Data App.
+      properties:
+        apiKeys:
+          type: array
+          description: The list of Data App API key objects.
+          items:
+            $ref: '#/components/schemas/DataAppApiKey'
+        nextPageToken:
+          type: string
+          description: Token to retrieve the next page of results.
+    ErrorResponse:
+      type: object
+      description: Standard error response returned when an API request fails.
+      properties:
+        code:
+          type: integer
+          description: The HTTP status code of the error.
+        status:
+          type: string
+          description: The error status string.
+        error:
+          type: string
+          description: A machine-readable error code identifier.
+        message:
+          type: string
+          description: A human-readable error message describing the failure.
+    DataAppApiKey:
+      type: object
+      description: An API key scoped to a specific Data App for authenticating endpoint calls.
+      properties:
+        apiKeyId:
+          type: string
+          description: The unique identifier of the Data App API key.
+        publicKey:
+          type: string
+          description: The public key used as the username in Digest Authentication.
+        privateKey:
+          type: string
+          description: The private key used as the password. Only returned at creation time.
+        description:
+          type: string
+          description: A human-readable description for the API key.
+        role:
+          type: string
+          description: The permission role assigned to the key.
+          enum:
+          - READ_ONLY
+          - READ_AND_WRITE
+        rateLimitRpm:
+          type: integer
+          description: The rate limit in requests per minute for this key.
+          minimum: 1
+          maximum: 1000
+    CreateDataAppApiKeyRequest:
+      type: object
+      description: Request body for creating a new Data App API key.
+      required:
+      - role
+      properties:
+        description:
+          type: string
+          description: A description for the new API key.
+        role:
+          type: string
+          description: The permission role for the API key.
+          enum:
+          - READ_ONLY
+          - READ_AND_WRITE
+        rateLimitRpm:
+          type: integer
+          description: Rate limit in requests per minute.
+          minimum: 1
+          maximum: 1000
+  securitySchemes:
+    digestAuth:
+      type: http
+      scheme: digest
+      description: HTTP Digest Authentication using a TiDB Cloud API public key as the username and private key as the password. Keys are generated in the TiDB Cloud console under Organization Settings > API Keys.
+externalDocs:
+  description: TiDB Cloud API Overview
+  url: https://docs.pingcap.com/tidbcloud/api-overview/

@@ -1,0 +1,156 @@
+openapi: 3.1.0
+info:
+  title: TiDB Cloud API Keys Audit Logs API
+  description: The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud. It supports managing projects, clusters, backups, restores, data imports, billing, and private endpoint connections across both TiDB Cloud Serverless and TiDB Cloud Dedicated tiers. The API uses HTTP Digest Authentication with public and private API keys and returns JSON-formatted responses. Available as both v1beta and the newer v1beta1 versions, it enables automation of database infrastructure lifecycle management at scale.
+  version: v1beta1
+  contact:
+    name: TiDB Cloud Support
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  termsOfService: https://www.pingcap.com/legal/privacy-policy/
+servers:
+- url: https://dedicated.tidbapi.com/v1beta1
+  description: Dedicated Cluster API Server
+- url: https://iam.tidbapi.com/v1beta1
+  description: IAM API Server
+- url: https://billing.tidbapi.com/v1beta1
+  description: Billing API Server
+security:
+- digestAuth: []
+tags:
+- name: Audit Logs
+  description: Operations for retrieving organization-level console audit logs.
+paths:
+  /auditLogs:
+    get:
+      operationId: listAuditLogs
+      summary: List audit logs
+      description: Returns a paginated list of console audit logs for the organization. Audit logs capture administrative actions such as cluster creation, deletion, and configuration changes, along with the user email, timestamp, and result of each action. Supports filtering by time range, event type, and keyword.
+      tags:
+      - Audit Logs
+      parameters:
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/pageToken'
+      - name: startTime
+        in: query
+        description: Filter audit logs starting from this ISO 8601 datetime.
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: endTime
+        in: query
+        description: Filter audit logs up to this ISO 8601 datetime.
+        required: false
+        schema:
+          type: string
+          format: date-time
+      - name: auditEventTypes
+        in: query
+        description: Comma-separated list of event types to filter by.
+        required: false
+        schema:
+          type: string
+      - name: keyword
+        in: query
+        description: Search term to filter audit log entries.
+        required: false
+        schema:
+          type: string
+      responses:
+        '200':
+          description: A paginated list of audit log entries.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListAuditLogsResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+components:
+  schemas:
+    AuditLog:
+      type: object
+      description: A console audit log entry recording an administrative action.
+      properties:
+        eventType:
+          type: string
+          description: The type of event that was logged.
+        operationEmail:
+          type: string
+          description: The email address of the user who performed the action.
+        result:
+          type: string
+          description: The outcome of the action (SUCCESS or FAILURE).
+        timestamp:
+          type: string
+          format: date-time
+          description: The ISO 8601 timestamp when the event occurred.
+        clusterId:
+          type: string
+          description: The ID of the cluster involved in the event, if applicable.
+        projectId:
+          type: string
+          description: The ID of the project involved in the event, if applicable.
+        orgId:
+          type: string
+          description: The ID of the organization where the event occurred.
+    ErrorResponse:
+      type: object
+      description: Standard error response returned when an API request fails.
+      properties:
+        code:
+          type: integer
+          description: The HTTP status code of the error.
+        status:
+          type: string
+          description: The error status string.
+        error:
+          type: string
+          description: A machine-readable error code identifier.
+        msgPrefix:
+          type: string
+          description: A human-readable error message describing the failure.
+    ListAuditLogsResponse:
+      type: object
+      description: Paginated list of audit log entries.
+      properties:
+        auditLogs:
+          type: array
+          description: The list of audit log entries.
+          items:
+            $ref: '#/components/schemas/AuditLog'
+        nextPageToken:
+          type: string
+          description: Token to retrieve the next page of results.
+  parameters:
+    pageSize:
+      name: pageSize
+      in: query
+      description: Maximum number of results to return per page. Default is 100, maximum is 100.
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 100
+    pageToken:
+      name: pageToken
+      in: query
+      description: Pagination token returned from a previous list request to retrieve the next page.
+      required: false
+      schema:
+        type: string
+  responses:
+    Unauthorized:
+      description: Authentication failed. Check your API key credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  securitySchemes:
+    digestAuth:
+      type: http
+      scheme: digest
+      description: HTTP Digest Authentication using a TiDB Cloud API public key as the username and private key as the password. Keys are generated in the TiDB Cloud console under Organization Settings > API Keys.
+externalDocs:
+  description: TiDB Cloud API Overview
+  url: https://docs.pingcap.com/tidbcloud/api-overview/

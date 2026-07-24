@@ -1,0 +1,226 @@
+openapi: 3.1.0
+info:
+  title: TiDB Cloud API Keys Schema API
+  description: The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud. It supports managing projects, clusters, backups, restores, data imports, billing, and private endpoint connections across both TiDB Cloud Serverless and TiDB Cloud Dedicated tiers. The API uses HTTP Digest Authentication with public and private API keys and returns JSON-formatted responses. Available as both v1beta and the newer v1beta1 versions, it enables automation of database infrastructure lifecycle management at scale.
+  version: v1beta1
+  contact:
+    name: TiDB Cloud Support
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  termsOfService: https://www.pingcap.com/legal/privacy-policy/
+servers:
+- url: https://dedicated.tidbapi.com/v1beta1
+  description: Dedicated Cluster API Server
+- url: https://iam.tidbapi.com/v1beta1
+  description: IAM API Server
+- url: https://billing.tidbapi.com/v1beta1
+  description: Billing API Server
+security:
+- digestAuth: []
+tags:
+- name: Schema
+  description: Endpoints for retrieving database and table schema information from the TiDB information schema.
+paths:
+  /schema:
+    get:
+      operationId: getAllSchemas
+      summary: Get all database schemas
+      description: Returns schema information for all databases known to this TiDB instance. The response includes table names, column definitions, and index information as represented in the TiDB information schema.
+      tags:
+      - Schema
+      responses:
+        '200':
+          description: All database schemas retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DatabaseSchema'
+  /schema/{db}:
+    get:
+      operationId: getDatabaseSchema
+      summary: Get database schema
+      description: Returns schema information for all tables in the specified database. Optionally set id_name_only to true to return only table IDs and names without the full column and index details, which is faster for large schemas.
+      tags:
+      - Schema
+      parameters:
+      - $ref: '#/components/parameters/db'
+      - name: id_name_only
+        in: query
+        description: If true, returns only table IDs and names without full schema details.
+        required: false
+        schema:
+          type: boolean
+      responses:
+        '200':
+          description: Database schema retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/TableSchema'
+        '404':
+          description: The specified database was not found.
+  /schema/{db}/{table}:
+    get:
+      operationId: getTableSchema
+      summary: Get table schema
+      description: Returns the full schema definition for the specified table, including all column names, types, default values, and index definitions. Can also look up a table by numeric table_id or multiple table_ids for batch retrieval.
+      tags:
+      - Schema
+      parameters:
+      - $ref: '#/components/parameters/db'
+      - $ref: '#/components/parameters/table'
+      - name: table_id
+        in: query
+        description: Optional numeric table ID for lookup by ID instead of name.
+        required: false
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Table schema retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableSchema'
+        '404':
+          description: The specified database or table was not found.
+  /db-table/{tableID}:
+    get:
+      operationId: getTableByID
+      summary: Get table info by table ID
+      description: Returns database information, table information, and the current TiDB info schema version for a specific table identified by its numeric table ID. This is useful for reverse lookups when you have a table ID from region information but need the associated database and table names.
+      tags:
+      - Schema
+      parameters:
+      - name: tableID
+        in: path
+        description: The numeric TiDB internal table ID.
+        required: true
+        schema:
+          type: integer
+      responses:
+        '200':
+          description: Table information retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TableByIDResponse'
+        '404':
+          description: No table with the specified ID was found.
+components:
+  schemas:
+    IndexInfo:
+      type: object
+      description: An index definition on a TiDB table.
+      properties:
+        id:
+          type: integer
+          description: The internal numeric index ID.
+        idx_name:
+          $ref: '#/components/schemas/CIStr'
+        tbl_name:
+          $ref: '#/components/schemas/CIStr'
+        idx_cols:
+          type: array
+          description: The columns included in this index.
+          items:
+            type: object
+        is_unique:
+          type: boolean
+          description: Whether this is a unique index.
+        is_primary:
+          type: boolean
+          description: Whether this is the primary key index.
+    DatabaseSchema:
+      type: object
+      description: Schema information for a TiDB database.
+      properties:
+        db_name:
+          $ref: '#/components/schemas/CIStr'
+        charset:
+          type: string
+          description: The character set of the database.
+        collate:
+          type: string
+          description: The collation of the database.
+    ColumnInfo:
+      type: object
+      description: A column definition within a TiDB table schema.
+      properties:
+        id:
+          type: integer
+          description: The internal numeric column ID.
+        name:
+          $ref: '#/components/schemas/CIStr'
+        field_type:
+          type: object
+          description: The MySQL field type descriptor for this column.
+    TableSchema:
+      type: object
+      description: Schema information for a TiDB table.
+      properties:
+        id:
+          type: integer
+          description: The internal numeric TiDB table ID.
+        name:
+          $ref: '#/components/schemas/CIStr'
+        charset:
+          type: string
+          description: The character set of the table.
+        collate:
+          type: string
+          description: The collation of the table.
+        cols:
+          type: array
+          description: The list of column definitions in the table.
+          items:
+            $ref: '#/components/schemas/ColumnInfo'
+        index_info:
+          type: array
+          description: The list of index definitions on the table.
+          items:
+            $ref: '#/components/schemas/IndexInfo'
+    TableByIDResponse:
+      type: object
+      description: Database and table information looked up by table ID.
+      properties:
+        db_info:
+          $ref: '#/components/schemas/DatabaseSchema'
+        table_info:
+          $ref: '#/components/schemas/TableSchema'
+    CIStr:
+      type: object
+      description: A case-insensitive string pair used in TiDB schema objects.
+      properties:
+        O:
+          type: string
+          description: The original case-preserved string value.
+        L:
+          type: string
+          description: The lowercase version of the string.
+  parameters:
+    db:
+      name: db
+      in: path
+      description: The database name.
+      required: true
+      schema:
+        type: string
+    table:
+      name: table
+      in: path
+      description: The table name within the specified database.
+      required: true
+      schema:
+        type: string
+  securitySchemes:
+    digestAuth:
+      type: http
+      scheme: digest
+      description: HTTP Digest Authentication using a TiDB Cloud API public key as the username and private key as the password. Keys are generated in the TiDB Cloud console under Organization Settings > API Keys.
+externalDocs:
+  description: TiDB Cloud API Overview
+  url: https://docs.pingcap.com/tidbcloud/api-overview/

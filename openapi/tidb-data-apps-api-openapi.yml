@@ -1,0 +1,290 @@
+openapi: 3.1.0
+info:
+  title: TiDB Cloud API Keys Data Apps API
+  description: The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud. It supports managing projects, clusters, backups, restores, data imports, billing, and private endpoint connections across both TiDB Cloud Serverless and TiDB Cloud Dedicated tiers. The API uses HTTP Digest Authentication with public and private API keys and returns JSON-formatted responses. Available as both v1beta and the newer v1beta1 versions, it enables automation of database infrastructure lifecycle management at scale.
+  version: v1beta1
+  contact:
+    name: TiDB Cloud Support
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  termsOfService: https://www.pingcap.com/legal/privacy-policy/
+servers:
+- url: https://dedicated.tidbapi.com/v1beta1
+  description: Dedicated Cluster API Server
+- url: https://iam.tidbapi.com/v1beta1
+  description: IAM API Server
+- url: https://billing.tidbapi.com/v1beta1
+  description: Billing API Server
+security:
+- digestAuth: []
+tags:
+- name: Data Apps
+  description: Operations for creating, listing, updating, and deleting Data Apps.
+paths:
+  /dataApps:
+    get:
+      operationId: listDataApps
+      summary: List Data Apps
+      description: Returns a paginated list of all Data Apps in the organization. Each Data App represents a collection of custom endpoints that are backed by SQL queries running against linked TiDB Cloud clusters. Results include the app ID, display name, description, and linked cluster information.
+      tags:
+      - Data Apps
+      parameters:
+      - $ref: '#/components/parameters/pageSize'
+      - $ref: '#/components/parameters/pageToken'
+      responses:
+        '200':
+          description: A paginated list of Data Apps.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListDataAppsResponse'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/RateLimitExceeded'
+    post:
+      operationId: createDataApp
+      summary: Create a Data App
+      description: Creates a new Data App within the organization. A Data App is a container for custom SQL-backed API endpoints. After creation, link a TiDB Cloud cluster as a data source and define endpoints to begin serving data via HTTPS.
+      tags:
+      - Data Apps
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateDataAppRequest'
+      responses:
+        '200':
+          description: Data App created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataApp'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+  /dataApps/{dataAppId}:
+    get:
+      operationId: getDataApp
+      summary: Get a Data App
+      description: Returns the configuration and metadata for a specific Data App, including its display name, description, linked data sources, system endpoint configuration, and Chat2Query settings if enabled.
+      tags:
+      - Data Apps
+      parameters:
+      - $ref: '#/components/parameters/dataAppId'
+      responses:
+        '200':
+          description: Data App details retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataApp'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    patch:
+      operationId: updateDataApp
+      summary: Update a Data App
+      description: Updates the display name or description of an existing Data App. Only the fields provided in the request body are modified. Linked data sources and endpoints remain unchanged.
+      tags:
+      - Data Apps
+      parameters:
+      - $ref: '#/components/parameters/dataAppId'
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateDataAppRequest'
+      responses:
+        '200':
+          description: Data App updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DataApp'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+    delete:
+      operationId: deleteDataApp
+      summary: Delete a Data App
+      description: Permanently deletes a Data App and all of its associated endpoints, API keys, and deployment history. This operation is irreversible. All clients calling endpoints within this Data App will receive errors after deletion.
+      tags:
+      - Data Apps
+      parameters:
+      - $ref: '#/components/parameters/dataAppId'
+      responses:
+        '200':
+          description: Data App deleted successfully.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+  /dataApps/{dataAppId}/apiSpec:
+    get:
+      operationId: getDataAppApiSpec
+      summary: Get OpenAPI specification
+      description: Returns the OpenAPI 3.0 specification for all endpoints defined within a Data App. The specification can be returned in JSON or YAML format by setting the Accept header accordingly. Use this spec to generate client SDKs, import into API testing tools, or publish API documentation.
+      tags:
+      - Data Apps
+      parameters:
+      - $ref: '#/components/parameters/dataAppId'
+      responses:
+        '200':
+          description: OpenAPI specification retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: The OpenAPI 3.0 specification document as a JSON object.
+            application/yaml:
+              schema:
+                type: string
+                description: The OpenAPI 3.0 specification document as a YAML string.
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '404':
+          $ref: '#/components/responses/NotFound'
+components:
+  schemas:
+    UpdateDataAppRequest:
+      type: object
+      description: Request body for updating an existing Data App.
+      properties:
+        displayName:
+          type: string
+          description: The new display name for the Data App.
+        description:
+          type: string
+          description: The new description for the Data App.
+    DataApp:
+      type: object
+      description: A TiDB Cloud Data App containing custom SQL-backed API endpoints.
+      properties:
+        dataAppId:
+          type: string
+          description: The unique identifier of the Data App.
+        displayName:
+          type: string
+          description: The human-readable display name of the Data App.
+        description:
+          type: string
+          description: A description of the Data App's purpose.
+        region:
+          type: string
+          description: The cloud region where this Data App is deployed.
+        createTime:
+          type: string
+          format: date-time
+          description: The timestamp when the Data App was created.
+        updateTime:
+          type: string
+          format: date-time
+          description: The timestamp when the Data App was last modified.
+    CreateDataAppRequest:
+      type: object
+      description: Request body for creating a new Data App.
+      required:
+      - displayName
+      properties:
+        displayName:
+          type: string
+          description: The display name for the new Data App.
+        description:
+          type: string
+          description: An optional description of the Data App.
+        clusterId:
+          type: string
+          description: An optional cluster ID to link as the initial data source.
+    ErrorResponse:
+      type: object
+      description: Standard error response returned when an API request fails.
+      properties:
+        code:
+          type: integer
+          description: The HTTP status code of the error.
+        status:
+          type: string
+          description: The error status string.
+        error:
+          type: string
+          description: A machine-readable error code identifier.
+        message:
+          type: string
+          description: A human-readable error message describing the failure.
+    ListDataAppsResponse:
+      type: object
+      description: Paginated list of Data Apps.
+      properties:
+        dataApps:
+          type: array
+          description: The list of Data App objects on this page.
+          items:
+            $ref: '#/components/schemas/DataApp'
+        nextPageToken:
+          type: string
+          description: Token to retrieve the next page of results.
+  parameters:
+    pageSize:
+      name: pageSize
+      in: query
+      description: Maximum number of results to return per page. Default is 100, maximum is 100.
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 100
+    pageToken:
+      name: pageToken
+      in: query
+      description: Pagination token returned from a previous list request to retrieve the next page.
+      required: false
+      schema:
+        type: string
+    dataAppId:
+      name: dataAppId
+      in: path
+      description: The unique identifier of the Data App.
+      required: true
+      schema:
+        type: string
+  responses:
+    BadRequest:
+      description: The request body or parameters are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    Unauthorized:
+      description: Authentication failed. Check your API key credentials.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    NotFound:
+      description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    RateLimitExceeded:
+      description: Rate limit exceeded. The API allows 100 requests per minute.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+  securitySchemes:
+    digestAuth:
+      type: http
+      scheme: digest
+      description: HTTP Digest Authentication using a TiDB Cloud API public key as the username and private key as the password. Keys are generated in the TiDB Cloud console under Organization Settings > API Keys.
+externalDocs:
+  description: TiDB Cloud API Overview
+  url: https://docs.pingcap.com/tidbcloud/api-overview/
