@@ -1,99 +1,671 @@
 aid: tidb
+accessModel:
+  pricing: freemium
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Freemium · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/tidb.png
 url: https://raw.githubusercontent.com/api-evangelist/tidb/refs/heads/main/apis.yml
 apis:
-  - aid: tidb:tidb-cloud-api
-    name: TiDB Cloud API
-    tags:
-      - Cloud
-      - Cluster Management
-      - Database
-      - Distributed SQL
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    baseURL: https://api.tidbcloud.com
-    humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
-    properties:
-      - url: https://docs.pingcap.com/tidbcloud/api-overview/
-        type: Documentation
-      - url: https://docs.pingcap.com/tidbcloud/api/v1beta/
-        type: Documentation
-      - url: openapi/tidb-cloud-api-openapi.yml
-        type: OpenAPI
-      - url: json-schema/tidb-cluster-schema.json
-        type: JSONSchema
-    description: >-
-      The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within
-      TiDB Cloud. It supports managing projects, clusters, backups, restores, data imports, billing, and private
-      endpoint connections across both TiDB Cloud Serverless and TiDB Cloud Dedicated tiers. The API uses digest
-      authentication with public and private API keys and returns JSON-formatted responses.
-  - aid: tidb:tidb-cloud-data-service-api
-    name: TiDB Cloud Data Service API
-    tags:
-      - Cloud
-      - Data Access
-      - Database
-      - REST
-      - Serverless
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    baseURL: https://data.tidbcloud.com
-    humanURL: https://docs.pingcap.com/tidbcloud/data-service-overview/
-    properties:
-      - url: https://docs.pingcap.com/tidbcloud/data-service-overview/
-        type: Documentation
-      - url: https://docs.pingcap.com/tidbcloud/data-service-get-started/
-        type: Documentation
-      - url: openapi/tidb-cloud-data-service-openapi.yml
-        type: OpenAPI
-      - url: json-schema/tidb-data-service-schema.json
-        type: JSONSchema
-    description: >-
-      TiDB Cloud Data Service enables developers to access TiDB Cloud data via HTTPS requests using custom API endpoints
-      backed by SQL queries. Developers define endpoints within a Data App, specifying the HTTP method, path, and the
-      SQL logic that the endpoint executes against a linked TiDB Cloud cluster. Endpoints support GET, POST, PUT, and
-      DELETE methods, return JSON-formatted results, and can be configured with pagination, rate limiting, and caching.
-  - aid: tidb:tidb-cloud-chat2query-api
-    name: TiDB Cloud Chat2Query API
-    tags:
-      - AI
-      - Cloud
-      - Database
-      - Natural Language
-      - SQL Generation
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    baseURL: https://data.tidbcloud.com
-    humanURL: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
-    properties:
-      - url: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
-        type: Documentation
-      - url: openapi/tidb-cloud-chat2query-openapi.yml
-        type: OpenAPI
-    description: >-
-      The TiDB Cloud Chat2Query API is an AI-powered interface that allows developers to generate and execute SQL
-      statements against TiDB Cloud clusters using natural language instructions. It is exposed as a special Data App
-      within TiDB Cloud and authenticated via API keys scoped to the Chat2Query Data App.
-  - aid: tidb:tidb-http-api
-    name: TiDB HTTP API
-    tags:
-      - Database
-      - Monitoring
-      - Operations
-      - Self-Managed
-      - Status
-    image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
-    baseURL: http://localhost:10080
-    humanURL: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
-    properties:
-      - url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
-        type: Documentation
-      - url: https://docs.pingcap.com/tidb/stable/tidb-monitoring-api/
-        type: Documentation
-      - url: openapi/tidb-http-api-openapi.yml
-        type: OpenAPI
-    description: >-
-      The TiDB HTTP API is a built-in administrative interface available on self-managed TiDB server instances,
-      accessible on port 10080 by default. It exposes endpoints for retrieving server status, database and table schema
-      information, region metadata, MVCC key details, DDL job history, and hot region data. Operators and monitoring
-      systems use this API to inspect the internal state of a running TiDB node, integrate with observability tooling,
-      and troubleshoot distributed SQL execution.
+- aid: tidb:tidb-api-keys-api
+  name: tidb API Keys API
+  description: Operations for creating, listing, updating, and deleting TiDB Cloud API keys.
+  humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
+  baseURL: https://api.tidbcloud.com
+  tags:
+  - API Keys
+  properties:
+  - type: OpenAPI
+    url: openapi/tidb-api-keys-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: JSONSchema
+    url: json-schema/tidb-cluster-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-get-started/
+  - type: JSONSchema
+    url: json-schema/tidb-data-service-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
+  - type: Documentation
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/tidb-monitoring-api/
+- aid: tidb:tidb-audit-logs-api
+  name: tidb Audit Logs API
+  description: Operations for retrieving organization-level console audit logs.
+  humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
+  baseURL: https://api.tidbcloud.com
+  tags:
+  - Audit Logs
+  properties:
+  - type: OpenAPI
+    url: openapi/tidb-audit-logs-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: JSONSchema
+    url: json-schema/tidb-cluster-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-get-started/
+  - type: JSONSchema
+    url: json-schema/tidb-data-service-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
+  - type: Documentation
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/tidb-monitoring-api/
+- aid: tidb:tidb-billing-api
+  name: tidb Billing API
+  description: Operations for retrieving monthly billing summaries, cost details, and usage trends.
+  humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
+  baseURL: https://api.tidbcloud.com
+  tags:
+  - Billing
+  properties:
+  - type: OpenAPI
+    url: openapi/tidb-billing-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: JSONSchema
+    url: json-schema/tidb-cluster-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-get-started/
+  - type: JSONSchema
+    url: json-schema/tidb-data-service-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
+  - type: Documentation
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/tidb-monitoring-api/
+- aid: tidb:tidb-chat2data-api
+  name: tidb Chat2Data API
+  description: >-
+    Operations for translating natural language questions into SQL and executing them against TiDB Cloud
+    clusters.
+  humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
+  baseURL: https://api.tidbcloud.com
+  tags:
+  - Chat2Data
+  properties:
+  - type: OpenAPI
+    url: openapi/tidb-chat2data-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: JSONSchema
+    url: json-schema/tidb-cluster-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-get-started/
+  - type: JSONSchema
+    url: json-schema/tidb-data-service-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
+  - type: Documentation
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/tidb-monitoring-api/
+- aid: tidb:tidb-clusters-api
+  name: tidb Clusters API
+  description: Operations for creating, listing, updating, and deleting TiDB Cloud Dedicated clusters.
+  humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
+  baseURL: https://api.tidbcloud.com
+  tags:
+  - Clusters
+  properties:
+  - type: OpenAPI
+    url: openapi/tidb-clusters-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: JSONSchema
+    url: json-schema/tidb-cluster-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-get-started/
+  - type: JSONSchema
+    url: json-schema/tidb-data-service-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
+  - type: Documentation
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/tidb-monitoring-api/
+- aid: tidb:tidb-data-app-api-keys-api
+  name: tidb Data App API Keys API
+  description: Operations for managing API keys scoped to a specific Data App.
+  humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
+  baseURL: https://api.tidbcloud.com
+  tags:
+  - Data App API Keys
+  properties:
+  - type: OpenAPI
+    url: openapi/tidb-data-app-api-keys-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: JSONSchema
+    url: json-schema/tidb-cluster-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-get-started/
+  - type: JSONSchema
+    url: json-schema/tidb-data-service-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
+  - type: Documentation
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/tidb-monitoring-api/
+- aid: tidb:tidb-data-apps-api
+  name: tidb Data Apps API
+  description: Operations for creating, listing, updating, and deleting Data Apps.
+  humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
+  baseURL: https://api.tidbcloud.com
+  tags:
+  - Data Apps
+  properties:
+  - type: OpenAPI
+    url: openapi/tidb-data-apps-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: JSONSchema
+    url: json-schema/tidb-cluster-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-get-started/
+  - type: JSONSchema
+    url: json-schema/tidb-data-service-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
+  - type: Documentation
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/tidb-monitoring-api/
+- aid: tidb:tidb-data-sources-api
+  name: tidb Data Sources API
+  description: >-
+    Operations for linking and managing TiDB Cloud clusters as data sources within a Data App.
+  humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
+  baseURL: https://api.tidbcloud.com
+  tags:
+  - Data Sources
+  properties:
+  - type: OpenAPI
+    url: openapi/tidb-data-sources-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: JSONSchema
+    url: json-schema/tidb-cluster-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-get-started/
+  - type: JSONSchema
+    url: json-schema/tidb-data-service-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
+  - type: Documentation
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/tidb-monitoring-api/
+- aid: tidb:tidb-data-summaries-api
+  name: tidb Data Summaries API
+  description: >-
+    Operations for generating and managing AI summaries of database schemas used as context for SQL generation.
+  humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
+  baseURL: https://api.tidbcloud.com
+  tags:
+  - Data Summaries
+  properties:
+  - type: OpenAPI
+    url: openapi/tidb-data-summaries-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: JSONSchema
+    url: json-schema/tidb-cluster-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-get-started/
+  - type: JSONSchema
+    url: json-schema/tidb-data-service-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
+  - type: Documentation
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/tidb-monitoring-api/
+- aid: tidb:tidb-ddl-api
+  name: tidb DDL API
+  description: Endpoints for managing and inspecting DDL jobs, including ownership and history.
+  humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
+  baseURL: https://api.tidbcloud.com
+  tags:
+  - DDL
+  properties:
+  - type: OpenAPI
+    url: openapi/tidb-ddl-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: JSONSchema
+    url: json-schema/tidb-cluster-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-get-started/
+  - type: JSONSchema
+    url: json-schema/tidb-data-service-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
+  - type: Documentation
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/tidb-monitoring-api/
+- aid: tidb:tidb-deployments-api
+  name: tidb Deployments API
+  description: Operations for deploying and managing versions of a Data App.
+  humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
+  baseURL: https://api.tidbcloud.com
+  tags:
+  - Deployments
+  properties:
+  - type: OpenAPI
+    url: openapi/tidb-deployments-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: JSONSchema
+    url: json-schema/tidb-cluster-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-get-started/
+  - type: JSONSchema
+    url: json-schema/tidb-data-service-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
+  - type: Documentation
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/tidb-monitoring-api/
+- aid: tidb:tidb-diagnostics-api
+  name: tidb Diagnostics API
+  description: Endpoints for downloading debug information and managing server diagnostics.
+  humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
+  baseURL: https://api.tidbcloud.com
+  tags:
+  - Diagnostics
+  properties:
+  - type: OpenAPI
+    url: openapi/tidb-diagnostics-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: JSONSchema
+    url: json-schema/tidb-cluster-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-get-started/
+  - type: JSONSchema
+    url: json-schema/tidb-data-service-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
+  - type: Documentation
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/tidb-monitoring-api/
+- aid: tidb:tidb-endpoints-api
+  name: tidb Endpoints API
+  description: >-
+    Operations for creating, listing, updating, testing, and deleting custom SQL-backed API endpoints.
+  humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
+  baseURL: https://api.tidbcloud.com
+  tags:
+  - Endpoints
+  properties:
+  - type: OpenAPI
+    url: openapi/tidb-endpoints-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: JSONSchema
+    url: json-schema/tidb-cluster-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-get-started/
+  - type: JSONSchema
+    url: json-schema/tidb-data-service-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
+  - type: Documentation
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/tidb-monitoring-api/
+- aid: tidb:tidb-imports-api
+  name: tidb Imports API
+  description: Operations for creating and managing data import tasks into TiDB Cloud clusters.
+  humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
+  baseURL: https://api.tidbcloud.com
+  tags:
+  - Imports
+  properties:
+  - type: OpenAPI
+    url: openapi/tidb-imports-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: JSONSchema
+    url: json-schema/tidb-cluster-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-get-started/
+  - type: JSONSchema
+    url: json-schema/tidb-data-service-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
+  - type: Documentation
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/tidb-monitoring-api/
+- aid: tidb:tidb-integrations-api
+  name: tidb Integrations API
+  description: Operations for managing third-party integrations with TiDB Cloud clusters.
+  humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
+  baseURL: https://api.tidbcloud.com
+  tags:
+  - Integrations
+  properties:
+  - type: OpenAPI
+    url: openapi/tidb-integrations-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: JSONSchema
+    url: json-schema/tidb-cluster-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-get-started/
+  - type: JSONSchema
+    url: json-schema/tidb-data-service-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
+  - type: Documentation
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/tidb-monitoring-api/
+- aid: tidb:tidb-mvcc-api
+  name: tidb MVCC API
+  description: >-
+    Endpoints for retrieving multi-version concurrency control (MVCC) key details for debugging.
+  humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
+  baseURL: https://api.tidbcloud.com
+  tags:
+  - MVCC
+  properties:
+  - type: OpenAPI
+    url: openapi/tidb-mvcc-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: JSONSchema
+    url: json-schema/tidb-cluster-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-get-started/
+  - type: JSONSchema
+    url: json-schema/tidb-data-service-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
+  - type: Documentation
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/tidb-monitoring-api/
+- aid: tidb:tidb-regions-api
+  name: tidb Regions API
+  description: Operations for listing available cloud regions and node specifications.
+  humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
+  baseURL: https://api.tidbcloud.com
+  tags:
+  - Regions
+  properties:
+  - type: OpenAPI
+    url: openapi/tidb-regions-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: JSONSchema
+    url: json-schema/tidb-cluster-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-get-started/
+  - type: JSONSchema
+    url: json-schema/tidb-data-service-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
+  - type: Documentation
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/tidb-monitoring-api/
+- aid: tidb:tidb-schema-api
+  name: tidb Schema API
+  description: >-
+    Endpoints for retrieving database and table schema information from the TiDB information schema.
+  humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
+  baseURL: https://api.tidbcloud.com
+  tags:
+  - Schema
+  properties:
+  - type: OpenAPI
+    url: openapi/tidb-schema-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: JSONSchema
+    url: json-schema/tidb-cluster-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-get-started/
+  - type: JSONSchema
+    url: json-schema/tidb-data-service-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
+  - type: Documentation
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/tidb-monitoring-api/
+- aid: tidb:tidb-sessions-api
+  name: tidb Sessions API
+  description: Operations for creating and managing multi-round conversational chat sessions.
+  humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
+  baseURL: https://api.tidbcloud.com
+  tags:
+  - Sessions
+  properties:
+  - type: OpenAPI
+    url: openapi/tidb-sessions-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: JSONSchema
+    url: json-schema/tidb-cluster-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-get-started/
+  - type: JSONSchema
+    url: json-schema/tidb-data-service-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
+  - type: Documentation
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/tidb-monitoring-api/
+- aid: tidb:tidb-settings-api
+  name: tidb Settings API
+  description: Endpoints for retrieving and modifying TiDB server runtime settings.
+  humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
+  baseURL: https://api.tidbcloud.com
+  tags:
+  - Settings
+  properties:
+  - type: OpenAPI
+    url: openapi/tidb-settings-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: JSONSchema
+    url: json-schema/tidb-cluster-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-get-started/
+  - type: JSONSchema
+    url: json-schema/tidb-data-service-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
+  - type: Documentation
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/tidb-monitoring-api/
+- aid: tidb:tidb-sql-refinement-api
+  name: tidb SQL Refinement API
+  description: Operations for refining and improving previously generated SQL queries.
+  humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
+  baseURL: https://api.tidbcloud.com
+  tags:
+  - SQL Refinement
+  properties:
+  - type: OpenAPI
+    url: openapi/tidb-sql-refinement-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: JSONSchema
+    url: json-schema/tidb-cluster-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-get-started/
+  - type: JSONSchema
+    url: json-schema/tidb-data-service-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
+  - type: Documentation
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/tidb-monitoring-api/
+- aid: tidb:tidb-statistics-api
+  name: tidb Statistics API
+  description: Endpoints for exporting optimizer statistics used for query planning.
+  humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
+  baseURL: https://api.tidbcloud.com
+  tags:
+  - Statistics
+  properties:
+  - type: OpenAPI
+    url: openapi/tidb-statistics-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: JSONSchema
+    url: json-schema/tidb-cluster-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-get-started/
+  - type: JSONSchema
+    url: json-schema/tidb-data-service-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
+  - type: Documentation
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/tidb-monitoring-api/
+- aid: tidb:tidb-status-api
+  name: tidb Status API
+  description: Endpoints for retrieving the operational status of the TiDB server instance.
+  humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
+  baseURL: https://api.tidbcloud.com
+  tags:
+  - Status
+  properties:
+  - type: OpenAPI
+    url: openapi/tidb-status-api-openapi.yml
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: JSONSchema
+    url: json-schema/tidb-cluster-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-overview/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/data-service-get-started/
+  - type: JSONSchema
+    url: json-schema/tidb-data-service-schema.json
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
+  - type: Documentation
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  - type: Documentation
+    url: https://docs.pingcap.com/tidb/stable/tidb-monitoring-api/
 common:
   - type: AgenticAccess
     url: agentic-access/tidb-agentic-access.yml
