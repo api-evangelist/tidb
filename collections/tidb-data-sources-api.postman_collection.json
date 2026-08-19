@@ -1,0 +1,1023 @@
+{
+  "item": [
+    {
+      "id": "cce21df8-ca57-441b-9ef0-044151fb6d1c",
+      "name": "Data Sources",
+      "description": {
+        "content": "Operations for linking and managing TiDB Cloud clusters as data sources within a Data App.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "94f9fded-6ad3-4b12-bb0b-a66119fdec28",
+          "name": "List data sources",
+          "request": {
+            "name": "List data sources",
+            "description": {
+              "content": "Returns all TiDB Cloud clusters linked as data sources to a specific Data App. Each data source includes the cluster ID, cluster name, and the databases accessible from this Data App.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "dataApps",
+                ":dataAppId",
+                "dataSources"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "dataAppId",
+                  "description": "(Required) The unique identifier of the Data App."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "400e9407-79f9-45d3-a6df-06f1c9cdfd12",
+              "name": "List of data sources retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dataApps",
+                    ":dataAppId",
+                    "dataSources"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The unique identifier of the Data App."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"dataSources\": [\n    {\n      \"clusterId\": \"string\",\n      \"clusterName\": \"string\",\n      \"clusterType\": \"string\"\n    },\n    {\n      \"clusterId\": \"string\",\n      \"clusterName\": \"string\",\n      \"clusterType\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "825daca0-3fde-4352-a4b3-c488d250e461",
+              "name": "Authentication failed. Check your API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dataApps",
+                    ":dataAppId",
+                    "dataSources"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The unique identifier of the Data App."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3383,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b458ca71-a469-4dd6-a4a7-011b4df81f51",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dataApps",
+                    ":dataAppId",
+                    "dataSources"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The unique identifier of the Data App."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3383,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0d327b8e-b8bd-452f-96ee-5b7c78682370",
+          "name": "Create a data source",
+          "request": {
+            "name": "Create a data source",
+            "description": {
+              "content": "Links a TiDB Cloud cluster to a Data App as a data source. Once linked, endpoints within the Data App can execute SQL queries against databases in the linked cluster. A Data App can be linked to multiple clusters.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "dataApps",
+                ":dataAppId",
+                "dataSources"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "dataAppId",
+                  "description": "(Required) The unique identifier of the Data App."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"clusterId\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "37df0fb0-1442-4d8c-ab09-4cdf90d0d0ae",
+              "name": "Data source linked successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dataApps",
+                    ":dataAppId",
+                    "dataSources"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The unique identifier of the Data App."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"clusterId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"clusterId\": \"string\",\n  \"clusterName\": \"string\",\n  \"clusterType\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6e2676b8-1ed0-4433-8869-be72c365977a",
+              "name": "The request body or parameters are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dataApps",
+                    ":dataAppId",
+                    "dataSources"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The unique identifier of the Data App."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"clusterId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3383,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "968a3953-6486-45ce-94a0-07a6d29cc339",
+              "name": "Authentication failed. Check your API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dataApps",
+                    ":dataAppId",
+                    "dataSources"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The unique identifier of the Data App."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"clusterId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3383,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bdabb2f7-6d34-4b2f-b0c5-676b34983f3c",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dataApps",
+                    ":dataAppId",
+                    "dataSources"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The unique identifier of the Data App."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"clusterId\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3383,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "53a25cf1-ace2-4e52-89f0-c4ccf8da0e10",
+          "name": "Get a data source",
+          "request": {
+            "name": "Get a data source",
+            "description": {
+              "content": "Returns the configuration of a specific cluster linked as a data source to a Data App, identified by the cluster ID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "dataApps",
+                ":dataAppId",
+                "dataSources",
+                ":clusterId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "dataAppId",
+                  "description": "(Required) The unique identifier of the Data App."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "clusterId",
+                  "description": "(Required) The unique identifier of the TiDB Cloud cluster used as a data source."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f395d17a-222d-403c-9ce4-f242416388c8",
+              "name": "Data source details retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dataApps",
+                    ":dataAppId",
+                    "dataSources",
+                    ":clusterId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The unique identifier of the Data App."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "clusterId",
+                      "description": "(Required) The unique identifier of the TiDB Cloud cluster used as a data source."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"clusterId\": \"string\",\n  \"clusterName\": \"string\",\n  \"clusterType\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a1a4ce3f-73fa-4691-b963-ef3b31f9e18c",
+              "name": "Authentication failed. Check your API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dataApps",
+                    ":dataAppId",
+                    "dataSources",
+                    ":clusterId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The unique identifier of the Data App."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "clusterId",
+                      "description": "(Required) The unique identifier of the TiDB Cloud cluster used as a data source."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3383,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cca403ca-c8ba-494c-b74a-ee58eead2ab1",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dataApps",
+                    ":dataAppId",
+                    "dataSources",
+                    ":clusterId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The unique identifier of the Data App."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "clusterId",
+                      "description": "(Required) The unique identifier of the TiDB Cloud cluster used as a data source."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3383,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "d0aa5d69-ae9a-45ed-9d21-8b24a093a03d",
+          "name": "Delete a data source",
+          "request": {
+            "name": "Delete a data source",
+            "description": {
+              "content": "Unlinks a TiDB Cloud cluster from a Data App. Endpoints that reference this cluster will stop working after the data source is removed.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "dataApps",
+                ":dataAppId",
+                "dataSources",
+                ":clusterId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "dataAppId",
+                  "description": "(Required) The unique identifier of the Data App."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "clusterId",
+                  "description": "(Required) The unique identifier of the TiDB Cloud cluster used as a data source."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b9b4d22a-9db1-4822-94ae-1c91ffaff520",
+              "name": "Data source unlinked successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dataApps",
+                    ":dataAppId",
+                    "dataSources",
+                    ":clusterId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The unique identifier of the Data App."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "clusterId",
+                      "description": "(Required) The unique identifier of the TiDB Cloud cluster used as a data source."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ddf255a8-1bf4-4d89-8d36-0f969a5691a5",
+              "name": "Authentication failed. Check your API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dataApps",
+                    ":dataAppId",
+                    "dataSources",
+                    ":clusterId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The unique identifier of the Data App."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "clusterId",
+                      "description": "(Required) The unique identifier of the TiDB Cloud cluster used as a data source."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3383,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "48cbf172-4da7-4070-b949-462d7f70926a",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dataApps",
+                    ":dataAppId",
+                    "dataSources",
+                    ":clusterId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The unique identifier of the Data App."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "clusterId",
+                      "description": "(Required) The unique identifier of the TiDB Cloud cluster used as a data source."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 3383,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://dedicated.tidbapi.com/v1beta1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "digest",
+    "digest": [
+      {
+        "key": "username",
+        "value": "{{digestAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{digestAuthPassword}}"
+      },
+      {
+        "key": "realm",
+        "value": "{{realm}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "9ddc587d-42da-41df-8318-56e45100ffae",
+    "name": "TiDB Cloud API Keys Data Sources API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud. It supports managing projects, clusters, backups, restores, data imports, billing, and private endpoint connections across both TiDB Cloud Serverless and TiDB Cloud Dedicated tiers. The API uses HTTP Digest Authentication with public and private API keys and returns JSON-formatted responses. Available as both v1beta and the newer v1beta1 versions, it enables automation of database infrastructure lifecycle management at scale.\n\nContact Support:\n Name: TiDB Cloud Support",
+      "type": "text/plain"
+    }
+  }
+}

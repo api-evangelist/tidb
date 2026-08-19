@@ -1,0 +1,104 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud API Keys Schema API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Schema",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get all database schemas",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/schema"
+          },
+          "docs": "Returns schema information for all databases known to this TiDB instance. The response includes table names, column definitions, and index information as represented in the TiDB information schema."
+        },
+        {
+          "info": {
+            "name": "Get database schema",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/schema/:db",
+            "params": [
+              {
+                "name": "db",
+                "value": "",
+                "type": "path",
+                "description": "The database name."
+              },
+              {
+                "name": "id_name_only",
+                "value": "",
+                "type": "query",
+                "description": "If true, returns only table IDs and names without full schema details."
+              }
+            ]
+          },
+          "docs": "Returns schema information for all tables in the specified database. Optionally set id_name_only to true to return only table IDs and names without the full column and index details, which is faster for large schemas."
+        },
+        {
+          "info": {
+            "name": "Get table schema",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/schema/:db/:table",
+            "params": [
+              {
+                "name": "db",
+                "value": "",
+                "type": "path",
+                "description": "The database name."
+              },
+              {
+                "name": "table",
+                "value": "",
+                "type": "path",
+                "description": "The table name within the specified database."
+              },
+              {
+                "name": "table_id",
+                "value": "",
+                "type": "query",
+                "description": "Optional numeric table ID for lookup by ID instead of name."
+              }
+            ]
+          },
+          "docs": "Returns the full schema definition for the specified table, including all column names, types, default values, and index definitions. Can also look up a table by numeric table_id or multiple table_ids for batch retrieval."
+        },
+        {
+          "info": {
+            "name": "Get table info by table ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/db-table/:tableID",
+            "params": [
+              {
+                "name": "tableID",
+                "value": "",
+                "type": "path",
+                "description": "The numeric TiDB internal table ID."
+              }
+            ]
+          },
+          "docs": "Returns database information, table information, and the current TiDB info schema version for a specific table identified by its numeric table ID. This is useful for reverse lookups when you have a table ID from region information but need the associated database and table names."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

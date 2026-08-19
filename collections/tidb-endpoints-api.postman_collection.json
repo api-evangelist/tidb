@@ -1,0 +1,595 @@
+{
+  "item": [
+    {
+      "id": "5e6be93a-4d77-4deb-874f-aecd8e4e3af7",
+      "name": "Endpoints",
+      "description": {
+        "content": "Operations for creating, listing, updating, testing, and deleting custom SQL-backed API endpoints.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "1c2b3a2a-23f9-4917-b8ef-c6f4ccdbb973",
+          "name": "List endpoints",
+          "request": {
+            "name": "List endpoints",
+            "description": {
+              "content": "Returns a paginated list of all custom SQL-backed endpoints defined within a Data App. Each endpoint entry includes its HTTP method, path, SQL template, parameters, and configuration settings such as caching and pagination.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "dataApps",
+                ":dataAppId",
+                "endpoints"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "100",
+                  "description": "Maximum number of results to return per page. Default is 100, maximum is 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "pageToken",
+                  "value": "<string>",
+                  "description": "Pagination token returned from a previous list request to retrieve the next page."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "dataAppId",
+                  "description": "(Required) The unique identifier of the Data App."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "9c46151c-d999-4bc3-bb77-3fa1787b90e7",
+              "name": "A paginated list of endpoints.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dataApps",
+                    ":dataAppId",
+                    "endpoints"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "100"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The unique identifier of the Data App."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"endpoints\": [\n    {\n      \"name\": \"string\",\n      \"displayName\": \"string\",\n      \"description\": \"string\",\n      \"path\": \"string\",\n      \"method\": \"POST\",\n      \"clusterId\": \"string\",\n      \"sqlTemplate\": \"string\",\n      \"tag\": \"string\",\n      \"settings\": {\n        \"timeout\": 6204,\n        \"rowLimit\": 5210,\n        \"cacheEnabled\": true,\n        \"cacheTtl\": 3514,\n        \"paginationEnabled\": false\n      },\n      \"params\": [\n        {\n          \"name\": \"string\",\n          \"type\": \"INTEGER\",\n          \"required\": false,\n          \"defaultValue\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"type\": \"STRING\",\n          \"required\": false,\n          \"defaultValue\": \"string\"\n        }\n      ]\n    },\n    {\n      \"name\": \"string\",\n      \"displayName\": \"string\",\n      \"description\": \"string\",\n      \"path\": \"string\",\n      \"method\": \"GET\",\n      \"clusterId\": \"string\",\n      \"sqlTemplate\": \"string\",\n      \"tag\": \"string\",\n      \"settings\": {\n        \"timeout\": 2953,\n        \"rowLimit\": 5030,\n        \"cacheEnabled\": true,\n        \"cacheTtl\": 99,\n        \"paginationEnabled\": false\n      },\n      \"params\": [\n        {\n          \"name\": \"string\",\n          \"type\": \"BOOLEAN\",\n          \"required\": false,\n          \"defaultValue\": \"string\"\n        },\n        {\n          \"name\": \"string\",\n          \"type\": \"STRING\",\n          \"required\": true,\n          \"defaultValue\": \"string\"\n        }\n      ]\n    }\n  ],\n  \"nextPageToken\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "43f4975c-b987-40d0-849c-8e521dcbb9cf",
+              "name": "Authentication failed. Check your API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dataApps",
+                    ":dataAppId",
+                    "endpoints"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "100"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The unique identifier of the Data App."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 1653,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6e7c99ed-c0a1-4bb2-ba5a-772479e8b27b",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dataApps",
+                    ":dataAppId",
+                    "endpoints"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "100"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The unique identifier of the Data App."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 1653,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "92f268bf-b049-43dd-8092-e1921e99e44f",
+          "name": "Create an endpoint",
+          "request": {
+            "name": "Create an endpoint",
+            "description": {
+              "content": "Defines a new custom SQL-backed API endpoint within a Data App. Specify the HTTP method, URL path, target cluster, SQL template, and any path or query parameters. The endpoint will become available after the Data App is deployed.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "dataApps",
+                ":dataAppId",
+                "endpoints"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "dataAppId",
+                  "description": "(Required) The unique identifier of the Data App."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"displayName\": \"<string>\",\n  \"path\": \"<string>\",\n  \"method\": \"<string>\",\n  \"clusterId\": \"<string>\",\n  \"sqlTemplate\": \"<string>\",\n  \"description\": \"<string>\",\n  \"tag\": \"<string>\",\n  \"settings\": {\n    \"timeout\": \"<integer>\",\n    \"rowLimit\": \"<integer>\",\n    \"cacheEnabled\": \"<boolean>\",\n    \"cacheTtl\": \"<integer>\",\n    \"paginationEnabled\": \"<boolean>\"\n  },\n  \"params\": [\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"required\": \"<boolean>\",\n      \"defaultValue\": \"<string>\"\n    },\n    {\n      \"name\": \"<string>\",\n      \"type\": \"<string>\",\n      \"required\": \"<boolean>\",\n      \"defaultValue\": \"<string>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "fadb2044-89d4-41c7-a80b-0f5adeef1f85",
+              "name": "Endpoint created successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dataApps",
+                    ":dataAppId",
+                    "endpoints"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The unique identifier of the Data App."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"displayName\": \"<string>\",\n  \"path\": \"<string>\",\n  \"method\": \"<string>\",\n  \"clusterId\": \"<string>\",\n  \"sqlTemplate\": \"<string>\",\n  \"description\": \"<string>\",\n  \"tag\": \"<string>\",\n  \"settings\": {\n    \"timeout\": 8479,\n    \"rowLimit\": 5469,\n    \"cacheEnabled\": true,\n    \"cacheTtl\": 5349,\n    \"paginationEnabled\": true\n  },\n  \"params\": [\n    {\n      \"name\": \"string\",\n      \"type\": \"BOOLEAN\",\n      \"required\": true,\n      \"defaultValue\": \"string\"\n    },\n    {\n      \"name\": \"string\",\n      \"type\": \"NUMBER\",\n      \"required\": false,\n      \"defaultValue\": \"string\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"name\": \"string\",\n  \"displayName\": \"string\",\n  \"description\": \"string\",\n  \"path\": \"string\",\n  \"method\": \"PUT\",\n  \"clusterId\": \"string\",\n  \"sqlTemplate\": \"string\",\n  \"tag\": \"string\",\n  \"settings\": {\n    \"timeout\": 8191,\n    \"rowLimit\": 2342,\n    \"cacheEnabled\": false,\n    \"cacheTtl\": 1648,\n    \"paginationEnabled\": true\n  },\n  \"params\": [\n    {\n      \"name\": \"string\",\n      \"type\": \"BOOLEAN\",\n      \"required\": false,\n      \"defaultValue\": \"string\"\n    },\n    {\n      \"name\": \"string\",\n      \"type\": \"STRING\",\n      \"required\": false,\n      \"defaultValue\": \"string\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "62cafc0e-a89c-40d7-92a0-5606f913a6de",
+              "name": "The request body or parameters are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dataApps",
+                    ":dataAppId",
+                    "endpoints"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The unique identifier of the Data App."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"displayName\": \"<string>\",\n  \"path\": \"<string>\",\n  \"method\": \"<string>\",\n  \"clusterId\": \"<string>\",\n  \"sqlTemplate\": \"<string>\",\n  \"description\": \"<string>\",\n  \"tag\": \"<string>\",\n  \"settings\": {\n    \"timeout\": 8479,\n    \"rowLimit\": 5469,\n    \"cacheEnabled\": true,\n    \"cacheTtl\": 5349,\n    \"paginationEnabled\": true\n  },\n  \"params\": [\n    {\n      \"name\": \"string\",\n      \"type\": \"BOOLEAN\",\n      \"required\": true,\n      \"defaultValue\": \"string\"\n    },\n    {\n      \"name\": \"string\",\n      \"type\": \"NUMBER\",\n      \"required\": false,\n      \"defaultValue\": \"string\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 1653,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "71e0603a-3d62-44d5-8b55-39ff16402405",
+              "name": "Authentication failed. Check your API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dataApps",
+                    ":dataAppId",
+                    "endpoints"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The unique identifier of the Data App."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"displayName\": \"<string>\",\n  \"path\": \"<string>\",\n  \"method\": \"<string>\",\n  \"clusterId\": \"<string>\",\n  \"sqlTemplate\": \"<string>\",\n  \"description\": \"<string>\",\n  \"tag\": \"<string>\",\n  \"settings\": {\n    \"timeout\": 8479,\n    \"rowLimit\": 5469,\n    \"cacheEnabled\": true,\n    \"cacheTtl\": 5349,\n    \"paginationEnabled\": true\n  },\n  \"params\": [\n    {\n      \"name\": \"string\",\n      \"type\": \"BOOLEAN\",\n      \"required\": true,\n      \"defaultValue\": \"string\"\n    },\n    {\n      \"name\": \"string\",\n      \"type\": \"NUMBER\",\n      \"required\": false,\n      \"defaultValue\": \"string\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 1653,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "aa9e677f-afa7-4930-9d93-2b7926d9cc59",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "dataApps",
+                    ":dataAppId",
+                    "endpoints"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "dataAppId",
+                      "description": "(Required) The unique identifier of the Data App."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"displayName\": \"<string>\",\n  \"path\": \"<string>\",\n  \"method\": \"<string>\",\n  \"clusterId\": \"<string>\",\n  \"sqlTemplate\": \"<string>\",\n  \"description\": \"<string>\",\n  \"tag\": \"<string>\",\n  \"settings\": {\n    \"timeout\": 8479,\n    \"rowLimit\": 5469,\n    \"cacheEnabled\": true,\n    \"cacheTtl\": 5349,\n    \"paginationEnabled\": true\n  },\n  \"params\": [\n    {\n      \"name\": \"string\",\n      \"type\": \"BOOLEAN\",\n      \"required\": true,\n      \"defaultValue\": \"string\"\n    },\n    {\n      \"name\": \"string\",\n      \"type\": \"NUMBER\",\n      \"required\": false,\n      \"defaultValue\": \"string\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 1653,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"message\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://dedicated.tidbapi.com/v1beta1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "digest",
+    "digest": [
+      {
+        "key": "username",
+        "value": "{{digestAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{digestAuthPassword}}"
+      },
+      {
+        "key": "realm",
+        "value": "{{realm}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "a45c609f-111b-43ea-9d25-c79d7a43a855",
+    "name": "TiDB Cloud API Keys Endpoints API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud. It supports managing projects, clusters, backups, restores, data imports, billing, and private endpoint connections across both TiDB Cloud Serverless and TiDB Cloud Dedicated tiers. The API uses HTTP Digest Authentication with public and private API keys and returns JSON-formatted responses. Available as both v1beta and the newer v1beta1 versions, it enables automation of database infrastructure lifecycle management at scale.\n\nContact Support:\n Name: TiDB Cloud Support",
+      "type": "text/plain"
+    }
+  }
+}

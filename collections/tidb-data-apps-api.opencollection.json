@@ -1,0 +1,138 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud API Keys Data Apps API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Data Apps",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Data Apps",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/dataApps",
+            "params": [
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per page. Default is 100, maximum is 100."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "Pagination token returned from a previous list request to retrieve the next page."
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of all Data Apps in the organization. Each Data App represents a collection of custom endpoints that are backed by SQL queries running against linked TiDB Cloud clusters. Results include the app ID, display name, description, and linked cluster information."
+        },
+        {
+          "info": {
+            "name": "Create a Data App",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/dataApps",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new Data App within the organization. A Data App is a container for custom SQL-backed API endpoints. After creation, link a TiDB Cloud cluster as a data source and define endpoints to begin serving data via HTTPS."
+        },
+        {
+          "info": {
+            "name": "Get a Data App",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/dataApps/:dataAppId",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Data App."
+              }
+            ]
+          },
+          "docs": "Returns the configuration and metadata for a specific Data App, including its display name, description, linked data sources, system endpoint configuration, and Chat2Query settings if enabled."
+        },
+        {
+          "info": {
+            "name": "Update a Data App",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://dedicated.tidbapi.com/v1beta1/dataApps/:dataAppId",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Data App."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the display name or description of an existing Data App. Only the fields provided in the request body are modified. Linked data sources and endpoints remain unchanged."
+        },
+        {
+          "info": {
+            "name": "Delete a Data App",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://dedicated.tidbapi.com/v1beta1/dataApps/:dataAppId",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Data App."
+              }
+            ]
+          },
+          "docs": "Permanently deletes a Data App and all of its associated endpoints, API keys, and deployment history. This operation is irreversible. All clients calling endpoints within this Data App will receive errors after deletion."
+        },
+        {
+          "info": {
+            "name": "Get OpenAPI specification",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/dataApps/:dataAppId/apiSpec",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Data App."
+              }
+            ]
+          },
+          "docs": "Returns the OpenAPI 3.0 specification for all endpoints defined within a Data App. The specification can be returned in JSON or YAML format by setting the Accept header accordingly. Use this spec to generate client SDKs, import into API testing tools, or publish API documentation."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

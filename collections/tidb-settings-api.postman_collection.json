@@ -1,0 +1,325 @@
+{
+  "item": [
+    {
+      "id": "9b1ae66a-d785-492e-af46-bae8d75a830c",
+      "name": "Settings",
+      "description": {
+        "content": "Endpoints for retrieving and modifying TiDB server runtime settings.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "438134cf-8f97-495f-a8cf-f3d665111f55",
+          "name": "Get server settings",
+          "request": {
+            "name": "Get server settings",
+            "description": {
+              "content": "Returns the current runtime settings of the TiDB server instance, including log level, general log status, and DDL slow threshold. These settings can be modified without restarting the server via the POST method of this endpoint.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "settings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5451a6c7-3aa5-4aa1-8fcb-6f45f9717ea0",
+              "name": "Server settings retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"general_log\": true,\n  \"log_level\": \"string\",\n  \"ddl_slow_threshold\": 8600\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "60ebcd36-8c7a-44e5-bd1a-a48154efdd52",
+          "name": "Update server settings",
+          "request": {
+            "name": "Update server settings",
+            "description": {
+              "content": "Modifies one or more runtime settings of the TiDB server without requiring a restart. Supports updating general_log to enable or disable the general query log, log_level to change the server log verbosity, and ddl_slow_threshold to adjust the DDL slow operation threshold in milliseconds.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "settings"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/x-www-form-urlencoded"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "urlencoded",
+              "urlencoded": [
+                {
+                  "disabled": false,
+                  "key": "tidb_general_log",
+                  "value": "<integer>",
+                  "description": "Set to 1 to enable general query logging, 0 to disable."
+                },
+                {
+                  "disabled": false,
+                  "key": "log_level",
+                  "value": "<string>",
+                  "description": "The new log level (debug, info, warn, error, fatal)."
+                },
+                {
+                  "disabled": false,
+                  "key": "ddl_slow_threshold",
+                  "value": "<integer>",
+                  "description": "New DDL slow threshold in milliseconds."
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "dbb8f72b-7de6-4dca-a2d4-697a5403883a",
+              "name": "Server settings updated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set to 1 to enable general query logging, 0 to disable.",
+                        "type": "text/plain"
+                      },
+                      "key": "tidb_general_log",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The new log level (debug, info, warn, error, fatal).",
+                        "type": "text/plain"
+                      },
+                      "key": "log_level",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "New DDL slow threshold in milliseconds.",
+                        "type": "text/plain"
+                      },
+                      "key": "ddl_slow_threshold",
+                      "value": "<integer>"
+                    }
+                  ]
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "2fcdea6a-f448-4909-8f43-381868ec15a6",
+              "name": "Invalid setting name or value provided.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "settings"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "urlencoded",
+                  "urlencoded": [
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "Set to 1 to enable general query logging, 0 to disable.",
+                        "type": "text/plain"
+                      },
+                      "key": "tidb_general_log",
+                      "value": "<integer>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "The new log level (debug, info, warn, error, fatal).",
+                        "type": "text/plain"
+                      },
+                      "key": "log_level",
+                      "value": "<string>"
+                    },
+                    {
+                      "disabled": false,
+                      "description": {
+                        "content": "New DDL slow threshold in milliseconds.",
+                        "type": "text/plain"
+                      },
+                      "key": "ddl_slow_threshold",
+                      "value": "<integer>"
+                    }
+                  ]
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://dedicated.tidbapi.com/v1beta1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "digest",
+    "digest": [
+      {
+        "key": "username",
+        "value": "{{digestAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{digestAuthPassword}}"
+      },
+      {
+        "key": "realm",
+        "value": "{{realm}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "068a2697-cba3-4de3-8536-3f5f2f3ea872",
+    "name": "TiDB Cloud API Keys Settings API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud. It supports managing projects, clusters, backups, restores, data imports, billing, and private endpoint connections across both TiDB Cloud Serverless and TiDB Cloud Dedicated tiers. The API uses HTTP Digest Authentication with public and private API keys and returns JSON-formatted responses. Available as both v1beta and the newer v1beta1 versions, it enables automation of database infrastructure lifecycle management at scale.\n\nContact Support:\n Name: TiDB Cloud Support",
+      "type": "text/plain"
+    }
+  }
+}

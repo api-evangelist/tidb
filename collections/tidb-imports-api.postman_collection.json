@@ -1,0 +1,1099 @@
+{
+  "item": [
+    {
+      "id": "2e453374-c87c-47bb-b07c-97f3a37269ef",
+      "name": "Imports",
+      "description": {
+        "content": "Operations for creating and managing data import tasks into TiDB Cloud clusters.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "51435029-fb2f-4b10-acb8-e6ed27973898",
+          "name": "List import tasks",
+          "request": {
+            "name": "List import tasks",
+            "description": {
+              "content": "Returns a paginated list of data import tasks for a specific TiDB Cloud Dedicated cluster. Each import task includes status, source configuration, progress information, and timestamps.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "clusters",
+                ":clusterId",
+                "imports"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "100",
+                  "description": "Maximum number of results to return per page. Default is 100, maximum is 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "pageToken",
+                  "value": "<string>",
+                  "description": "Pagination token returned from a previous list request to retrieve the next page."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "clusterId",
+                  "description": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "6555c464-190c-4617-b2f2-10be7b0a4a69",
+              "name": "A paginated list of import tasks.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "100"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "clusterId",
+                      "description": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"imports\": [\n    {\n      \"importId\": \"string\",\n      \"clusterId\": \"string\",\n      \"state\": \"COMPLETED\",\n      \"sourceType\": \"string\",\n      \"fileFormat\": \"string\",\n      \"progress\": 5483.080895085352,\n      \"createTime\": \"1984-10-30T14:13:42.914Z\",\n      \"errorMessage\": \"string\"\n    },\n    {\n      \"importId\": \"string\",\n      \"clusterId\": \"string\",\n      \"state\": \"FAILED\",\n      \"sourceType\": \"string\",\n      \"fileFormat\": \"string\",\n      \"progress\": 7888.329874089773,\n      \"createTime\": \"1961-06-01T17:02:22.817Z\",\n      \"errorMessage\": \"string\"\n    }\n  ],\n  \"nextPageToken\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fd912470-935a-4ab6-bf90-51bf17650209",
+              "name": "Authentication failed. Check your API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "100"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "clusterId",
+                      "description": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9866,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "4d454219-3dd4-4cd6-9475-1671f5b67c35",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "100"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "clusterId",
+                      "description": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9866,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a178b763-efcc-4a51-bf59-56540f83d477",
+          "name": "Create an import task",
+          "request": {
+            "name": "Create an import task",
+            "description": {
+              "content": "Creates a new data import task for a specific TiDB Cloud Dedicated cluster. Supports importing data from AWS S3, Google Cloud Storage, and local file uploads in CSV, SQL, Parquet, and Aurora Snapshot formats. Specify the source type, file format, target database, and any necessary access credentials.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "clusters",
+                ":clusterId",
+                "imports"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "clusterId",
+                  "description": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"sourceType\": \"<string>\",\n  \"fileFormat\": \"<string>\",\n  \"targetDatabase\": \"<string>\",\n  \"s3Source\": {\n    \"bucketUri\": \"<string>\",\n    \"roleArn\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "661fefcb-f835-4f2b-bb0c-9b95e0acb928",
+              "name": "Import task created successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "clusterId",
+                      "description": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"sourceType\": \"<string>\",\n  \"fileFormat\": \"<string>\",\n  \"targetDatabase\": \"<string>\",\n  \"s3Source\": {\n    \"bucketUri\": \"string\",\n    \"roleArn\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"importId\": \"string\",\n  \"clusterId\": \"string\",\n  \"state\": \"FAILED\",\n  \"sourceType\": \"string\",\n  \"fileFormat\": \"string\",\n  \"progress\": 4001.6369759536497,\n  \"createTime\": \"2018-04-03T19:35:55.544Z\",\n  \"errorMessage\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6ac4e5df-b545-4859-a957-29b650c8ca88",
+              "name": "The request body or parameters are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "clusterId",
+                      "description": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"sourceType\": \"<string>\",\n  \"fileFormat\": \"<string>\",\n  \"targetDatabase\": \"<string>\",\n  \"s3Source\": {\n    \"bucketUri\": \"string\",\n    \"roleArn\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9866,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "68055b22-3e93-4c54-a303-9b2314b76960",
+              "name": "Authentication failed. Check your API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "clusterId",
+                      "description": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"sourceType\": \"<string>\",\n  \"fileFormat\": \"<string>\",\n  \"targetDatabase\": \"<string>\",\n  \"s3Source\": {\n    \"bucketUri\": \"string\",\n    \"roleArn\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9866,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9f0e1170-76ed-4064-8faa-0faf561b5ba5",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "clusterId",
+                      "description": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"sourceType\": \"<string>\",\n  \"fileFormat\": \"<string>\",\n  \"targetDatabase\": \"<string>\",\n  \"s3Source\": {\n    \"bucketUri\": \"string\",\n    \"roleArn\": \"string\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9866,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "eba40b89-9daa-435e-8f11-d117c6c90994",
+          "name": "Get an import task",
+          "request": {
+            "name": "Get an import task",
+            "description": {
+              "content": "Returns the current status and configuration details of a specific data import task. Includes progress percentage, estimated completion time, error messages if any, and source file information.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "clusters",
+                ":clusterId",
+                "imports",
+                ":importId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "clusterId",
+                  "description": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "importId",
+                  "description": "(Required) The unique identifier of the import task."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "a3546b10-1dca-4e1a-a1e6-61334264c2c8",
+              "name": "Import task details retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports",
+                    ":importId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "clusterId",
+                      "description": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "importId",
+                      "description": "(Required) The unique identifier of the import task."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"importId\": \"string\",\n  \"clusterId\": \"string\",\n  \"state\": \"FAILED\",\n  \"sourceType\": \"string\",\n  \"fileFormat\": \"string\",\n  \"progress\": 4001.6369759536497,\n  \"createTime\": \"2018-04-03T19:35:55.544Z\",\n  \"errorMessage\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "349f5efa-1a54-4ff3-a062-998b64bb493c",
+              "name": "Authentication failed. Check your API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports",
+                    ":importId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "clusterId",
+                      "description": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "importId",
+                      "description": "(Required) The unique identifier of the import task."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9866,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7442f01b-9143-479e-8b31-4168b7858644",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports",
+                    ":importId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "clusterId",
+                      "description": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "importId",
+                      "description": "(Required) The unique identifier of the import task."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9866,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "11d13e82-6be8-42ea-aeb4-5dd248403e46",
+          "name": "Cancel an import task",
+          "request": {
+            "name": "Cancel an import task",
+            "description": {
+              "content": "Cancels an in-progress data import task for a specific cluster. Only import tasks in a RUNNING or PENDING state can be cancelled. Cancelled tasks cannot be resumed; a new import task must be created.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "clusters",
+                ":clusterId",
+                "imports",
+                "{{importId}}:cancel"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "clusterId",
+                  "description": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "bc288737-20b0-4de0-9321-7a46fdc9c460",
+              "name": "Import task cancelled successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports",
+                    "{{importId}}:cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "clusterId",
+                      "description": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1d864b46-91e8-4f4a-9177-58a5ab1b00af",
+              "name": "The request body or parameters are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports",
+                    "{{importId}}:cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "clusterId",
+                      "description": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9866,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "573c32d5-17bf-4818-a6d2-61f172b61baf",
+              "name": "Authentication failed. Check your API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports",
+                    "{{importId}}:cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "clusterId",
+                      "description": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9866,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "104af021-20ee-4c6b-9907-bd178bade21d",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId",
+                    "imports",
+                    "{{importId}}:cancel"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "clusterId",
+                      "description": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 9866,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://dedicated.tidbapi.com/v1beta1",
+      "key": "baseUrl"
+    },
+    {
+      "disabled": false,
+      "description": {
+        "content": "(Required) The unique identifier of the import task.",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "<string>",
+      "key": "importId"
+    }
+  ],
+  "auth": {
+    "type": "digest",
+    "digest": [
+      {
+        "key": "username",
+        "value": "{{digestAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{digestAuthPassword}}"
+      },
+      {
+        "key": "realm",
+        "value": "{{realm}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "d522a60b-09be-4524-8ce1-1af82819c048",
+    "name": "TiDB Cloud API Keys Imports API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud. It supports managing projects, clusters, backups, restores, data imports, billing, and private endpoint connections across both TiDB Cloud Serverless and TiDB Cloud Dedicated tiers. The API uses HTTP Digest Authentication with public and private API keys and returns JSON-formatted responses. Available as both v1beta and the newer v1beta1 versions, it enables automation of database infrastructure lifecycle management at scale.\n\nContact Support:\n Name: TiDB Cloud Support",
+      "type": "text/plain"
+    }
+  }
+}

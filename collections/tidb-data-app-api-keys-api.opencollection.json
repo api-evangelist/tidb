@@ -1,0 +1,72 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud API Keys Data App API Keys API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Data App API Keys",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Data App API keys",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/dataApps/:dataAppId/apiKeys",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Data App."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per page. Default is 100, maximum is 100."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "Pagination token returned from a previous list request to retrieve the next page."
+              }
+            ]
+          },
+          "docs": "Returns all API keys scoped to a specific Data App. These keys are used to authenticate calls to the custom endpoints defined within the Data App and are separate from organization-level API keys."
+        },
+        {
+          "info": {
+            "name": "Create a Data App API key",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/dataApps/:dataAppId/apiKeys",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Data App."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new API key scoped to a specific Data App. Specify the key description, role (READ_ONLY or READ_AND_WRITE), rate limit in requests per minute, and optional expiration settings. The private key is only returned at creation time."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

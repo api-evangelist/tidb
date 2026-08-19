@@ -1,0 +1,306 @@
+{
+  "item": [
+    {
+      "id": "f5aa5a33-5222-47e6-bf59-b88fa3206057",
+      "name": "SQL Refinement",
+      "description": {
+        "content": "Operations for refining and improving previously generated SQL queries.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "ed094472-6c6c-4bcf-bce3-6a7f8e1ba335",
+          "name": "Refine a SQL query",
+          "request": {
+            "name": "Refine a SQL query",
+            "description": {
+              "content": "Takes a previously generated SQL query and a refinement instruction, then produces an improved SQL statement. Use this endpoint to iteratively improve query accuracy based on user feedback without starting a new query generation from scratch.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v3",
+                "refineSql"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"question\": \"<string>\",\n  \"sql\": \"<string>\",\n  \"task\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "c2a14bc1-763c-4548-ad6e-95a38e63bcb8",
+              "name": "SQL refined successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "refineSql"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"question\": \"<string>\",\n  \"sql\": \"<string>\",\n  \"task\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 31,\n  \"msg\": \"string\",\n  \"result\": {\n    \"question_id\": \"string\",\n    \"sql\": \"string\",\n    \"rows\": [\n      {\n        \"key_0\": \"string\",\n        \"key_1\": true,\n        \"key_2\": 7006.3238654129245,\n        \"key_3\": 6304\n      },\n      {\n        \"key_0\": 3,\n        \"key_1\": \"string\",\n        \"key_2\": 8685,\n        \"key_3\": false\n      }\n    ],\n    \"columns\": [\n      {\n        \"col\": \"string\",\n        \"data_type\": \"string\",\n        \"nullable\": false\n      },\n      {\n        \"col\": \"string\",\n        \"data_type\": \"string\",\n        \"nullable\": false\n      }\n    ]\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9e1bde7f-eb3f-4f58-a309-eae4da92d334",
+              "name": "The request body or parameters are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "refineSql"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"question\": \"<string>\",\n  \"sql\": \"<string>\",\n  \"task\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4114,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0aa4e942-1e62-4486-9765-a2358250339e",
+              "name": "Authentication failed. Check your Chat2Query API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "refineSql"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"question\": \"<string>\",\n  \"sql\": \"<string>\",\n  \"task\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4114,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9300172f-729a-4cd5-b1dc-a7594083262b",
+              "name": "Rate limit exceeded. The Chat2Query API allows 100 requests per day per Data App. Contact TiDB Cloud support to request a higher limit.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "refineSql"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"cluster_id\": \"<string>\",\n  \"database\": \"<string>\",\n  \"question\": \"<string>\",\n  \"sql\": \"<string>\",\n  \"task\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4114,\n  \"msg\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://dedicated.tidbapi.com/v1beta1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "digest",
+    "digest": [
+      {
+        "key": "username",
+        "value": "{{digestAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{digestAuthPassword}}"
+      },
+      {
+        "key": "realm",
+        "value": "{{realm}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "57728202-f251-4992-a731-eab7edeecf14",
+    "name": "TiDB Cloud API Keys SQL Refinement API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud. It supports managing projects, clusters, backups, restores, data imports, billing, and private endpoint connections across both TiDB Cloud Serverless and TiDB Cloud Dedicated tiers. The API uses HTTP Digest Authentication with public and private API keys and returns JSON-formatted responses. Available as both v1beta and the newer v1beta1 versions, it enables automation of database infrastructure lifecycle management at scale.\n\nContact Support:\n Name: TiDB Cloud Support",
+      "type": "text/plain"
+    }
+  }
+}

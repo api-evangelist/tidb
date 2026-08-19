@@ -1,0 +1,223 @@
+{
+  "item": [
+    {
+      "id": "35541d56-b1d5-402b-ae88-e7f47f0e95d4",
+      "name": "DDL",
+      "description": {
+        "content": "Endpoints for managing and inspecting DDL jobs, including ownership and history.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "2e35fea6-ca39-4099-83ba-26ed98266cd3",
+          "name": "Get DDL job history",
+          "request": {
+            "name": "Get DDL job history",
+            "description": {
+              "content": "Returns the history of DDL (Data Definition Language) jobs executed on the cluster, such as CREATE TABLE, ALTER TABLE, DROP INDEX, and similar schema change operations. Results are paginated using start_job_id and limit parameters. DDL history is useful for auditing schema changes and diagnosing failed schema modifications.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "ddl",
+                "history"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "start_job_id",
+                  "value": "<integer>",
+                  "description": "The DDL job ID to start listing from, for pagination."
+                },
+                {
+                  "disabled": false,
+                  "key": "limit",
+                  "value": "<integer>",
+                  "description": "Maximum number of DDL job history records to return."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "28c74110-af4c-4226-9751-0dae055f41cc",
+              "name": "DDL job history retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ddl",
+                    "history"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "start_job_id",
+                      "value": "<integer>"
+                    },
+                    {
+                      "key": "limit",
+                      "value": "<integer>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"id\": 8153,\n    \"type\": \"string\",\n    \"schema_id\": 7676,\n    \"table_id\": 8736,\n    \"schema_name\": \"string\",\n    \"table_name\": \"string\",\n    \"state\": \"string\",\n    \"start_time\": 7528,\n    \"error\": \"string\"\n  },\n  {\n    \"id\": 6090,\n    \"type\": \"string\",\n    \"schema_id\": 6431,\n    \"table_id\": 2867,\n    \"schema_name\": \"string\",\n    \"table_name\": \"string\",\n    \"state\": \"string\",\n    \"start_time\": 6537,\n    \"error\": \"string\"\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0c9284b9-41db-4686-b9a9-f852d49af601",
+          "name": "Resign DDL owner",
+          "request": {
+            "name": "Resign DDL owner",
+            "description": {
+              "content": "Forces the current TiDB server to resign its role as the DDL owner, triggering a new DDL owner election among all TiDB servers in the cluster. Only one TiDB server is the DDL owner at any time and is responsible for executing schema change jobs. Use this endpoint when the current DDL owner is experiencing issues.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "ddl",
+                "owner",
+                "resign"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c88edd78-2e5b-4638-b5b0-723fa4163bb4",
+              "name": "DDL owner resignation initiated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "ddl",
+                    "owner",
+                    "resign"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://dedicated.tidbapi.com/v1beta1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "digest",
+    "digest": [
+      {
+        "key": "username",
+        "value": "{{digestAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{digestAuthPassword}}"
+      },
+      {
+        "key": "realm",
+        "value": "{{realm}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "aa775f08-aaad-4de1-8ee1-ba991ec2eb3f",
+    "name": "TiDB Cloud API Keys DDL API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud. It supports managing projects, clusters, backups, restores, data imports, billing, and private endpoint connections across both TiDB Cloud Serverless and TiDB Cloud Dedicated tiers. The API uses HTTP Digest Authentication with public and private API keys and returns JSON-formatted responses. Available as both v1beta and the newer v1beta1 versions, it enables automation of database infrastructure lifecycle management at scale.\n\nContact Support:\n Name: TiDB Cloud Support",
+      "type": "text/plain"
+    }
+  }
+}

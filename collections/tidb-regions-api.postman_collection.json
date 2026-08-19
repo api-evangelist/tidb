@@ -1,0 +1,1281 @@
+{
+  "item": [
+    {
+      "id": "ce30086a-a30c-446a-b339-9f1cb011992b",
+      "name": "Regions",
+      "description": {
+        "content": "Operations for listing available cloud regions and node specifications.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "45fcce57-beb6-4a0c-b00b-47f2aa5b025b",
+          "name": "List regions",
+          "request": {
+            "name": "List regions",
+            "description": {
+              "content": "Returns a list of all available cloud provider regions where TiDB Cloud Dedicated clusters can be deployed. Each region includes cloud provider, region identifier, display name, and availability status.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "regions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "100",
+                  "description": "Maximum number of results to return per page. Default is 100, maximum is 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "pageToken",
+                  "value": "<string>",
+                  "description": "Pagination token returned from a previous list request to retrieve the next page."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "26c902ef-e98b-47c0-ad16-e3806498ec3f",
+              "name": "A paginated list of available regions.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "regions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "100"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"regions\": [\n    {\n      \"regionId\": \"string\",\n      \"cloudProvider\": \"string\",\n      \"displayName\": \"string\"\n    },\n    {\n      \"regionId\": \"string\",\n      \"cloudProvider\": \"string\",\n      \"displayName\": \"string\"\n    }\n  ],\n  \"nextPageToken\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "5d9526bc-73cc-4053-8ce2-749ed49452e3",
+              "name": "Authentication failed. Check your API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "regions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "100"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 6324,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e3ebde5a-cdf9-4d38-89c2-f4693ed159be",
+          "name": "Get a region",
+          "request": {
+            "name": "Get a region",
+            "description": {
+              "content": "Returns detailed information about a specific cloud region, including its cloud provider, display name, geographic location, and support for specific TiDB Cloud features.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "regions",
+                ":regionId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "regionId",
+                  "description": "(Required) The unique identifier of the cloud region."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "c75b09ce-55c6-4c22-b82d-317afcb5379d",
+              "name": "Region details retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "regions",
+                    ":regionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "regionId",
+                      "description": "(Required) The unique identifier of the cloud region."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"regionId\": \"string\",\n  \"cloudProvider\": \"string\",\n  \"displayName\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "14bc7d2b-eabe-4bc3-b95d-42ef864f8b45",
+              "name": "Authentication failed. Check your API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "regions",
+                    ":regionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "regionId",
+                      "description": "(Required) The unique identifier of the cloud region."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 6324,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ddde8b91-c409-4483-81d5-46420c14cc8f",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "regions",
+                    ":regionId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "regionId",
+                      "description": "(Required) The unique identifier of the cloud region."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 6324,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0001dbd7-a5d2-4cef-8d8c-f9a0a746a2e4",
+          "name": "List node specifications",
+          "request": {
+            "name": "List node specifications",
+            "description": {
+              "content": "Returns all available node specifications for a given region, including TiDB, TiKV, and TiFlash component types. Each specification includes CPU, memory, and storage details. Use this endpoint to determine valid node configurations before creating or scaling a cluster.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "regions",
+                ":regionId",
+                "nodeSpecs"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "100",
+                  "description": "Maximum number of results to return per page. Default is 100, maximum is 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "pageToken",
+                  "value": "<string>",
+                  "description": "Pagination token returned from a previous list request to retrieve the next page."
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "regionId",
+                  "description": "(Required) The unique identifier of the cloud region."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "911acdf4-61b7-4ada-afff-0dccfae2b920",
+              "name": "A paginated list of node specifications.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "regions",
+                    ":regionId",
+                    "nodeSpecs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "100"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "regionId",
+                      "description": "(Required) The unique identifier of the cloud region."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"nodeSpecs\": [\n    {\n      \"nodeSpecKey\": \"string\",\n      \"componentType\": \"string\",\n      \"cpu\": 51,\n      \"memory\": 6381\n    },\n    {\n      \"nodeSpecKey\": \"string\",\n      \"componentType\": \"string\",\n      \"cpu\": 4089,\n      \"memory\": 3287\n    }\n  ],\n  \"nextPageToken\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "da77a1aa-ff6d-4e44-88c1-987b79db47c7",
+              "name": "Authentication failed. Check your API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "regions",
+                    ":regionId",
+                    "nodeSpecs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "100"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "regionId",
+                      "description": "(Required) The unique identifier of the cloud region."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 6324,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a1e5ebea-7e49-44e5-a061-43e8ba72bc89",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "regions",
+                    ":regionId",
+                    "nodeSpecs"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "100"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "regionId",
+                      "description": "(Required) The unique identifier of the cloud region."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 6324,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "66bc47b6-9ecd-4270-8b34-05738dc0fb75",
+          "name": "List all regions metadata",
+          "request": {
+            "name": "List all regions metadata",
+            "description": {
+              "content": "Returns the metadata for all TiKV regions known to this TiDB instance. Each region entry includes region ID, start and end keys, epoch information, and peer assignments. This endpoint is primarily used for cluster topology inspection and debugging region distribution issues.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "regions",
+                "meta"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "12825856-0bcd-4911-bed9-892db4ba8d01",
+              "name": "Region metadata retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "regions",
+                    "meta"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"region_id\": 3789,\n    \"start_key\": \"string\",\n    \"end_key\": \"string\",\n    \"frames\": [\n      {\n        \"db_name\": \"string\",\n        \"table_name\": \"string\",\n        \"table_id\": 2112,\n        \"is_record\": false,\n        \"record_id\": 5883,\n        \"index_name\": \"string\",\n        \"index_id\": 3346\n      },\n      {\n        \"db_name\": \"string\",\n        \"table_name\": \"string\",\n        \"table_id\": 663,\n        \"is_record\": true,\n        \"record_id\": 56,\n        \"index_name\": \"string\",\n        \"index_id\": 9344\n      }\n    ]\n  },\n  {\n    \"region_id\": 9788,\n    \"start_key\": \"string\",\n    \"end_key\": \"string\",\n    \"frames\": [\n      {\n        \"db_name\": \"string\",\n        \"table_name\": \"string\",\n        \"table_id\": 7526,\n        \"is_record\": false,\n        \"record_id\": 4337,\n        \"index_name\": \"string\",\n        \"index_id\": 2128\n      },\n      {\n        \"db_name\": \"string\",\n        \"table_name\": \"string\",\n        \"table_id\": 8315,\n        \"is_record\": false,\n        \"record_id\": 9716,\n        \"index_name\": \"string\",\n        \"index_id\": 913\n      }\n    ]\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b108cd49-29e6-4dcb-aa86-0cbc5aeb0db2",
+          "name": "Get hot regions",
+          "request": {
+            "name": "Get hot regions",
+            "description": {
+              "content": "Returns the top hot read and write regions for each TiKV store, along with the associated table and index names. This endpoint is used for identifying hotspot issues in data access patterns, which can cause uneven load distribution across TiKV nodes.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "regions",
+                "hot"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b08a0910-ac9d-4161-a674-bdc9ea0d625d",
+              "name": "Hot regions data retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "regions",
+                    "hot"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"as_peer\": [\n    {\n      \"store_id\": 9429,\n      \"hot_region_list\": [\n        {\n          \"region_id\": 7489,\n          \"flow_bytes\": 9514.713481985464\n        },\n        {\n          \"region_id\": 6556,\n          \"flow_bytes\": 2906.151601890675\n        }\n      ]\n    },\n    {\n      \"store_id\": 8255,\n      \"hot_region_list\": [\n        {\n          \"region_id\": 6521,\n          \"flow_bytes\": 1473.6968480760681\n        },\n        {\n          \"region_id\": 8572,\n          \"flow_bytes\": 3763.6965657026635\n        }\n      ]\n    }\n  ],\n  \"as_leader\": [\n    {\n      \"store_id\": 1058,\n      \"hot_region_list\": [\n        {\n          \"region_id\": 744,\n          \"flow_bytes\": 6830.104775415801\n        },\n        {\n          \"region_id\": 5746,\n          \"flow_bytes\": 2238.0658727267178\n        }\n      ]\n    },\n    {\n      \"store_id\": 5557,\n      \"hot_region_list\": [\n        {\n          \"region_id\": 8841,\n          \"flow_bytes\": 9604.610977244562\n        },\n        {\n          \"region_id\": 5930,\n          \"flow_bytes\": 3885.411868202263\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "82e259ab-d17b-4a89-9502-df46062c6644",
+          "name": "Get a region",
+          "request": {
+            "name": "Get a region",
+            "description": {
+              "content": "Returns detailed information about a specific TiKV region identified by its numeric region ID. Includes peer locations, epoch, and the associated frame information mapping the region to TiDB tables and indexes.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "regions",
+                ":regionID"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<integer>",
+                  "key": "regionID",
+                  "description": "(Required) The numeric TiKV region ID."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d611181c-fa13-4e35-a9f5-b4f36bc7ebaf",
+              "name": "Region information retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "regions",
+                    ":regionID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "regionID",
+                      "description": "(Required) The numeric TiKV region ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": 6557,\n  \"start_key\": \"string\",\n  \"end_key\": \"string\",\n  \"frames\": [\n    {\n      \"db_name\": \"string\",\n      \"table_name\": \"string\",\n      \"table_id\": 38,\n      \"is_record\": true,\n      \"record_id\": 5683,\n      \"index_name\": \"string\",\n      \"index_id\": 7486\n    },\n    {\n      \"db_name\": \"string\",\n      \"table_name\": \"string\",\n      \"table_id\": 8923,\n      \"is_record\": true,\n      \"record_id\": 6785,\n      \"index_name\": \"string\",\n      \"index_id\": 5676\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0d203675-8b51-41a0-9a56-ea9506535057",
+              "name": "No region with the specified ID was found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "regions",
+                    ":regionID"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<integer>",
+                      "key": "regionID",
+                      "description": "(Required) The numeric TiKV region ID."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0350a18c-a0fa-408c-9c04-5fdb032eb121",
+          "name": "Get table regions",
+          "request": {
+            "name": "Get table regions",
+            "description": {
+              "content": "Returns the list of TiKV regions that store data for a specific TiDB table. Each region entry includes the region ID, start key, end key, leader peer, and follower peers. Use this endpoint to understand the physical data layout of a table across TiKV stores.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "tables",
+                ":db",
+                ":table",
+                "regions"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "db",
+                  "description": "(Required) The database name."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "table",
+                  "description": "(Required) The table name within the specified database."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "398950e7-5353-4c2f-88dd-8441c40cdb1b",
+              "name": "Table regions retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tables",
+                    ":db",
+                    ":table",
+                    "regions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "db",
+                      "description": "(Required) The database name."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "table",
+                      "description": "(Required) The table name within the specified database."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"table_name\": \"string\",\n  \"table_id\": 3158,\n  \"record_regions\": [\n    {\n      \"region_id\": 2711,\n      \"leader\": {\n        \"id\": 1776,\n        \"store_id\": 4640\n      },\n      \"peers\": [\n        {\n          \"id\": 5507,\n          \"store_id\": 8344\n        },\n        {\n          \"id\": 3185,\n          \"store_id\": 6131\n        }\n      ],\n      \"start_key\": \"string\",\n      \"end_key\": \"string\"\n    },\n    {\n      \"region_id\": 750,\n      \"leader\": {\n        \"id\": 4997,\n        \"store_id\": 3532\n      },\n      \"peers\": [\n        {\n          \"id\": 9143,\n          \"store_id\": 1259\n        },\n        {\n          \"id\": 9909,\n          \"store_id\": 5298\n        }\n      ],\n      \"start_key\": \"string\",\n      \"end_key\": \"string\"\n    }\n  ],\n  \"indices\": [\n    {\n      \"name\": \"string\",\n      \"id\": 1508,\n      \"regions\": [\n        {\n          \"region_id\": 988,\n          \"leader\": {\n            \"id\": 5406,\n            \"store_id\": 4987\n          },\n          \"peers\": [\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"store_id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"store_id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"start_key\": \"string\",\n          \"end_key\": \"string\"\n        },\n        {\n          \"region_id\": 7208,\n          \"leader\": {\n            \"id\": 4482,\n            \"store_id\": 5341\n          },\n          \"peers\": [\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"store_id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"store_id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"start_key\": \"string\",\n          \"end_key\": \"string\"\n        }\n      ]\n    },\n    {\n      \"name\": \"string\",\n      \"id\": 5348,\n      \"regions\": [\n        {\n          \"region_id\": 2764,\n          \"leader\": {\n            \"id\": 4186,\n            \"store_id\": 9263\n          },\n          \"peers\": [\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"store_id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"store_id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"start_key\": \"string\",\n          \"end_key\": \"string\"\n        },\n        {\n          \"region_id\": 577,\n          \"leader\": {\n            \"id\": 1337,\n            \"store_id\": 4782\n          },\n          \"peers\": [\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"store_id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            },\n            {\n              \"id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              },\n              \"store_id\": {\n                \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n              }\n            }\n          ],\n          \"start_key\": \"string\",\n          \"end_key\": \"string\"\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0f3f50a4-c2f1-4f1e-aa6f-6635b146f5c3",
+              "name": "The specified database or table was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tables",
+                    ":db",
+                    ":table",
+                    "regions"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "db",
+                      "description": "(Required) The database name."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "table",
+                      "description": "(Required) The table name within the specified database."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8618971c-bbc5-43ae-9dce-a2c47ee8a6e5",
+          "name": "Scatter table regions",
+          "request": {
+            "name": "Scatter table regions",
+            "description": {
+              "content": "Initiates region scatter for the specified table, redistributing its TiKV regions across stores to improve data balance. This is typically used after bulk data loads that may have caused uneven region distribution.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "tables",
+                ":db",
+                ":table",
+                "scatter"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "db",
+                  "description": "(Required) The database name."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "table",
+                  "description": "(Required) The table name within the specified database."
+                }
+              ]
+            },
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "3cfa7fd5-2d30-498f-86bb-ca0aef5f3372",
+              "name": "Region scatter initiated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tables",
+                    ":db",
+                    ":table",
+                    "scatter"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "db",
+                      "description": "(Required) The database name."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "table",
+                      "description": "(Required) The table name within the specified database."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9a128ebd-496d-4613-a90c-cd0c62a72c92",
+              "name": "The specified database or table was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "tables",
+                    ":db",
+                    ":table",
+                    "scatter"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "db",
+                      "description": "(Required) The database name."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "table",
+                      "description": "(Required) The table name within the specified database."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://dedicated.tidbapi.com/v1beta1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "digest",
+    "digest": [
+      {
+        "key": "username",
+        "value": "{{digestAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{digestAuthPassword}}"
+      },
+      {
+        "key": "realm",
+        "value": "{{realm}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "c2df9caf-9b3a-43a8-967d-176bd4809286",
+    "name": "TiDB Cloud API Keys Regions API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud. It supports managing projects, clusters, backups, restores, data imports, billing, and private endpoint connections across both TiDB Cloud Serverless and TiDB Cloud Dedicated tiers. The API uses HTTP Digest Authentication with public and private API keys and returns JSON-formatted responses. Available as both v1beta and the newer v1beta1 versions, it enables automation of database infrastructure lifecycle management at scale.\n\nContact Support:\n Name: TiDB Cloud Support",
+      "type": "text/plain"
+    }
+  }
+}

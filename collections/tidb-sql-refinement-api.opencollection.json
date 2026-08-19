@@ -1,0 +1,33 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud API Keys SQL Refinement API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "SQL Refinement",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Refine a SQL query",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/v3/refineSql",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Takes a previously generated SQL query and a refinement instruction, then produces an improved SQL statement. Use this endpoint to iteratively improve query accuracy based on user feedback without starting a new query generation from scratch."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

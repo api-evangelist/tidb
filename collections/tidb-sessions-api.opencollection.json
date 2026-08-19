@@ -1,0 +1,33 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud API Keys Sessions API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Sessions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create a chat session",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/v3/sessions",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new multi-round conversational chat session. Sessions maintain conversation context across multiple chat2data calls, enabling follow-up questions that reference prior results. Use the returned session ID in subsequent chat2data requests to continue the conversation."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

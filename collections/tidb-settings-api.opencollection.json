@@ -1,0 +1,44 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud API Keys Settings API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Settings",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get server settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/settings"
+          },
+          "docs": "Returns the current runtime settings of the TiDB server instance, including log level, general log status, and DDL slow threshold. These settings can be modified without restarting the server via the POST method of this endpoint."
+        },
+        {
+          "info": {
+            "name": "Update server settings",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/settings",
+            "body": {
+              "type": "form-urlencoded",
+              "data": []
+            }
+          },
+          "docs": "Modifies one or more runtime settings of the TiDB server without requiring a restart. Supports updating general_log to enable or disable the general query log, log_level to change the server log verbosity, and ddl_slow_threshold to adjust the DDL slow operation threshold in milliseconds."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

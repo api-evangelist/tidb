@@ -1,0 +1,68 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud API Keys MVCC API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "MVCC",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get MVCC info by row handle",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/mvcc/key/:db/:table/:handle",
+            "params": [
+              {
+                "name": "db",
+                "value": "",
+                "type": "path",
+                "description": "The database name."
+              },
+              {
+                "name": "table",
+                "value": "",
+                "type": "path",
+                "description": "The table name within the specified database."
+              },
+              {
+                "name": "handle",
+                "value": "",
+                "type": "path",
+                "description": "The row handle (primary key value or internal row ID) for the target row."
+              }
+            ]
+          },
+          "docs": "Returns multi-version concurrency control (MVCC) information for the key corresponding to the specified row handle in a table. Shows all versions of the key across transactions, including start timestamp, commit timestamp, and value. Used for debugging transaction conflicts and stale data issues."
+        },
+        {
+          "info": {
+            "name": "Get MVCC info by hex key",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/mvcc/hex/:hexKey",
+            "params": [
+              {
+                "name": "hexKey",
+                "value": "",
+                "type": "path",
+                "description": "The raw key encoded as a hexadecimal string."
+              }
+            ]
+          },
+          "docs": "Returns MVCC information for a key specified as a hexadecimal string. This endpoint is used when you have the raw encoded key from TiKV region information and need to look up the MVCC history for that specific key."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,342 @@
+{
+  "item": [
+    {
+      "id": "40413916-d177-4dac-9fb2-9201aeb73e04",
+      "name": "MVCC",
+      "description": {
+        "content": "Endpoints for retrieving multi-version concurrency control (MVCC) key details for debugging.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "58fe8f49-7eec-4ceb-befb-e4a9b6ab839d",
+          "name": "Get MVCC info by row handle",
+          "request": {
+            "name": "Get MVCC info by row handle",
+            "description": {
+              "content": "Returns multi-version concurrency control (MVCC) information for the key corresponding to the specified row handle in a table. Shows all versions of the key across transactions, including start timestamp, commit timestamp, and value. Used for debugging transaction conflicts and stale data issues.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "mvcc",
+                "key",
+                ":db",
+                ":table",
+                ":handle"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "db",
+                  "description": "(Required) The database name."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "table",
+                  "description": "(Required) The table name within the specified database."
+                },
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "handle",
+                  "description": "(Required) The row handle (primary key value or internal row ID) for the target row."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1a7b45bb-57ab-458d-9f8c-6ae808e04558",
+              "name": "MVCC information retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "mvcc",
+                    "key",
+                    ":db",
+                    ":table",
+                    ":handle"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "db",
+                      "description": "(Required) The database name."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "table",
+                      "description": "(Required) The table name within the specified database."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "handle",
+                      "description": "(Required) The row handle (primary key value or internal row ID) for the target row."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"key\": \"string\",\n  \"mvcc\": {\n    \"info\": {}\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f38ae324-9bd3-4d31-b701-c54f075b185c",
+              "name": "The specified database, table, or handle was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "mvcc",
+                    "key",
+                    ":db",
+                    ":table",
+                    ":handle"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "db",
+                      "description": "(Required) The database name."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "table",
+                      "description": "(Required) The table name within the specified database."
+                    },
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "handle",
+                      "description": "(Required) The row handle (primary key value or internal row ID) for the target row."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "018507d5-2671-487d-83d3-6b34fb09a954",
+          "name": "Get MVCC info by hex key",
+          "request": {
+            "name": "Get MVCC info by hex key",
+            "description": {
+              "content": "Returns MVCC information for a key specified as a hexadecimal string. This endpoint is used when you have the raw encoded key from TiKV region information and need to look up the MVCC history for that specific key.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "mvcc",
+                "hex",
+                ":hexKey"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "hexKey",
+                  "description": "(Required) The raw key encoded as a hexadecimal string."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "159e9e78-be2b-4c57-a1a8-83e54329c4a9",
+              "name": "MVCC information retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "mvcc",
+                    "hex",
+                    ":hexKey"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "hexKey",
+                      "description": "(Required) The raw key encoded as a hexadecimal string."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"key\": \"string\",\n  \"mvcc\": {\n    \"info\": {}\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://dedicated.tidbapi.com/v1beta1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "digest",
+    "digest": [
+      {
+        "key": "username",
+        "value": "{{digestAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{digestAuthPassword}}"
+      },
+      {
+        "key": "realm",
+        "value": "{{realm}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "1e55d53d-3ebc-4526-825b-9758e23bf0b9",
+    "name": "TiDB Cloud API Keys MVCC API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud. It supports managing projects, clusters, backups, restores, data imports, billing, and private endpoint connections across both TiDB Cloud Serverless and TiDB Cloud Dedicated tiers. The API uses HTTP Digest Authentication with public and private API keys and returns JSON-formatted responses. Available as both v1beta and the newer v1beta1 versions, it enables automation of database infrastructure lifecycle management at scale.\n\nContact Support:\n Name: TiDB Cloud Support",
+      "type": "text/plain"
+    }
+  }
+}

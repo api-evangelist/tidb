@@ -1,0 +1,363 @@
+{
+  "item": [
+    {
+      "id": "5fdea63f-cfd8-4446-ad6a-e06d17ffd393",
+      "name": "Status",
+      "description": {
+        "content": "Endpoints for retrieving the operational status of the TiDB server instance.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3bc6cd6a-7f97-4154-b193-faff367df39d",
+          "name": "Get server status",
+          "request": {
+            "name": "Get server status",
+            "description": {
+              "content": "Returns the current operational status of the TiDB server instance, including the number of active connections, the TiDB version string, and the git commit hash of the binary. This endpoint is commonly used by load balancers and health check systems to verify that the TiDB process is running and accepting connections.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "status"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "aec6615a-d3a4-4635-92fc-50aa906410d3",
+              "name": "Server status retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"connections\": 3302,\n  \"version\": \"string\",\n  \"git_hash\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f4e6c973-6602-41fc-a756-b30793bcdf50",
+          "name": "Get Prometheus metrics",
+          "request": {
+            "name": "Get Prometheus metrics",
+            "description": {
+              "content": "Returns all Prometheus-format performance metrics for the TiDB server instance. This endpoint is consumed by Prometheus scrape jobs to collect TiDB-specific metrics including query latency, error rates, connection pool utilization, and internal component performance counters.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "metrics"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "text/plain"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "50710e41-d11e-4501-9ed8-b3b0ab442d02",
+              "name": "Prometheus metrics returned in text exposition format.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "metrics"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "text/plain"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "82a95724-42db-402a-b4cd-99a8ef530c82",
+          "name": "Get server information",
+          "request": {
+            "name": "Get server information",
+            "description": {
+              "content": "Returns detailed information about the TiDB server instance including version, IP address, listening port, status port, and the git hash of the binary. This endpoint is useful for service discovery and identifying specific nodes in a TiDB cluster.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "info"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7ed957ce-b2cd-40d1-9986-a41578f5314c",
+              "name": "Server information retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "info"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"ddl_id\": \"string\",\n  \"ip\": \"string\",\n  \"listening_port\": 6486,\n  \"status_port\": 4248,\n  \"lease\": \"string\",\n  \"binlog_status\": \"string\",\n  \"start_timestamp\": 9741,\n  \"git_hash\": \"string\",\n  \"is_owner\": false,\n  \"op_scope_level\": 5571\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4d20a080-2c44-4091-9050-8d2093e5d53a",
+          "name": "Get all cluster server information",
+          "request": {
+            "name": "Get all cluster server information",
+            "description": {
+              "content": "Returns information about all TiDB server instances in the cluster as registered with the Placement Driver (PD). This provides a cluster-wide view of all running TiDB nodes and their connection endpoints.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "info",
+                "all"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "1711bb05-642c-4969-bd6c-2e1b773c38da",
+              "name": "All TiDB server information retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "info",
+                    "all"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"servers_num\": 2306,\n  \"owner_id\": \"string\",\n  \"is_all_server_version_consistent\": true,\n  \"all_servers_info\": {\n    \"key_0\": {\n      \"ddl_id\": \"string\",\n      \"ip\": \"string\",\n      \"listening_port\": 7564,\n      \"status_port\": 2698,\n      \"lease\": \"string\",\n      \"binlog_status\": \"string\",\n      \"start_timestamp\": 2823,\n      \"git_hash\": \"string\",\n      \"is_owner\": false,\n      \"op_scope_level\": 1591\n    },\n    \"key_1\": {\n      \"ddl_id\": \"string\",\n      \"ip\": \"string\",\n      \"listening_port\": 9976,\n      \"status_port\": 6864,\n      \"lease\": \"string\",\n      \"binlog_status\": \"string\",\n      \"start_timestamp\": 6014,\n      \"git_hash\": \"string\",\n      \"is_owner\": false,\n      \"op_scope_level\": 5146\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://dedicated.tidbapi.com/v1beta1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "digest",
+    "digest": [
+      {
+        "key": "username",
+        "value": "{{digestAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{digestAuthPassword}}"
+      },
+      {
+        "key": "realm",
+        "value": "{{realm}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "116dd5fc-3581-4a68-bbd3-a54a3ed8477c",
+    "name": "TiDB Cloud API Keys Status API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud. It supports managing projects, clusters, backups, restores, data imports, billing, and private endpoint connections across both TiDB Cloud Serverless and TiDB Cloud Dedicated tiers. The API uses HTTP Digest Authentication with public and private API keys and returns JSON-formatted responses. Available as both v1beta and the newer v1beta1 versions, it enables automation of database infrastructure lifecycle management at scale.\n\nContact Support:\n Name: TiDB Cloud Support",
+      "type": "text/plain"
+    }
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud API Keys Integrations API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Integrations",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List integrations",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId/integrations",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the TiDB Cloud Dedicated cluster."
+              }
+            ]
+          },
+          "docs": "Returns all third-party integrations configured for a specific TiDB Cloud Dedicated cluster. Supported integrations include Datadog, Prometheus, and other observability platforms."
+        },
+        {
+          "info": {
+            "name": "Create an integration",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId/integrations",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the TiDB Cloud Dedicated cluster."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Configures a new third-party integration for a specific TiDB Cloud Dedicated cluster. The integration type and credentials must be specified in the request body. Once created, TiDB Cloud will begin sending metrics and logs to the configured integration endpoint."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

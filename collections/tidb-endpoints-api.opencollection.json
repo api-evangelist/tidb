@@ -1,0 +1,72 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud API Keys Endpoints API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Endpoints",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List endpoints",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/dataApps/:dataAppId/endpoints",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Data App."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per page. Default is 100, maximum is 100."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "Pagination token returned from a previous list request to retrieve the next page."
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of all custom SQL-backed endpoints defined within a Data App. Each endpoint entry includes its HTTP method, path, SQL template, parameters, and configuration settings such as caching and pagination."
+        },
+        {
+          "info": {
+            "name": "Create an endpoint",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/dataApps/:dataAppId/endpoints",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Data App."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Defines a new custom SQL-backed API endpoint within a Data App. Specify the HTTP method, URL path, target cluster, SQL template, and any path or query parameters. The endpoint will become available after the Data App is deployed."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

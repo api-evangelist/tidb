@@ -1,0 +1,200 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud API Keys Clusters API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Clusters",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List clusters",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters",
+            "params": [
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per page. Default is 100, maximum is 100."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "Pagination token returned from a previous list request to retrieve the next page."
+              },
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "query",
+                "description": "Filter clusters by project ID."
+              },
+              {
+                "name": "clusterStates",
+                "value": "",
+                "type": "query",
+                "description": "Filter clusters by state. Possible values include CREATING, ACTIVE, PAUSED, RESUMING, DELETING, and UPGRADING."
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of TiDB Cloud Dedicated clusters within the organization or a specific project. Supports filtering by project ID, region, and cluster state. Results are paginated using page tokens."
+        },
+        {
+          "info": {
+            "name": "Create a cluster",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters",
+            "params": [
+              {
+                "name": "validateOnly",
+                "value": "",
+                "type": "query",
+                "description": "If true, validates the request without creating the cluster."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new TiDB Cloud Dedicated cluster within the specified project. The request body must specify the cluster name, cloud provider, region, and component configuration including TiDB, TiKV, and optionally TiFlash node sizes and counts. Use validateOnly to test a request without actually creating the cluster."
+        },
+        {
+          "info": {
+            "name": "Get a cluster",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the TiDB Cloud Dedicated cluster."
+              }
+            ]
+          },
+          "docs": "Returns the full configuration and current status of a specific TiDB Cloud Dedicated cluster, including its nodes, network configuration, version, and operational state."
+        },
+        {
+          "info": {
+            "name": "Update a cluster",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the TiDB Cloud Dedicated cluster."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Modifies the configuration of an existing TiDB Cloud Dedicated cluster. Supports scaling TiDB node count, TiKV storage size, and TiFlash node count. Only fields included in the request body are updated; omitted fields remain unchanged."
+        },
+        {
+          "info": {
+            "name": "Delete a cluster",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the TiDB Cloud Dedicated cluster."
+              }
+            ]
+          },
+          "docs": "Permanently deletes a TiDB Cloud Dedicated cluster and all associated data. This operation is irreversible. The cluster must be in an active or paused state before deletion."
+        },
+        {
+          "info": {
+            "name": "Pause a cluster",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId:pauseCluster",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the TiDB Cloud Dedicated cluster."
+              }
+            ]
+          },
+          "docs": "Pauses a running TiDB Cloud Dedicated cluster, suspending compute resources while retaining data in storage. Paused clusters do not incur compute charges. The cluster must be in an ACTIVE state to be paused."
+        },
+        {
+          "info": {
+            "name": "Resume a cluster",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId:resumeCluster",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the TiDB Cloud Dedicated cluster."
+              }
+            ]
+          },
+          "docs": "Resumes a paused TiDB Cloud Dedicated cluster, restoring compute resources and making the cluster available for connections. The cluster must be in a PAUSED state to be resumed."
+        },
+        {
+          "info": {
+            "name": "Reset root password",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId:resetRootPassword",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the TiDB Cloud Dedicated cluster."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Resets the root password for a TiDB Cloud Dedicated cluster. The new password is specified in the request body. After the reset, existing connections using the old password will be invalidated."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

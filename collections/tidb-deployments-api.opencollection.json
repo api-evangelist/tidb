@@ -1,0 +1,68 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud API Keys Deployments API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Deployments",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List deployments",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/dataApps/:dataAppId/deployments",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Data App."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per page. Default is 100, maximum is 100."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "Pagination token returned from a previous list request to retrieve the next page."
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of deployment records for a Data App. Each deployment captures a versioned snapshot of the Data App's endpoints at the time of deployment, enabling rollback and audit of configuration changes."
+        },
+        {
+          "info": {
+            "name": "Create a deployment",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/dataApps/:dataAppId/deployments",
+            "params": [
+              {
+                "name": "dataAppId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the Data App."
+              }
+            ]
+          },
+          "docs": "Deploys the current configuration of a Data App, making all defined endpoints live. Creates an immutable deployment record that can be referenced for rollback. Endpoints are not publicly accessible until a successful deployment is created."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

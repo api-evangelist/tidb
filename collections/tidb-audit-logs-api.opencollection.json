@@ -1,0 +1,67 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud API Keys Audit Logs API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Audit Logs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List audit logs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/auditLogs",
+            "params": [
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per page. Default is 100, maximum is 100."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "Pagination token returned from a previous list request to retrieve the next page."
+              },
+              {
+                "name": "startTime",
+                "value": "",
+                "type": "query",
+                "description": "Filter audit logs starting from this ISO 8601 datetime."
+              },
+              {
+                "name": "endTime",
+                "value": "",
+                "type": "query",
+                "description": "Filter audit logs up to this ISO 8601 datetime."
+              },
+              {
+                "name": "auditEventTypes",
+                "value": "",
+                "type": "query",
+                "description": "Comma-separated list of event types to filter by."
+              },
+              {
+                "name": "keyword",
+                "value": "",
+                "type": "query",
+                "description": "Search term to filter audit log entries."
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of console audit logs for the organization. Audit logs capture administrative actions such as cluster creation, deletion, and configuration changes, along with the user email, timestamp, and result of each action. Supports filtering by time range, event type, and keyword."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

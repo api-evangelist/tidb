@@ -1,0 +1,54 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud API Keys DDL API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "DDL",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get DDL job history",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/ddl/history",
+            "params": [
+              {
+                "name": "start_job_id",
+                "value": "",
+                "type": "query",
+                "description": "The DDL job ID to start listing from, for pagination."
+              },
+              {
+                "name": "limit",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of DDL job history records to return."
+              }
+            ]
+          },
+          "docs": "Returns the history of DDL (Data Definition Language) jobs executed on the cluster, such as CREATE TABLE, ALTER TABLE, DROP INDEX, and similar schema change operations. Results are paginated using start_job_id and limit parameters. DDL history is useful for auditing schema changes and diagnosing failed schema modifications."
+        },
+        {
+          "info": {
+            "name": "Resign DDL owner",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/ddl/owner/resign"
+          },
+          "docs": "Forces the current TiDB server to resign its role as the DDL owner, triggering a new DDL owner election among all TiDB servers in the cluster. Only one TiDB server is the DDL owner at any time and is responsible for executing schema change jobs. Use this endpoint when the current DDL owner is experiencing issues."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

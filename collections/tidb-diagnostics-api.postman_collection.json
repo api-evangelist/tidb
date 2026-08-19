@@ -1,0 +1,141 @@
+{
+  "item": [
+    {
+      "id": "21cb393e-24d6-4341-a40e-a217f62ab509",
+      "name": "Diagnostics",
+      "description": {
+        "content": "Endpoints for downloading debug information and managing server diagnostics.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "eaed93bd-6ea0-4c48-810c-3376c20119ed",
+          "name": "Download debug info zip",
+          "request": {
+            "name": "Download debug info zip",
+            "description": {
+              "content": "Returns a zip archive containing TiDB debug information useful for diagnosing production issues. The archive includes heap profile, CPU profile, goroutine dump, and configuration information collected over the specified number of seconds. This endpoint is used when filing bug reports or investigating performance problems with PingCAP support.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "debug",
+                "zip"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "seconds",
+                  "value": "10",
+                  "description": "Number of seconds to collect CPU profile and goroutine data before packaging."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/zip"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "99fc9ca4-9c83-41bf-bd03-8aaf1680b8c7",
+              "name": "Debug zip archive returned successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "debug",
+                    "zip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "seconds",
+                      "value": "10"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/zip"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/zip"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://dedicated.tidbapi.com/v1beta1",
+      "key": "baseUrl"
+    }
+  ],
+  "auth": {
+    "type": "digest",
+    "digest": [
+      {
+        "key": "username",
+        "value": "{{digestAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{digestAuthPassword}}"
+      },
+      {
+        "key": "realm",
+        "value": "{{realm}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "e6767c32-3374-424a-8707-9e4d261d949f",
+    "name": "TiDB Cloud API Keys Diagnostics API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud. It supports managing projects, clusters, backups, restores, data imports, billing, and private endpoint connections across both TiDB Cloud Serverless and TiDB Cloud Dedicated tiers. The API uses HTTP Digest Authentication with public and private API keys and returns JSON-formatted responses. Available as both v1beta and the newer v1beta1 versions, it enables automation of database infrastructure lifecycle management at scale.\n\nContact Support:\n Name: TiDB Cloud Support",
+      "type": "text/plain"
+    }
+  }
+}

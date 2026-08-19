@@ -1,0 +1,1966 @@
+{
+  "item": [
+    {
+      "id": "5d9f322a-eb74-42a3-bfb0-005a1d674e7d",
+      "name": "Clusters",
+      "description": {
+        "content": "Operations for creating, listing, updating, and deleting TiDB Cloud Dedicated clusters.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5aa07efd-286c-4123-8062-2d9550f6ae69",
+          "name": "List clusters",
+          "request": {
+            "name": "List clusters",
+            "description": {
+              "content": "Returns a paginated list of TiDB Cloud Dedicated clusters within the organization or a specific project. Supports filtering by project ID, region, and cluster state. Results are paginated using page tokens.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "clusters"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "pageSize",
+                  "value": "100",
+                  "description": "Maximum number of results to return per page. Default is 100, maximum is 100."
+                },
+                {
+                  "disabled": false,
+                  "key": "pageToken",
+                  "value": "<string>",
+                  "description": "Pagination token returned from a previous list request to retrieve the next page."
+                },
+                {
+                  "disabled": false,
+                  "key": "projectId",
+                  "value": "<string>",
+                  "description": "Filter clusters by project ID."
+                },
+                {
+                  "disabled": false,
+                  "key": "clusterStates",
+                  "value": "<string>",
+                  "description": "Filter clusters by state. Possible values include CREATING, ACTIVE, PAUSED, RESUMING, DELETING, and UPGRADING."
+                },
+                {
+                  "disabled": false,
+                  "key": "clusterStates",
+                  "value": "<string>",
+                  "description": "Filter clusters by state. Possible values include CREATING, ACTIVE, PAUSED, RESUMING, DELETING, and UPGRADING."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "100c2d77-aa3c-4e1d-9c75-5ad02616197b",
+              "name": "A paginated list of clusters.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "100"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "projectId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "clusterStates",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "clusterStates",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"clusters\": [\n    {\n      \"clusterId\": \"string\",\n      \"displayName\": \"string\",\n      \"clusterType\": \"DEDICATED\",\n      \"cloudProvider\": \"AZURE\",\n      \"regionId\": \"string\",\n      \"tidbVersion\": \"string\",\n      \"state\": \"UPGRADING\",\n      \"createTime\": \"1991-11-07T14:27:01.501Z\",\n      \"updateTime\": \"1963-06-05T22:21:25.875Z\",\n      \"components\": {\n        \"tidb\": {\n          \"nodeSize\": \"string\",\n          \"nodeQuantity\": 4467\n        },\n        \"tikv\": {\n          \"nodeSize\": \"string\",\n          \"nodeQuantity\": 1336,\n          \"storageSize\": 9239\n        },\n        \"tiflash\": {\n          \"nodeSize\": \"string\",\n          \"nodeQuantity\": 3046,\n          \"storageSize\": 464\n        }\n      },\n      \"connectionStrings\": {\n        \"defaultUser\": \"string\",\n        \"standard\": {\n          \"host\": \"string\",\n          \"port\": 2069\n        },\n        \"vpcPeering\": {\n          \"host\": \"string\",\n          \"port\": 6005\n        },\n        \"privateEndpoint\": {\n          \"host\": \"string\",\n          \"port\": 2022\n        }\n      }\n    },\n    {\n      \"clusterId\": \"string\",\n      \"displayName\": \"string\",\n      \"clusterType\": \"DEDICATED\",\n      \"cloudProvider\": \"GCP\",\n      \"regionId\": \"string\",\n      \"tidbVersion\": \"string\",\n      \"state\": \"UPGRADING\",\n      \"createTime\": \"1972-06-14T09:02:10.160Z\",\n      \"updateTime\": \"2022-01-25T04:18:22.588Z\",\n      \"components\": {\n        \"tidb\": {\n          \"nodeSize\": \"string\",\n          \"nodeQuantity\": 7051\n        },\n        \"tikv\": {\n          \"nodeSize\": \"string\",\n          \"nodeQuantity\": 4880,\n          \"storageSize\": 9440\n        },\n        \"tiflash\": {\n          \"nodeSize\": \"string\",\n          \"nodeQuantity\": 1044,\n          \"storageSize\": 1783\n        }\n      },\n      \"connectionStrings\": {\n        \"defaultUser\": \"string\",\n        \"standard\": {\n          \"host\": \"string\",\n          \"port\": 6185\n        },\n        \"vpcPeering\": {\n          \"host\": \"string\",\n          \"port\": 8301\n        },\n        \"privateEndpoint\": {\n          \"host\": \"string\",\n          \"port\": 2372\n        }\n      }\n    }\n  ],\n  \"nextPageToken\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c78d8993-5aea-4cb6-a85b-ebdcb18c9887",
+              "name": "Authentication failed. Check your API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "100"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "projectId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "clusterStates",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "clusterStates",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4573,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "015301d0-7918-48a6-b19e-f784e9e707a5",
+              "name": "Rate limit exceeded. The API allows 100 requests per minute.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "pageSize",
+                      "value": "100"
+                    },
+                    {
+                      "key": "pageToken",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "projectId",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "clusterStates",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "clusterStates",
+                      "value": "<string>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4573,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "3e795953-7e25-447d-9bde-ce24f56f75dc",
+          "name": "Create a cluster",
+          "request": {
+            "name": "Create a cluster",
+            "description": {
+              "content": "Creates a new TiDB Cloud Dedicated cluster within the specified project. The request body must specify the cluster name, cloud provider, region, and component configuration including TiDB, TiKV, and optionally TiFlash node sizes and counts. Use validateOnly to test a request without actually creating the cluster.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "clusters"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "validateOnly",
+                  "value": "<boolean>",
+                  "description": "If true, validates the request without creating the cluster."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"displayName\": \"<string>\",\n  \"cloudProvider\": \"<string>\",\n  \"regionId\": \"<string>\",\n  \"components\": {\n    \"tidb\": {\n      \"nodeSize\": \"<string>\",\n      \"nodeQuantity\": \"<integer>\"\n    },\n    \"tikv\": {\n      \"nodeSize\": \"<string>\",\n      \"nodeQuantity\": \"<integer>\",\n      \"storageSize\": \"<integer>\"\n    },\n    \"tiflash\": {\n      \"nodeSize\": \"<string>\",\n      \"nodeQuantity\": \"<integer>\",\n      \"storageSize\": \"<integer>\"\n    }\n  },\n  \"projectId\": \"<string>\",\n  \"rootPassword\": \"<string>\",\n  \"port\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "1ec2be5e-20f1-45ae-a33d-23c51af0c491",
+              "name": "Cluster created successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "validateOnly",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"displayName\": \"<string>\",\n  \"cloudProvider\": \"<string>\",\n  \"regionId\": \"<string>\",\n  \"components\": {\n    \"tidb\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 4183\n    },\n    \"tikv\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 7110,\n      \"storageSize\": 810\n    },\n    \"tiflash\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 3023,\n      \"storageSize\": 124\n    }\n  },\n  \"projectId\": \"<string>\",\n  \"rootPassword\": \"<string>\",\n  \"port\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"clusterId\": \"string\",\n  \"displayName\": \"string\",\n  \"clusterType\": \"DEDICATED\",\n  \"cloudProvider\": \"AZURE\",\n  \"regionId\": \"string\",\n  \"tidbVersion\": \"string\",\n  \"state\": \"DELETING\",\n  \"createTime\": \"1971-04-18T23:59:24.123Z\",\n  \"updateTime\": \"2019-03-21T05:25:20.276Z\",\n  \"components\": {\n    \"tidb\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 2028\n    },\n    \"tikv\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 5414,\n      \"storageSize\": 5334\n    },\n    \"tiflash\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 685,\n      \"storageSize\": 7601\n    }\n  },\n  \"connectionStrings\": {\n    \"defaultUser\": \"string\",\n    \"standard\": {\n      \"host\": \"string\",\n      \"port\": 7742\n    },\n    \"vpcPeering\": {\n      \"host\": \"string\",\n      \"port\": 4982\n    },\n    \"privateEndpoint\": {\n      \"host\": \"string\",\n      \"port\": 1443\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d925955d-9f8c-4e9a-8918-76b68eff05cc",
+              "name": "The request body or parameters are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "validateOnly",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"displayName\": \"<string>\",\n  \"cloudProvider\": \"<string>\",\n  \"regionId\": \"<string>\",\n  \"components\": {\n    \"tidb\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 4183\n    },\n    \"tikv\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 7110,\n      \"storageSize\": 810\n    },\n    \"tiflash\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 3023,\n      \"storageSize\": 124\n    }\n  },\n  \"projectId\": \"<string>\",\n  \"rootPassword\": \"<string>\",\n  \"port\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4573,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "12dc3488-0575-49d7-84bd-7211ec05f0ce",
+              "name": "Authentication failed. Check your API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "validateOnly",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"displayName\": \"<string>\",\n  \"cloudProvider\": \"<string>\",\n  \"regionId\": \"<string>\",\n  \"components\": {\n    \"tidb\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 4183\n    },\n    \"tikv\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 7110,\n      \"storageSize\": 810\n    },\n    \"tiflash\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 3023,\n      \"storageSize\": 124\n    }\n  },\n  \"projectId\": \"<string>\",\n  \"rootPassword\": \"<string>\",\n  \"port\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4573,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a8b9574e-3435-480a-984f-aa18bd054a25",
+              "name": "Rate limit exceeded. The API allows 100 requests per minute.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "validateOnly",
+                      "value": "<boolean>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"displayName\": \"<string>\",\n  \"cloudProvider\": \"<string>\",\n  \"regionId\": \"<string>\",\n  \"components\": {\n    \"tidb\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 4183\n    },\n    \"tikv\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 7110,\n      \"storageSize\": 810\n    },\n    \"tiflash\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 3023,\n      \"storageSize\": 124\n    }\n  },\n  \"projectId\": \"<string>\",\n  \"rootPassword\": \"<string>\",\n  \"port\": \"<integer>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4573,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f419d96d-dbaf-4bbe-8d72-583891a689cb",
+          "name": "Get a cluster",
+          "request": {
+            "name": "Get a cluster",
+            "description": {
+              "content": "Returns the full configuration and current status of a specific TiDB Cloud Dedicated cluster, including its nodes, network configuration, version, and operational state.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "clusters",
+                ":clusterId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "clusterId",
+                  "description": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "8974c6e2-24fc-4b68-83d9-405ff5c20ce9",
+              "name": "Cluster details retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "clusterId",
+                      "description": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"clusterId\": \"string\",\n  \"displayName\": \"string\",\n  \"clusterType\": \"DEDICATED\",\n  \"cloudProvider\": \"AZURE\",\n  \"regionId\": \"string\",\n  \"tidbVersion\": \"string\",\n  \"state\": \"DELETING\",\n  \"createTime\": \"1971-04-18T23:59:24.123Z\",\n  \"updateTime\": \"2019-03-21T05:25:20.276Z\",\n  \"components\": {\n    \"tidb\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 2028\n    },\n    \"tikv\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 5414,\n      \"storageSize\": 5334\n    },\n    \"tiflash\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 685,\n      \"storageSize\": 7601\n    }\n  },\n  \"connectionStrings\": {\n    \"defaultUser\": \"string\",\n    \"standard\": {\n      \"host\": \"string\",\n      \"port\": 7742\n    },\n    \"vpcPeering\": {\n      \"host\": \"string\",\n      \"port\": 4982\n    },\n    \"privateEndpoint\": {\n      \"host\": \"string\",\n      \"port\": 1443\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6b35467a-eafe-4e65-b280-6087523b8e83",
+              "name": "Authentication failed. Check your API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "clusterId",
+                      "description": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4573,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f6de6cc1-1547-45ed-a2d7-a8b7c50aa277",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "clusterId",
+                      "description": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4573,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "4a0c3e78-5330-4153-a39c-0b20396a86da",
+          "name": "Update a cluster",
+          "request": {
+            "name": "Update a cluster",
+            "description": {
+              "content": "Modifies the configuration of an existing TiDB Cloud Dedicated cluster. Supports scaling TiDB node count, TiKV storage size, and TiFlash node count. Only fields included in the request body are updated; omitted fields remain unchanged.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "clusters",
+                ":clusterId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "clusterId",
+                  "description": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PATCH",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"displayName\": \"<string>\",\n  \"components\": {\n    \"tidb\": {\n      \"nodeSize\": \"<string>\",\n      \"nodeQuantity\": \"<integer>\"\n    },\n    \"tikv\": {\n      \"nodeSize\": \"<string>\",\n      \"nodeQuantity\": \"<integer>\",\n      \"storageSize\": \"<integer>\"\n    },\n    \"tiflash\": {\n      \"nodeSize\": \"<string>\",\n      \"nodeQuantity\": \"<integer>\",\n      \"storageSize\": \"<integer>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "0720d064-d3b1-476f-a46f-6e606d7315cd",
+              "name": "Cluster updated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "clusterId",
+                      "description": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"displayName\": \"<string>\",\n  \"components\": {\n    \"tidb\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 2422\n    },\n    \"tikv\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 1302,\n      \"storageSize\": 2808\n    },\n    \"tiflash\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 1559,\n      \"storageSize\": 5564\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"clusterId\": \"string\",\n  \"displayName\": \"string\",\n  \"clusterType\": \"DEDICATED\",\n  \"cloudProvider\": \"AZURE\",\n  \"regionId\": \"string\",\n  \"tidbVersion\": \"string\",\n  \"state\": \"DELETING\",\n  \"createTime\": \"1971-04-18T23:59:24.123Z\",\n  \"updateTime\": \"2019-03-21T05:25:20.276Z\",\n  \"components\": {\n    \"tidb\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 2028\n    },\n    \"tikv\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 5414,\n      \"storageSize\": 5334\n    },\n    \"tiflash\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 685,\n      \"storageSize\": 7601\n    }\n  },\n  \"connectionStrings\": {\n    \"defaultUser\": \"string\",\n    \"standard\": {\n      \"host\": \"string\",\n      \"port\": 7742\n    },\n    \"vpcPeering\": {\n      \"host\": \"string\",\n      \"port\": 4982\n    },\n    \"privateEndpoint\": {\n      \"host\": \"string\",\n      \"port\": 1443\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "002b81a8-da7e-4931-8690-5cad71aa3550",
+              "name": "The request body or parameters are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "clusterId",
+                      "description": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"displayName\": \"<string>\",\n  \"components\": {\n    \"tidb\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 2422\n    },\n    \"tikv\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 1302,\n      \"storageSize\": 2808\n    },\n    \"tiflash\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 1559,\n      \"storageSize\": 5564\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4573,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d6bb961f-ce50-4015-84a3-f4250b10c3c3",
+              "name": "Authentication failed. Check your API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "clusterId",
+                      "description": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"displayName\": \"<string>\",\n  \"components\": {\n    \"tidb\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 2422\n    },\n    \"tikv\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 1302,\n      \"storageSize\": 2808\n    },\n    \"tiflash\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 1559,\n      \"storageSize\": 5564\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4573,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "900c8236-5fb4-493d-9d99-03a44f9a7d90",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "clusterId",
+                      "description": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PATCH",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"displayName\": \"<string>\",\n  \"components\": {\n    \"tidb\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 2422\n    },\n    \"tikv\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 1302,\n      \"storageSize\": 2808\n    },\n    \"tiflash\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 1559,\n      \"storageSize\": 5564\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4573,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "f58633bb-43fe-46fe-9993-39379accf305",
+          "name": "Delete a cluster",
+          "request": {
+            "name": "Delete a cluster",
+            "description": {
+              "content": "Permanently deletes a TiDB Cloud Dedicated cluster and all associated data. This operation is irreversible. The cluster must be in an active or paused state before deletion.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "clusters",
+                ":clusterId"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "clusterId",
+                  "description": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "DELETE",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "b1e2cd13-4795-44e6-8de3-1b3df9bdf630",
+              "name": "Cluster deletion initiated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "clusterId",
+                      "description": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "bf6f20f2-cce5-4278-a7a7-0f1d4239062a",
+              "name": "Authentication failed. Check your API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "clusterId",
+                      "description": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4573,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1408291a-82bf-4c31-bfdb-711d1f527384",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    ":clusterId"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "clusterId",
+                      "description": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "DELETE",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4573,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "70a7cecd-2bcb-473c-a5f9-e73248b5be6a",
+          "name": "Pause a cluster",
+          "request": {
+            "name": "Pause a cluster",
+            "description": {
+              "content": "Pauses a running TiDB Cloud Dedicated cluster, suspending compute resources while retaining data in storage. Paused clusters do not incur compute charges. The cluster must be in an ACTIVE state to be paused.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "clusters",
+                "{{clusterId}}:pauseCluster"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "fa18bcdc-1e36-42b9-b864-56d84b085711",
+              "name": "Cluster pause initiated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    "{{clusterId}}:pauseCluster"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"clusterId\": \"string\",\n  \"displayName\": \"string\",\n  \"clusterType\": \"DEDICATED\",\n  \"cloudProvider\": \"AZURE\",\n  \"regionId\": \"string\",\n  \"tidbVersion\": \"string\",\n  \"state\": \"DELETING\",\n  \"createTime\": \"1971-04-18T23:59:24.123Z\",\n  \"updateTime\": \"2019-03-21T05:25:20.276Z\",\n  \"components\": {\n    \"tidb\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 2028\n    },\n    \"tikv\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 5414,\n      \"storageSize\": 5334\n    },\n    \"tiflash\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 685,\n      \"storageSize\": 7601\n    }\n  },\n  \"connectionStrings\": {\n    \"defaultUser\": \"string\",\n    \"standard\": {\n      \"host\": \"string\",\n      \"port\": 7742\n    },\n    \"vpcPeering\": {\n      \"host\": \"string\",\n      \"port\": 4982\n    },\n    \"privateEndpoint\": {\n      \"host\": \"string\",\n      \"port\": 1443\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "407e220b-1fdd-4783-91f6-a0ab22b5c57c",
+              "name": "The request body or parameters are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    "{{clusterId}}:pauseCluster"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4573,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b4fb0128-c1c3-42e1-9010-0e0134169040",
+              "name": "Authentication failed. Check your API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    "{{clusterId}}:pauseCluster"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4573,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ee53b7e7-878b-4a18-acd6-b1783ea7ad68",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    "{{clusterId}}:pauseCluster"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4573,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5c07318b-54f6-44af-a5a5-5f2fbf5f369f",
+          "name": "Resume a cluster",
+          "request": {
+            "name": "Resume a cluster",
+            "description": {
+              "content": "Resumes a paused TiDB Cloud Dedicated cluster, restoring compute resources and making the cluster available for connections. The cluster must be in a PAUSED state to be resumed.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "clusters",
+                "{{clusterId}}:resumeCluster"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "48963052-ede7-4c71-a550-cb28f1e01d27",
+              "name": "Cluster resume initiated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    "{{clusterId}}:resumeCluster"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"clusterId\": \"string\",\n  \"displayName\": \"string\",\n  \"clusterType\": \"DEDICATED\",\n  \"cloudProvider\": \"AZURE\",\n  \"regionId\": \"string\",\n  \"tidbVersion\": \"string\",\n  \"state\": \"DELETING\",\n  \"createTime\": \"1971-04-18T23:59:24.123Z\",\n  \"updateTime\": \"2019-03-21T05:25:20.276Z\",\n  \"components\": {\n    \"tidb\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 2028\n    },\n    \"tikv\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 5414,\n      \"storageSize\": 5334\n    },\n    \"tiflash\": {\n      \"nodeSize\": \"string\",\n      \"nodeQuantity\": 685,\n      \"storageSize\": 7601\n    }\n  },\n  \"connectionStrings\": {\n    \"defaultUser\": \"string\",\n    \"standard\": {\n      \"host\": \"string\",\n      \"port\": 7742\n    },\n    \"vpcPeering\": {\n      \"host\": \"string\",\n      \"port\": 4982\n    },\n    \"privateEndpoint\": {\n      \"host\": \"string\",\n      \"port\": 1443\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dc453f33-58fc-49f3-936b-c435f6a3f4ed",
+              "name": "The request body or parameters are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    "{{clusterId}}:resumeCluster"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4573,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "880a6887-a735-4700-80d3-78f7f969dd58",
+              "name": "Authentication failed. Check your API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    "{{clusterId}}:resumeCluster"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4573,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1a530868-ed9b-49d2-a038-0fd41c150b64",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    "{{clusterId}}:resumeCluster"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4573,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "62420be8-eb9f-4399-93ee-260eae2b8bbd",
+          "name": "Reset root password",
+          "request": {
+            "name": "Reset root password",
+            "description": {
+              "content": "Resets the root password for a TiDB Cloud Dedicated cluster. The new password is specified in the request body. After the reset, existing connections using the old password will be invalidated.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "clusters",
+                "{{clusterId}}:resetRootPassword"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"password\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "605ccf8c-c2df-4818-accd-948f0a280ad6",
+              "name": "Root password reset successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    "{{clusterId}}:resetRootPassword"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"password\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "de83d179-cecf-4efe-95cd-21f178cd5f67",
+              "name": "The request body or parameters are invalid.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    "{{clusterId}}:resetRootPassword"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"password\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4573,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "95a663fd-c2f9-4a30-b328-69c899f3751e",
+              "name": "Authentication failed. Check your API key credentials.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    "{{clusterId}}:resetRootPassword"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"password\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4573,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a4b24ccf-a231-4389-9319-d9fc9ea75236",
+              "name": "The requested resource was not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "clusters",
+                    "{{clusterId}}:resetRootPassword"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: digest",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Digest <credentials>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"password\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"code\": 4573,\n  \"status\": \"string\",\n  \"error\": \"string\",\n  \"msgPrefix\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://dedicated.tidbapi.com/v1beta1",
+      "key": "baseUrl"
+    },
+    {
+      "disabled": false,
+      "description": {
+        "content": "(Required) The unique identifier of the TiDB Cloud Dedicated cluster.",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "<string>",
+      "key": "clusterId"
+    }
+  ],
+  "auth": {
+    "type": "digest",
+    "digest": [
+      {
+        "key": "username",
+        "value": "{{digestAuthUsername}}"
+      },
+      {
+        "key": "password",
+        "value": "{{digestAuthPassword}}"
+      },
+      {
+        "key": "realm",
+        "value": "{{realm}}"
+      }
+    ]
+  },
+  "info": {
+    "_postman_id": "31ffa22a-28e4-43e9-ba53-109df4afa179",
+    "name": "TiDB Cloud API Keys Clusters API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud. It supports managing projects, clusters, backups, restores, data imports, billing, and private endpoint connections across both TiDB Cloud Serverless and TiDB Cloud Dedicated tiers. The API uses HTTP Digest Authentication with public and private API keys and returns JSON-formatted responses. Available as both v1beta and the newer v1beta1 versions, it enables automation of database infrastructure lifecycle management at scale.\n\nContact Support:\n Name: TiDB Cloud Support",
+      "type": "text/plain"
+    }
+  }
+}

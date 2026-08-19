@@ -1,0 +1,184 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud API Keys Regions API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Regions",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List regions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/regions",
+            "params": [
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per page. Default is 100, maximum is 100."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "Pagination token returned from a previous list request to retrieve the next page."
+              }
+            ]
+          },
+          "docs": "Returns a list of all available cloud provider regions where TiDB Cloud Dedicated clusters can be deployed. Each region includes cloud provider, region identifier, display name, and availability status."
+        },
+        {
+          "info": {
+            "name": "Get a region",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/regions/:regionId",
+            "params": [
+              {
+                "name": "regionId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the cloud region."
+              }
+            ]
+          },
+          "docs": "Returns detailed information about a specific cloud region, including its cloud provider, display name, geographic location, and support for specific TiDB Cloud features."
+        },
+        {
+          "info": {
+            "name": "List node specifications",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/regions/:regionId/nodeSpecs",
+            "params": [
+              {
+                "name": "regionId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the cloud region."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per page. Default is 100, maximum is 100."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "Pagination token returned from a previous list request to retrieve the next page."
+              }
+            ]
+          },
+          "docs": "Returns all available node specifications for a given region, including TiDB, TiKV, and TiFlash component types. Each specification includes CPU, memory, and storage details. Use this endpoint to determine valid node configurations before creating or scaling a cluster."
+        },
+        {
+          "info": {
+            "name": "List all regions metadata",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/regions/meta"
+          },
+          "docs": "Returns the metadata for all TiKV regions known to this TiDB instance. Each region entry includes region ID, start and end keys, epoch information, and peer assignments. This endpoint is primarily used for cluster topology inspection and debugging region distribution issues."
+        },
+        {
+          "info": {
+            "name": "Get hot regions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/regions/hot"
+          },
+          "docs": "Returns the top hot read and write regions for each TiKV store, along with the associated table and index names. This endpoint is used for identifying hotspot issues in data access patterns, which can cause uneven load distribution across TiKV nodes."
+        },
+        {
+          "info": {
+            "name": "Get a region",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/regions/:regionID",
+            "params": [
+              {
+                "name": "regionID",
+                "value": "",
+                "type": "path",
+                "description": "The numeric TiKV region ID."
+              }
+            ]
+          },
+          "docs": "Returns detailed information about a specific TiKV region identified by its numeric region ID. Includes peer locations, epoch, and the associated frame information mapping the region to TiDB tables and indexes."
+        },
+        {
+          "info": {
+            "name": "Get table regions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/tables/:db/:table/regions",
+            "params": [
+              {
+                "name": "db",
+                "value": "",
+                "type": "path",
+                "description": "The database name."
+              },
+              {
+                "name": "table",
+                "value": "",
+                "type": "path",
+                "description": "The table name within the specified database."
+              }
+            ]
+          },
+          "docs": "Returns the list of TiKV regions that store data for a specific TiDB table. Each region entry includes the region ID, start key, end key, leader peer, and follower peers. Use this endpoint to understand the physical data layout of a table across TiKV stores."
+        },
+        {
+          "info": {
+            "name": "Scatter table regions",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/tables/:db/:table/scatter",
+            "params": [
+              {
+                "name": "db",
+                "value": "",
+                "type": "path",
+                "description": "The database name."
+              },
+              {
+                "name": "table",
+                "value": "",
+                "type": "path",
+                "description": "The table name within the specified database."
+              }
+            ]
+          },
+          "docs": "Initiates region scatter for the specified table, redistributing its TiKV regions across stores to improve data balance. This is typically used after bulk data loads that may have caused uneven region distribution."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

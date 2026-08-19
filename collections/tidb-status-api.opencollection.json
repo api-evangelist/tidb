@@ -1,0 +1,62 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud API Keys Status API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Status",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get server status",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/status"
+          },
+          "docs": "Returns the current operational status of the TiDB server instance, including the number of active connections, the TiDB version string, and the git commit hash of the binary. This endpoint is commonly used by load balancers and health check systems to verify that the TiDB process is running and accepting connections."
+        },
+        {
+          "info": {
+            "name": "Get Prometheus metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/metrics"
+          },
+          "docs": "Returns all Prometheus-format performance metrics for the TiDB server instance. This endpoint is consumed by Prometheus scrape jobs to collect TiDB-specific metrics including query latency, error rates, connection pool utilization, and internal component performance counters."
+        },
+        {
+          "info": {
+            "name": "Get server information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/info"
+          },
+          "docs": "Returns detailed information about the TiDB server instance including version, IP address, listening port, status port, and the git hash of the binary. This endpoint is useful for service discovery and identifying specific nodes in a TiDB cluster."
+        },
+        {
+          "info": {
+            "name": "Get all cluster server information",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/info/all"
+          },
+          "docs": "Returns information about all TiDB server instances in the cluster as registered with the Placement Driver (PD). This provides a cluster-wide view of all running TiDB nodes and their connection endpoints."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

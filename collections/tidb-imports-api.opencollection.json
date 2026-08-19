@@ -1,0 +1,122 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud API Keys Imports API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Imports",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List import tasks",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId/imports",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the TiDB Cloud Dedicated cluster."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per page. Default is 100, maximum is 100."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "Pagination token returned from a previous list request to retrieve the next page."
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of data import tasks for a specific TiDB Cloud Dedicated cluster. Each import task includes status, source configuration, progress information, and timestamps."
+        },
+        {
+          "info": {
+            "name": "Create an import task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId/imports",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the TiDB Cloud Dedicated cluster."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new data import task for a specific TiDB Cloud Dedicated cluster. Supports importing data from AWS S3, Google Cloud Storage, and local file uploads in CSV, SQL, Parquet, and Aurora Snapshot formats. Specify the source type, file format, target database, and any necessary access credentials."
+        },
+        {
+          "info": {
+            "name": "Get an import task",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId/imports/:importId",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the TiDB Cloud Dedicated cluster."
+              },
+              {
+                "name": "importId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the import task."
+              }
+            ]
+          },
+          "docs": "Returns the current status and configuration details of a specific data import task. Includes progress percentage, estimated completion time, error messages if any, and source file information."
+        },
+        {
+          "info": {
+            "name": "Cancel an import task",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/clusters/:clusterId/imports/:importId:cancel",
+            "params": [
+              {
+                "name": "clusterId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the TiDB Cloud Dedicated cluster."
+              },
+              {
+                "name": "importId",
+                "value": "",
+                "type": "path",
+                "description": "The unique identifier of the import task."
+              }
+            ]
+          },
+          "docs": "Cancels an in-progress data import task for a specific cluster. Only import tasks in a RUNNING or PENDING state can be cancelled. Cancelled tasks cannot be resumed; a new import task must be created."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

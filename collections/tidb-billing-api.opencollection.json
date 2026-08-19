@@ -1,0 +1,71 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud API Keys Billing API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Billing",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get monthly bill",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/bills/:billedMonth",
+            "params": [
+              {
+                "name": "billedMonth",
+                "value": "",
+                "type": "path",
+                "description": "The billing month in YYYY-MM format (e.g., 2025-03)."
+              }
+            ]
+          },
+          "docs": "Returns the organization's billing summary for the specified month in YYYY-MM format. Includes an overview of total charges, a breakdown by project, and a breakdown by service type such as compute, storage, and data transfer."
+        },
+        {
+          "info": {
+            "name": "Get monthly bill with daily details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/billsDetails/:billedMonth",
+            "params": [
+              {
+                "name": "billedMonth",
+                "value": "",
+                "type": "path",
+                "description": "The billing month in YYYY-MM format (e.g., 2025-03)."
+              }
+            ]
+          },
+          "docs": "Returns the organization's detailed billing information for the specified month, broken down by daily usage per project, cluster, and service path. Includes credits applied, discounts, running totals, and total costs."
+        },
+        {
+          "info": {
+            "name": "Query cost explorer",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/billsCostExplorer",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Returns usage cost details based on a custom cost explorer query. Supports filtering and grouping by project, cluster, service, region, and date range. Use this endpoint to build custom billing dashboards and spending trend reports."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

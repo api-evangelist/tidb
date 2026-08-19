@@ -1,0 +1,125 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud API Keys API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "API Keys",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List API keys",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/apikeys",
+            "params": [
+              {
+                "name": "projectId",
+                "value": "",
+                "type": "query",
+                "description": "Filter API keys by project ID. Omit for organization-level keys."
+              },
+              {
+                "name": "pageSize",
+                "value": "",
+                "type": "query",
+                "description": "Maximum number of results to return per page. Default is 100, maximum is 100."
+              },
+              {
+                "name": "pageToken",
+                "value": "",
+                "type": "query",
+                "description": "Pagination token returned from a previous list request to retrieve the next page."
+              }
+            ]
+          },
+          "docs": "Returns a paginated list of API keys for the organization or a specific project. Each key entry includes its display name, access key, role, and creation time. Secret keys are not returned after initial creation."
+        },
+        {
+          "info": {
+            "name": "Create an API key",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://dedicated.tidbapi.com/v1beta1/apikeys",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new API key with the specified display name, project scope, and role. The response includes both the public access key and the private secret key. The secret key is only returned at creation time and cannot be retrieved afterwards; store it securely."
+        },
+        {
+          "info": {
+            "name": "Get an API key",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/apikeys/:accessKey",
+            "params": [
+              {
+                "name": "accessKey",
+                "value": "",
+                "type": "path",
+                "description": "The public access key portion of the API key pair."
+              }
+            ]
+          },
+          "docs": "Returns the metadata and permissions for a specific API key identified by its public access key. The private secret key is not returned."
+        },
+        {
+          "info": {
+            "name": "Update an API key",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://dedicated.tidbapi.com/v1beta1/apikeys/:accessKey",
+            "params": [
+              {
+                "name": "accessKey",
+                "value": "",
+                "type": "path",
+                "description": "The public access key portion of the API key pair."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Updates the display name or role of an existing API key. Only the fields provided in the request body are modified. The access key and secret key remain unchanged."
+        },
+        {
+          "info": {
+            "name": "Delete an API key",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://dedicated.tidbapi.com/v1beta1/apikeys/:accessKey",
+            "params": [
+              {
+                "name": "accessKey",
+                "value": "",
+                "type": "path",
+                "description": "The public access key portion of the API key pair."
+              }
+            ]
+          },
+          "docs": "Permanently deletes an API key. Once deleted, any requests authenticated with this key will be rejected. This action cannot be undone."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

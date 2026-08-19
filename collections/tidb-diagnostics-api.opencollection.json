@@ -1,0 +1,37 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "TiDB Cloud API Keys Diagnostics API",
+    "version": "v1beta1"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Diagnostics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Download debug info zip",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://dedicated.tidbapi.com/v1beta1/debug/zip",
+            "params": [
+              {
+                "name": "seconds",
+                "value": "",
+                "type": "query",
+                "description": "Number of seconds to collect CPU profile and goroutine data before packaging."
+              }
+            ]
+          },
+          "docs": "Returns a zip archive containing TiDB debug information useful for diagnosing production issues. The archive includes heap profile, CPU profile, goroutine dump, and configuration information collected over the specified number of seconds. This endpoint is used when filing bug reports or investigating performance problems with PingCAP support."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
