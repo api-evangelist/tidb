@@ -22,6 +22,8 @@ apis:
   humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
   baseURL: https://api.tidbcloud.com
   tags:
+  - APIKeys
+  tags_raw:
   - API Keys
   properties:
   - type: OpenAPI
@@ -136,6 +138,8 @@ apis:
   humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
   baseURL: https://api.tidbcloud.com
   tags:
+  - Cluster
+  tags_raw:
   - Clusters
   properties:
   - type: OpenAPI
@@ -306,6 +310,8 @@ apis:
   humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
   baseURL: https://api.tidbcloud.com
   tags:
+  - Deployment
+  tags_raw:
   - Deployments
   properties:
   - type: OpenAPI
@@ -362,7 +368,8 @@ apis:
     Operations for creating, listing, updating, testing, and deleting custom SQL-backed API endpoints.
   humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
   baseURL: https://api.tidbcloud.com
-  tags:
+  tags: []
+  tags_raw:
   - Endpoints
   properties:
   - type: OpenAPI
@@ -419,6 +426,8 @@ apis:
   humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
   baseURL: https://api.tidbcloud.com
   tags:
+  - Integration
+  tags_raw:
   - Integrations
   properties:
   - type: OpenAPI
