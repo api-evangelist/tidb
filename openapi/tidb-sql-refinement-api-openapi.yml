@@ -1,19 +1,19 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: TiDB Cloud API Keys SQL Refinement API
-  description: The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud. It supports managing projects, clusters, backups, restores, data imports, billing, and private endpoint connections across both TiDB Cloud Serverless and TiDB Cloud Dedicated tiers. The API uses HTTP Digest Authentication with public and private API keys and returns JSON-formatted responses. Available as both v1beta and the newer v1beta1 versions, it enables automation of database infrastructure lifecycle management at scale.
-  version: v1beta1
+  title: TiDB Cloud Chat2Query SQL Refinement API
+  description: The TiDB Cloud Chat2Query API is an AI-powered interface that enables developers to generate and execute SQL statements against TiDB Cloud clusters using natural language instructions. It is exposed as a special Data App within TiDB Cloud, authenticated via API keys scoped to the Chat2Query Data App. The API provides endpoints for generating data summaries of database schemas, translating natural language prompts into SQL via the v2 and v3 chat2data endpoints, refining existing queries, managing multi-round chat sessions, and suggesting questions for data exploration. It is intended for building AI-assisted data exploration tools, reporting interfaces, and applications that need to query structured data without requiring users to write SQL directly. The API uses HTTP Digest Authentication and is rate limited to 100 requests per day per Data App.
+  version: v3
   contact:
     name: TiDB Cloud Support
-    url: https://docs.pingcap.com/tidbcloud/api-overview/
+    url: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
   termsOfService: https://www.pingcap.com/legal/privacy-policy/
 servers:
-- url: https://dedicated.tidbapi.com/v1beta1
-  description: Dedicated Cluster API Server
-- url: https://iam.tidbapi.com/v1beta1
-  description: IAM API Server
-- url: https://billing.tidbapi.com/v1beta1
-  description: Billing API Server
+- url: https://data.tidbcloud.com/api/v1beta/app/{dataAppId}/endpoint
+  description: Chat2Query Data App Endpoint Server
+  variables:
+    dataAppId:
+      description: The Chat2Query Data App ID assigned by TiDB Cloud.
+      default: dataapp_default
 security:
 - digestAuth: []
 tags:
@@ -48,6 +48,37 @@ paths:
           $ref: '#/components/responses/RateLimitExceeded'
 components:
   schemas:
+    Chat2DataResult:
+      type: object
+      description: The result of a Chat2Data SQL generation and execution.
+      properties:
+        question_id:
+          type: string
+          description: A unique identifier for this question and result pair.
+        sql:
+          type: string
+          description: The SQL statement that was generated from the natural language question.
+        rows:
+          type: array
+          description: The query result rows returned by executing the generated SQL.
+          items:
+            type: object
+            additionalProperties: true
+        columns:
+          type: array
+          description: The column definitions for the query result.
+          items:
+            $ref: '#/components/schemas/ColumnDefinition'
+    ErrorResponse:
+      type: object
+      description: Standard error response returned when an API request fails.
+      properties:
+        code:
+          type: integer
+          description: The error code.
+        msg:
+          type: string
+          description: A human-readable error message describing the failure.
     RefineSqlRequest:
       type: object
       description: Request body for refining a previously generated SQL query.
@@ -73,27 +104,6 @@ components:
         task:
           type: string
           description: A description of how to refine the SQL query.
-    Chat2DataResult:
-      type: object
-      description: The result of a Chat2Data SQL generation and execution.
-      properties:
-        question_id:
-          type: string
-          description: A unique identifier for this question and result pair.
-        sql:
-          type: string
-          description: The SQL statement that was generated from the natural language question.
-        rows:
-          type: array
-          description: The query result rows returned by executing the generated SQL.
-          items:
-            type: object
-            additionalProperties: true
-        columns:
-          type: array
-          description: The column definitions for the query result.
-          items:
-            $ref: '#/components/schemas/ColumnDefinition'
     ColumnDefinition:
       type: object
       description: A column definition in a query result set.
@@ -107,16 +117,6 @@ components:
         nullable:
           type: boolean
           description: Whether the column can contain NULL values.
-    ErrorResponse:
-      type: object
-      description: Standard error response returned when an API request fails.
-      properties:
-        code:
-          type: integer
-          description: The error code.
-        msg:
-          type: string
-          description: A human-readable error message describing the failure.
     Chat2DataResponse:
       type: object
       description: API response wrapper for a Chat2Data operation.
@@ -136,14 +136,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: The request body or parameters are invalid.
+    RateLimitExceeded:
+      description: Rate limit exceeded. The Chat2Query API allows 100 requests per day per Data App. Contact TiDB Cloud support to request a higher limit.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    RateLimitExceeded:
-      description: Rate limit exceeded. The Chat2Query API allows 100 requests per day per Data App. Contact TiDB Cloud support to request a higher limit.
+    BadRequest:
+      description: The request body or parameters are invalid.
       content:
         application/json:
           schema:
@@ -152,7 +152,7 @@ components:
     digestAuth:
       type: http
       scheme: digest
-      description: HTTP Digest Authentication using a TiDB Cloud API public key as the username and private key as the password. Keys are generated in the TiDB Cloud console under Organization Settings > API Keys.
+      description: HTTP Digest Authentication using a Chat2Query Data App API public key as the username and private key as the password. Keys are generated within the Chat2Query Data App in the TiDB Cloud console.
 externalDocs:
-  description: TiDB Cloud API Overview
-  url: https://docs.pingcap.com/tidbcloud/api-overview/
+  description: TiDB Cloud Chat2Query API Reference
+  url: https://docs.pingcap.com/tidbcloud/use-chat2query-api/

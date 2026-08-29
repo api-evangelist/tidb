@@ -1,12 +1,8 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: TiDB Cloud API Keys Regions API
-  description: The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud. It supports managing projects, clusters, backups, restores, data imports, billing, and private endpoint connections across both TiDB Cloud Serverless and TiDB Cloud Dedicated tiers. The API uses HTTP Digest Authentication with public and private API keys and returns JSON-formatted responses. Available as both v1beta and the newer v1beta1 versions, it enables automation of database infrastructure lifecycle management at scale.
-  version: v1beta1
-  contact:
-    name: TiDB Cloud Support
-    url: https://docs.pingcap.com/tidbcloud/api-overview/
-  termsOfService: https://www.pingcap.com/legal/privacy-policy/
+  title: Tidb Regions API
+  version: '1.0'
+  description: 'Operations tagged Regions across 2 of this provider''s published API definitions: tidb-cloud-api-openapi.yml, tidb-http-api-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://dedicated.tidbapi.com/v1beta1
   description: Dedicated Cluster API Server
@@ -14,8 +10,8 @@ servers:
   description: IAM API Server
 - url: https://billing.tidbapi.com/v1beta1
   description: Billing API Server
-security:
-- digestAuth: []
+- url: http://localhost:10080
+  description: Local TiDB Node (default status port)
 tags:
 - name: Regions
   description: Operations for listing available cloud regions and node specifications.
@@ -39,6 +35,15 @@ paths:
                 $ref: '#/components/schemas/ListRegionsResponse'
         '401':
           $ref: '#/components/responses/Unauthorized'
+      security:
+      - digestAuth: []
+    servers:
+    - url: https://dedicated.tidbapi.com/v1beta1
+      description: Dedicated Cluster API Server
+    - url: https://iam.tidbapi.com/v1beta1
+      description: IAM API Server
+    - url: https://billing.tidbapi.com/v1beta1
+      description: Billing API Server
   /regions/{regionId}:
     get:
       operationId: getRegion
@@ -59,6 +64,15 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+      security:
+      - digestAuth: []
+    servers:
+    - url: https://dedicated.tidbapi.com/v1beta1
+      description: Dedicated Cluster API Server
+    - url: https://iam.tidbapi.com/v1beta1
+      description: IAM API Server
+    - url: https://billing.tidbapi.com/v1beta1
+      description: Billing API Server
   /regions/{regionId}/nodeSpecs:
     get:
       operationId: listNodeSpecs
@@ -81,6 +95,15 @@ paths:
           $ref: '#/components/responses/Unauthorized'
         '404':
           $ref: '#/components/responses/NotFound'
+      security:
+      - digestAuth: []
+    servers:
+    - url: https://dedicated.tidbapi.com/v1beta1
+      description: Dedicated Cluster API Server
+    - url: https://iam.tidbapi.com/v1beta1
+      description: IAM API Server
+    - url: https://billing.tidbapi.com/v1beta1
+      description: Billing API Server
   /regions/meta:
     get:
       operationId: listRegionsMeta
@@ -97,6 +120,9 @@ paths:
                 type: array
                 items:
                   $ref: '#/components/schemas/RegionMeta'
+    servers:
+    - url: http://localhost:10080
+      description: Local TiDB Node (default status port)
   /regions/hot:
     get:
       operationId: getHotRegions
@@ -111,6 +137,9 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/HotRegions'
+    servers:
+    - url: http://localhost:10080
+      description: Local TiDB Node (default status port)
   /regions/{regionID}:
     get:
       operationId: getRegionByID
@@ -134,6 +163,9 @@ paths:
                 $ref: '#/components/schemas/RegionInfo'
         '404':
           description: No region with the specified ID was found.
+    servers:
+    - url: http://localhost:10080
+      description: Local TiDB Node (default status port)
   /tables/{db}/{table}/regions:
     get:
       operationId: getTableRegions
@@ -153,6 +185,9 @@ paths:
                 $ref: '#/components/schemas/TableRegions'
         '404':
           description: The specified database or table was not found.
+    servers:
+    - url: http://localhost:10080
+      description: Local TiDB Node (default status port)
   /tables/{db}/{table}/scatter:
     post:
       operationId: scatterTableRegions
@@ -168,6 +203,9 @@ paths:
           description: Region scatter initiated successfully.
         '404':
           description: The specified database or table was not found.
+    servers:
+    - url: http://localhost:10080
+      description: Local TiDB Node (default status port)
 components:
   parameters:
     pageSize:
@@ -180,20 +218,6 @@ components:
         minimum: 1
         maximum: 100
         default: 100
-    db:
-      name: db
-      in: path
-      description: The database name.
-      required: true
-      schema:
-        type: string
-    table:
-      name: table
-      in: path
-      description: The table name within the specified database.
-      required: true
-      schema:
-        type: string
     pageToken:
       name: pageToken
       in: query
@@ -208,61 +232,21 @@ components:
       required: true
       schema:
         type: string
+    table:
+      name: table
+      in: path
+      description: The table name within the specified database.
+      required: true
+      schema:
+        type: string
+    db:
+      name: db
+      in: path
+      description: The database name.
+      required: true
+      schema:
+        type: string
   schemas:
-    IndexRegions:
-      type: object
-      description: Region information for a specific table index.
-      properties:
-        name:
-          type: string
-          description: The index name.
-        id:
-          type: integer
-          description: The numeric index ID.
-        regions:
-          type: array
-          description: The regions holding data for this index.
-          items:
-            $ref: '#/components/schemas/RegionDetail'
-    ListRegionsResponse:
-      type: object
-      description: Paginated list of available regions.
-      properties:
-        regions:
-          type: array
-          description: The list of region objects.
-          items:
-            $ref: '#/components/schemas/Region'
-        nextPageToken:
-          type: string
-          description: Token to retrieve the next page of results.
-    Region:
-      type: object
-      description: A cloud region where TiDB Cloud Dedicated clusters can be deployed.
-      properties:
-        regionId:
-          type: string
-          description: The unique identifier of the region.
-        cloudProvider:
-          type: string
-          description: The cloud provider for this region.
-        displayName:
-          type: string
-          description: The human-readable display name of the region.
-    HotRegions:
-      type: object
-      description: Hot read and write region data across all TiKV stores.
-      properties:
-        as_peer:
-          type: array
-          description: Hot regions where the local store is a follower peer.
-          items:
-            $ref: '#/components/schemas/HotRegionStore'
-        as_leader:
-          type: array
-          description: Hot regions where the local store is the leader.
-          items:
-            $ref: '#/components/schemas/HotRegionStore'
     ErrorResponse:
       type: object
       description: Standard error response returned when an API request fails.
@@ -279,6 +263,47 @@ components:
         msgPrefix:
           type: string
           description: A human-readable error message describing the failure.
+    NodeSpec:
+      type: object
+      description: A node specification option for a cluster component.
+      properties:
+        nodeSpecKey:
+          type: string
+          description: The unique key identifying this node specification.
+        componentType:
+          type: string
+          description: The cluster component this spec applies to (tidb, tikv, tiflash).
+        cpu:
+          type: integer
+          description: The number of vCPU cores for this node spec.
+        memory:
+          type: integer
+          description: The memory in GiB for this node spec.
+    Region:
+      type: object
+      description: A cloud region where TiDB Cloud Dedicated clusters can be deployed.
+      properties:
+        regionId:
+          type: string
+          description: The unique identifier of the region.
+        cloudProvider:
+          type: string
+          description: The cloud provider for this region.
+        displayName:
+          type: string
+          description: The human-readable display name of the region.
+    ListRegionsResponse:
+      type: object
+      description: Paginated list of available regions.
+      properties:
+        regions:
+          type: array
+          description: The list of region objects.
+          items:
+            $ref: '#/components/schemas/Region'
+        nextPageToken:
+          type: string
+          description: Token to retrieve the next page of results.
     ListNodeSpecsResponse:
       type: object
       description: Paginated list of node specifications for a region.
@@ -291,24 +316,36 @@ components:
         nextPageToken:
           type: string
           description: Token to retrieve the next page of results.
-    RegionMeta:
+    HotRegion:
       type: object
-      description: Metadata about a TiKV region.
+      description: A hot region with throughput statistics.
       properties:
         region_id:
           type: integer
-          description: The unique numeric identifier of the region.
-        start_key:
+          description: The region ID.
+        flow_bytes:
+          type: number
+          description: The data throughput through this region in bytes per second.
+    TableRegions:
+      type: object
+      description: Region distribution information for a TiDB table.
+      properties:
+        table_name:
           type: string
-          description: The encoded start key of the region's key range.
-        end_key:
-          type: string
-          description: The encoded end key of the region's key range.
-        frames:
+          description: The name of the table.
+        table_id:
+          type: integer
+          description: The numeric table ID.
+        record_regions:
           type: array
-          description: The frame mappings associating this region with TiDB tables and indexes.
+          description: The regions storing row data for this table.
           items:
-            $ref: '#/components/schemas/RegionFrame'
+            $ref: '#/components/schemas/RegionDetail'
+        indices:
+          type: array
+          description: The index regions for this table.
+          items:
+            $ref: '#/components/schemas/IndexRegions'
     RegionFrame:
       type: object
       description: A mapping from a TiKV region to a TiDB table or index.
@@ -334,64 +371,48 @@ components:
         index_id:
           type: integer
           description: The numeric index ID if this region stores index data.
-    HotRegion:
+    RegionMeta:
       type: object
-      description: A hot region with throughput statistics.
+      description: Metadata about a TiKV region.
       properties:
         region_id:
           type: integer
-          description: The region ID.
-        flow_bytes:
-          type: number
-          description: The data throughput through this region in bytes per second.
-    HotRegionStore:
+          description: The unique numeric identifier of the region.
+        start_key:
+          type: string
+          description: The encoded start key of the region's key range.
+        end_key:
+          type: string
+          description: The encoded end key of the region's key range.
+        frames:
+          type: array
+          description: The frame mappings associating this region with TiDB tables and indexes.
+          items:
+            $ref: '#/components/schemas/RegionFrame'
+    RegionPeer:
       type: object
-      description: Hot region data for a specific TiKV store.
+      description: A peer replica of a TiKV region.
       properties:
+        id:
+          type: integer
+          description: The peer ID.
         store_id:
           type: integer
-          description: The numeric TiKV store ID.
-        hot_region_list:
-          type: array
-          description: The list of hot regions for this store.
-          items:
-            $ref: '#/components/schemas/HotRegion'
-    TableRegions:
+          description: The TiKV store ID where this peer is hosted.
+    HotRegions:
       type: object
-      description: Region distribution information for a TiDB table.
+      description: Hot read and write region data across all TiKV stores.
       properties:
-        table_name:
-          type: string
-          description: The name of the table.
-        table_id:
-          type: integer
-          description: The numeric table ID.
-        record_regions:
+        as_peer:
           type: array
-          description: The regions storing row data for this table.
+          description: Hot regions where the local store is a follower peer.
           items:
-            $ref: '#/components/schemas/RegionDetail'
-        indices:
+            $ref: '#/components/schemas/HotRegionStore'
+        as_leader:
           type: array
-          description: The index regions for this table.
+          description: Hot regions where the local store is the leader.
           items:
-            $ref: '#/components/schemas/IndexRegions'
-    NodeSpec:
-      type: object
-      description: A node specification option for a cluster component.
-      properties:
-        nodeSpecKey:
-          type: string
-          description: The unique key identifying this node specification.
-        componentType:
-          type: string
-          description: The cluster component this spec applies to (tidb, tikv, tiflash).
-        cpu:
-          type: integer
-          description: The number of vCPU cores for this node spec.
-        memory:
-          type: integer
-          description: The memory in GiB for this node spec.
+            $ref: '#/components/schemas/HotRegionStore'
     RegionInfo:
       type: object
       description: Detailed information about a specific TiKV region.
@@ -410,6 +431,33 @@ components:
           description: The TiDB table/index mappings for this region.
           items:
             $ref: '#/components/schemas/RegionFrame'
+    HotRegionStore:
+      type: object
+      description: Hot region data for a specific TiKV store.
+      properties:
+        store_id:
+          type: integer
+          description: The numeric TiKV store ID.
+        hot_region_list:
+          type: array
+          description: The list of hot regions for this store.
+          items:
+            $ref: '#/components/schemas/HotRegion'
+    IndexRegions:
+      type: object
+      description: Region information for a specific table index.
+      properties:
+        name:
+          type: string
+          description: The index name.
+        id:
+          type: integer
+          description: The numeric index ID.
+        regions:
+          type: array
+          description: The regions holding data for this index.
+          items:
+            $ref: '#/components/schemas/RegionDetail'
     RegionDetail:
       type: object
       description: Details about a specific TiKV region hosting table or index data.
@@ -430,16 +478,6 @@ components:
         end_key:
           type: string
           description: The encoded end key of this region.
-    RegionPeer:
-      type: object
-      description: A peer replica of a TiKV region.
-      properties:
-        id:
-          type: integer
-          description: The peer ID.
-        store_id:
-          type: integer
-          description: The TiKV store ID where this peer is hosted.
   responses:
     Unauthorized:
       description: Authentication failed. Check your API key credentials.
@@ -458,6 +496,6 @@ components:
       type: http
       scheme: digest
       description: HTTP Digest Authentication using a TiDB Cloud API public key as the username and private key as the password. Keys are generated in the TiDB Cloud console under Organization Settings > API Keys.
-externalDocs:
-  description: TiDB Cloud API Overview
-  url: https://docs.pingcap.com/tidbcloud/api-overview/
+x-refined-from:
+- tidb-cloud-api-openapi.yml
+- tidb-http-api-openapi.yml

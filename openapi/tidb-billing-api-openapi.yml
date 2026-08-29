@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: TiDB Cloud API Keys Billing API
+  title: TiDB Cloud Billing API
   description: The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud. It supports managing projects, clusters, backups, restores, data imports, billing, and private endpoint connections across both TiDB Cloud Serverless and TiDB Cloud Dedicated tiers. The API uses HTTP Digest Authentication with public and private API keys and returns JSON-formatted responses. Available as both v1beta and the newer v1beta1 versions, it enables automation of database infrastructure lifecycle management at scale.
   version: v1beta1
   contact:
@@ -86,6 +86,38 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
+    BillsCostExplorer:
+      type: object
+      description: Results from a cost explorer query.
+      properties:
+        trends:
+          type: array
+          description: Array of cost trend data points.
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                description: The date for this trend data point.
+              cost:
+                type: string
+                description: The cost amount for this date.
+    ErrorResponse:
+      type: object
+      description: Standard error response returned when an API request fails.
+      properties:
+        code:
+          type: integer
+          description: The HTTP status code of the error.
+        status:
+          type: string
+          description: The error status string.
+        error:
+          type: string
+          description: A machine-readable error code identifier.
+        msgPrefix:
+          type: string
+          description: A human-readable error message describing the failure.
     BillsExplorer:
       type: object
       description: An organization's monthly billing summary.
@@ -124,47 +156,6 @@ components:
               totalCost:
                 type: string
                 description: The total cost for this service.
-    BillsDetails:
-      type: object
-      description: Detailed daily billing data for a month.
-      properties:
-        billsDetails:
-          type: array
-          description: List of daily billing detail records.
-          items:
-            $ref: '#/components/schemas/BillDetail'
-    BillsCostExplorer:
-      type: object
-      description: Results from a cost explorer query.
-      properties:
-        trends:
-          type: array
-          description: Array of cost trend data points.
-          items:
-            type: object
-            properties:
-              date:
-                type: string
-                description: The date for this trend data point.
-              cost:
-                type: string
-                description: The cost amount for this date.
-    ErrorResponse:
-      type: object
-      description: Standard error response returned when an API request fails.
-      properties:
-        code:
-          type: integer
-          description: The HTTP status code of the error.
-        status:
-          type: string
-          description: The error status string.
-        error:
-          type: string
-          description: A machine-readable error code identifier.
-        msgPrefix:
-          type: string
-          description: A human-readable error message describing the failure.
     CostExplorerRequest:
       type: object
       description: Request body for querying the cost explorer.
@@ -177,6 +168,15 @@ components:
           description: Dimensions to group results by (project, cluster, service, region).
           items:
             type: string
+    BillsDetails:
+      type: object
+      description: Detailed daily billing data for a month.
+      properties:
+        billsDetails:
+          type: array
+          description: List of daily billing detail records.
+          items:
+            $ref: '#/components/schemas/BillDetail'
     BillDetail:
       type: object
       description: A single daily billing record for a cluster and service.
@@ -206,15 +206,6 @@ components:
         totalCost:
           type: string
           description: The total cost for this specific record.
-  parameters:
-    billedMonth:
-      name: billedMonth
-      in: path
-      description: The billing month in YYYY-MM format (e.g., 2025-03).
-      required: true
-      schema:
-        type: string
-        pattern: ^\d{4}-\d{2}$
   responses:
     Unauthorized:
       description: Authentication failed. Check your API key credentials.
@@ -228,6 +219,15 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
+  parameters:
+    billedMonth:
+      name: billedMonth
+      in: path
+      description: The billing month in YYYY-MM format (e.g., 2025-03).
+      required: true
+      schema:
+        type: string
+        pattern: ^\d{4}-\d{2}$
   securitySchemes:
     digestAuth:
       type: http

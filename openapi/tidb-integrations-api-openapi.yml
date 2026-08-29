@@ -1,6 +1,6 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: TiDB Cloud API Keys Integrations API
+  title: TiDB Cloud Integrations API
   description: The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud. It supports managing projects, clusters, backups, restores, data imports, billing, and private endpoint connections across both TiDB Cloud Serverless and TiDB Cloud Dedicated tiers. The API uses HTTP Digest Authentication with public and private API keys and returns JSON-formatted responses. Available as both v1beta and the newer v1beta1 versions, it enables automation of database infrastructure lifecycle management at scale.
   version: v1beta1
   contact:
@@ -90,6 +90,19 @@ components:
         active:
           type: boolean
           description: Whether the integration is currently active.
+    CreateIntegrationRequest:
+      type: object
+      description: Request body for creating a new cluster integration.
+      required:
+      - integrationType
+      properties:
+        integrationType:
+          type: string
+          description: The type of integration to create.
+        config:
+          type: object
+          description: Integration-specific configuration properties such as API keys and region.
+          additionalProperties: true
     ErrorResponse:
       type: object
       description: Standard error response returned when an API request fails.
@@ -106,19 +119,6 @@ components:
         msgPrefix:
           type: string
           description: A human-readable error message describing the failure.
-    CreateIntegrationRequest:
-      type: object
-      description: Request body for creating a new cluster integration.
-      required:
-      - integrationType
-      properties:
-        integrationType:
-          type: string
-          description: The type of integration to create.
-        config:
-          type: object
-          description: Integration-specific configuration properties such as API keys and region.
-          additionalProperties: true
     ListIntegrationsResponse:
       type: object
       description: List of integrations for a cluster.
@@ -129,12 +129,6 @@ components:
           items:
             $ref: '#/components/schemas/Integration'
   responses:
-    BadRequest:
-      description: The request body or parameters are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
     Unauthorized:
       description: Authentication failed. Check your API key credentials.
       content:
@@ -143,6 +137,12 @@ components:
             $ref: '#/components/schemas/ErrorResponse'
     NotFound:
       description: The requested resource was not found.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: The request body or parameters are invalid.
       content:
         application/json:
           schema:

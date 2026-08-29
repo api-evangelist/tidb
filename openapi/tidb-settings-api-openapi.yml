@@ -1,21 +1,15 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: TiDB Cloud API Keys Settings API
-  description: The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud. It supports managing projects, clusters, backups, restores, data imports, billing, and private endpoint connections across both TiDB Cloud Serverless and TiDB Cloud Dedicated tiers. The API uses HTTP Digest Authentication with public and private API keys and returns JSON-formatted responses. Available as both v1beta and the newer v1beta1 versions, it enables automation of database infrastructure lifecycle management at scale.
-  version: v1beta1
+  title: TiDB HTTP Settings API
+  description: The TiDB HTTP API is a built-in administrative interface available on self-managed TiDB server instances, accessible on port 10080 by default. It exposes endpoints for retrieving server status, database and table schema information, region metadata, MVCC key details, DDL job history, hot region data, and server configuration. Operators and monitoring systems use this API to inspect the internal state of a running TiDB node, integrate with observability tooling, and troubleshoot distributed SQL execution. The API does not require authentication by default and is intended for use within trusted internal networks. The port can be configured in tidb.toml via the status.status-port setting.
+  version: '1.0'
   contact:
-    name: TiDB Cloud Support
-    url: https://docs.pingcap.com/tidbcloud/api-overview/
-  termsOfService: https://www.pingcap.com/legal/privacy-policy/
+    name: TiDB GitHub
+    url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
+  termsOfService: https://www.apache.org/licenses/LICENSE-2.0
 servers:
-- url: https://dedicated.tidbapi.com/v1beta1
-  description: Dedicated Cluster API Server
-- url: https://iam.tidbapi.com/v1beta1
-  description: IAM API Server
-- url: https://billing.tidbapi.com/v1beta1
-  description: Billing API Server
-security:
-- digestAuth: []
+- url: http://localhost:10080
+  description: Local TiDB Node (default status port)
 tags:
 - name: Settings
   description: Endpoints for retrieving and modifying TiDB server runtime settings.
@@ -88,11 +82,6 @@ components:
         ddl_slow_threshold:
           type: integer
           description: New DDL slow threshold in milliseconds.
-  securitySchemes:
-    digestAuth:
-      type: http
-      scheme: digest
-      description: HTTP Digest Authentication using a TiDB Cloud API public key as the username and private key as the password. Keys are generated in the TiDB Cloud console under Organization Settings > API Keys.
 externalDocs:
-  description: TiDB Cloud API Overview
-  url: https://docs.pingcap.com/tidbcloud/api-overview/
+  description: TiDB HTTP API Reference
+  url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md

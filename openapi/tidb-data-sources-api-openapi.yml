@@ -1,19 +1,15 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
-  title: TiDB Cloud API Keys Data Sources API
-  description: The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud. It supports managing projects, clusters, backups, restores, data imports, billing, and private endpoint connections across both TiDB Cloud Serverless and TiDB Cloud Dedicated tiers. The API uses HTTP Digest Authentication with public and private API keys and returns JSON-formatted responses. Available as both v1beta and the newer v1beta1 versions, it enables automation of database infrastructure lifecycle management at scale.
+  title: TiDB Cloud Data Service Data Sources API
+  description: The TiDB Cloud Data Service API enables developers to manage Data Apps and custom REST endpoints backed by SQL queries running against TiDB Cloud clusters. Operators create Data Apps, link them to clusters, define custom endpoints with SQL templates, manage API keys, and deploy endpoints via this API. Endpoints support GET, POST, PUT, and DELETE methods, return JSON-formatted results, and can be configured with pagination, rate limiting, and caching. The API uses HTTP Digest Authentication and is served from the dataservice.tidbapi.com host.
   version: v1beta1
   contact:
     name: TiDB Cloud Support
-    url: https://docs.pingcap.com/tidbcloud/api-overview/
+    url: https://docs.pingcap.com/tidbcloud/data-service-overview/
   termsOfService: https://www.pingcap.com/legal/privacy-policy/
 servers:
-- url: https://dedicated.tidbapi.com/v1beta1
-  description: Dedicated Cluster API Server
-- url: https://iam.tidbapi.com/v1beta1
-  description: IAM API Server
-- url: https://billing.tidbapi.com/v1beta1
-  description: Billing API Server
+- url: https://dataservice.tidbapi.com/v1beta1
+  description: Data Service Management API Server
 security:
 - digestAuth: []
 tags:
@@ -105,21 +101,6 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  parameters:
-    clusterId:
-      name: clusterId
-      in: path
-      description: The unique identifier of the TiDB Cloud cluster used as a data source.
-      required: true
-      schema:
-        type: string
-    dataAppId:
-      name: dataAppId
-      in: path
-      description: The unique identifier of the Data App.
-      required: true
-      schema:
-        type: string
   schemas:
     CreateDataSourceRequest:
       type: object
@@ -130,19 +111,6 @@ components:
         clusterId:
           type: string
           description: The unique identifier of the TiDB Cloud cluster to link.
-    DataSource:
-      type: object
-      description: A TiDB Cloud cluster linked as a data source within a Data App.
-      properties:
-        clusterId:
-          type: string
-          description: The unique identifier of the linked cluster.
-        clusterName:
-          type: string
-          description: The display name of the linked cluster.
-        clusterType:
-          type: string
-          description: The type of cluster (SERVERLESS or DEDICATED).
     ErrorResponse:
       type: object
       description: Standard error response returned when an API request fails.
@@ -168,13 +136,35 @@ components:
           description: The list of linked data source objects.
           items:
             $ref: '#/components/schemas/DataSource'
+    DataSource:
+      type: object
+      description: A TiDB Cloud cluster linked as a data source within a Data App.
+      properties:
+        clusterId:
+          type: string
+          description: The unique identifier of the linked cluster.
+        clusterName:
+          type: string
+          description: The display name of the linked cluster.
+        clusterType:
+          type: string
+          description: The type of cluster (SERVERLESS or DEDICATED).
+  parameters:
+    clusterId:
+      name: clusterId
+      in: path
+      description: The unique identifier of the TiDB Cloud cluster used as a data source.
+      required: true
+      schema:
+        type: string
+    dataAppId:
+      name: dataAppId
+      in: path
+      description: The unique identifier of the Data App.
+      required: true
+      schema:
+        type: string
   responses:
-    BadRequest:
-      description: The request body or parameters are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
     Unauthorized:
       description: Authentication failed. Check your API key credentials.
       content:
@@ -187,11 +177,17 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
+    BadRequest:
+      description: The request body or parameters are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
   securitySchemes:
     digestAuth:
       type: http
       scheme: digest
-      description: HTTP Digest Authentication using a TiDB Cloud API public key as the username and private key as the password. Keys are generated in the TiDB Cloud console under Organization Settings > API Keys.
+      description: HTTP Digest Authentication using a TiDB Cloud organization API public key as the username and private key as the password. Keys are generated in the TiDB Cloud console under Organization Settings > API Keys.
 externalDocs:
-  description: TiDB Cloud API Overview
-  url: https://docs.pingcap.com/tidbcloud/api-overview/
+  description: TiDB Cloud Data Service Overview
+  url: https://docs.pingcap.com/tidbcloud/data-service-overview/
