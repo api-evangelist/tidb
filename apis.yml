@@ -32,7 +32,7 @@ apis:
   name: tidb API Keys API
   description: Operations for creating, listing, updating, and deleting TiDB Cloud API keys.
   humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
-  baseURL: https://api.tidbcloud.com
+  baseURL: https://iam.tidbapi.com/v1beta1
   tags:
   - APIKeys
   tags_raw:
@@ -62,7 +62,7 @@ apis:
   name: tidb Audit Logs API
   description: Operations for retrieving organization-level console audit logs.
   humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
-  baseURL: https://api.tidbcloud.com
+  baseURL: https://iam.tidbapi.com/v1beta1
   tags:
   - Audit Logs
   properties:
@@ -90,7 +90,7 @@ apis:
   name: tidb Billing API
   description: Operations for retrieving monthly billing summaries, cost details, and usage trends.
   humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
-  baseURL: https://api.tidbcloud.com
+  baseURL: https://billing.tidbapi.com/v1beta1
   tags:
   - Billing
   properties:
@@ -120,7 +120,7 @@ apis:
     Operations for translating natural language questions into SQL and executing them against TiDB Cloud
     clusters.
   humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
-  baseURL: https://api.tidbcloud.com
+  baseURL: https://data.tidbcloud.com/api/v1beta/app/{dataAppId}/endpoint
   tags:
   - Chat2Data
   properties:
@@ -148,7 +148,7 @@ apis:
   name: tidb Clusters API
   description: Operations for creating, listing, updating, and deleting TiDB Cloud Dedicated clusters.
   humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
-  baseURL: https://api.tidbcloud.com
+  baseURL: https://dedicated.tidbapi.com/v1beta1
   tags:
   - Cluster
   tags_raw:
@@ -178,7 +178,7 @@ apis:
   name: tidb Data App API Keys API
   description: Operations for managing API keys scoped to a specific Data App.
   humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
-  baseURL: https://api.tidbcloud.com
+  baseURL: https://dataservice.tidbapi.com/v1beta1
   tags:
   - Data App API Keys
   properties:
@@ -206,7 +206,7 @@ apis:
   name: tidb Data Apps API
   description: Operations for creating, listing, updating, and deleting Data Apps.
   humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
-  baseURL: https://api.tidbcloud.com
+  baseURL: https://dataservice.tidbapi.com/v1beta1
   tags:
   - Data Apps
   properties:
@@ -235,7 +235,7 @@ apis:
   description: >-
     Operations for linking and managing TiDB Cloud clusters as data sources within a Data App.
   humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
-  baseURL: https://api.tidbcloud.com
+  baseURL: https://dataservice.tidbapi.com/v1beta1
   tags:
   - Data Sources
   properties:
@@ -264,7 +264,7 @@ apis:
   description: >-
     Operations for generating and managing AI summaries of database schemas used as context for SQL generation.
   humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
-  baseURL: https://api.tidbcloud.com
+  baseURL: https://data.tidbcloud.com/api/v1beta/app/{dataAppId}/endpoint
   tags:
   - Data Summaries
   properties:
@@ -292,7 +292,7 @@ apis:
   name: tidb DDL API
   description: Endpoints for managing and inspecting DDL jobs, including ownership and history.
   humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
-  baseURL: https://api.tidbcloud.com
+  baseURL: http://{tidb-host}:10080
   tags:
   - DDL
   properties:
@@ -320,7 +320,7 @@ apis:
   name: tidb Deployments API
   description: Operations for deploying and managing versions of a Data App.
   humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
-  baseURL: https://api.tidbcloud.com
+  baseURL: https://dataservice.tidbapi.com/v1beta1
   tags:
   - Deployment
   tags_raw:
@@ -350,7 +350,7 @@ apis:
   name: tidb Diagnostics API
   description: Endpoints for downloading debug information and managing server diagnostics.
   humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
-  baseURL: https://api.tidbcloud.com
+  baseURL: http://{tidb-host}:10080
   tags:
   - Diagnostics
   properties:
@@ -379,7 +379,7 @@ apis:
   description: >-
     Operations for creating, listing, updating, testing, and deleting custom SQL-backed API endpoints.
   humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
-  baseURL: https://api.tidbcloud.com
+  baseURL: https://dataservice.tidbapi.com/v1beta1
   tags: []
   tags_raw:
   - Endpoints
@@ -408,8 +408,10 @@ apis:
   name: tidb Imports API
   description: Operations for creating and managing data import tasks into TiDB Cloud clusters.
   humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
-  baseURL: https://api.tidbcloud.com
+  baseURL: https://dedicated.tidbapi.com/v1beta1
   tags:
+  - Import
+  tags_raw:
   - Imports
   properties:
   - type: OpenAPI
@@ -436,7 +438,7 @@ apis:
   name: tidb Integrations API
   description: Operations for managing third-party integrations with TiDB Cloud clusters.
   humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
-  baseURL: https://api.tidbcloud.com
+  baseURL: https://dedicated.tidbapi.com/v1beta1
   tags:
   - Integration
   tags_raw:
@@ -467,7 +469,7 @@ apis:
   description: >-
     Endpoints for retrieving multi-version concurrency control (MVCC) key details for debugging.
   humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
-  baseURL: https://api.tidbcloud.com
+  baseURL: http://{tidb-host}:10080
   tags:
   - MVCC
   properties:
@@ -495,7 +497,7 @@ apis:
   name: tidb Regions API
   description: Operations for listing available cloud regions and node specifications.
   humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
-  baseURL: https://api.tidbcloud.com
+  baseURL: https://dedicated.tidbapi.com/v1beta1
   tags:
   - Regions
   properties:
@@ -524,7 +526,7 @@ apis:
   description: >-
     Endpoints for retrieving database and table schema information from the TiDB information schema.
   humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
-  baseURL: https://api.tidbcloud.com
+  baseURL: http://{tidb-host}:10080
   tags:
   - Schema
   properties:
@@ -552,7 +554,7 @@ apis:
   name: tidb Sessions API
   description: Operations for creating and managing multi-round conversational chat sessions.
   humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
-  baseURL: https://api.tidbcloud.com
+  baseURL: https://data.tidbcloud.com/api/v1beta/app/{dataAppId}/endpoint
   tags:
   - Sessions
   properties:
@@ -580,7 +582,7 @@ apis:
   name: tidb Settings API
   description: Endpoints for retrieving and modifying TiDB server runtime settings.
   humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
-  baseURL: https://api.tidbcloud.com
+  baseURL: http://{tidb-host}:10080
   tags:
   - Settings
   properties:
@@ -608,7 +610,7 @@ apis:
   name: tidb SQL Refinement API
   description: Operations for refining and improving previously generated SQL queries.
   humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
-  baseURL: https://api.tidbcloud.com
+  baseURL: https://data.tidbcloud.com/api/v1beta/app/{dataAppId}/endpoint
   tags:
   - SQL Refinement
   properties:
@@ -636,7 +638,7 @@ apis:
   name: tidb Statistics API
   description: Endpoints for exporting optimizer statistics used for query planning.
   humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
-  baseURL: https://api.tidbcloud.com
+  baseURL: http://{tidb-host}:10080
   tags:
   - Statistics
   properties:
@@ -664,7 +666,7 @@ apis:
   name: tidb Status API
   description: Endpoints for retrieving the operational status of the TiDB server instance.
   humanURL: https://docs.pingcap.com/tidbcloud/api-overview/
-  baseURL: https://api.tidbcloud.com
+  baseURL: http://{tidb-host}:10080
   tags:
   - Status
   properties:
@@ -688,6 +690,266 @@ apis:
     url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md
   - type: Documentation
     url: https://docs.pingcap.com/tidb/stable/tidb-monitoring-api/
+- aid: tidb:tidb-cloud-dedicated-api
+  name: TiDB Cloud Dedicated API
+  description: >-
+    The published Swagger 2.0 contract for managing TiDB Cloud Dedicated clusters — clusters, TiDB node
+    groups, regions and node specs, private endpoint connections, data imports, observability integrations
+    and CDC changefeeds. 36 operations, harvested verbatim from PingCAP.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  baseURL: https://dedicated.tidbapi.com/v1beta1
+  tags:
+  - Cluster
+  - Region
+  - Private Endpoint Connection
+  - Import
+  - Integration
+  - Changefeed
+  properties:
+  - type: OpenAPI
+    url: openapi/_original/tidb-cloud-dedicated-v1beta1-openapi-original.json
+  - type: OpenAPI
+    name: OpenAPI (provider-hosted)
+    url: https://docs-download.pingcap.com/api/tidbcloud-oas-v1beta1-dedicated.swagger.json
+  - type: Overlay
+    url: overlays/tidb-dedicated-overlay.yaml
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  - type: Authentication
+    url: authentication/tidb-authentication.yml
+  - type: RateLimits
+    url: rate-limits/tidb-rate-limits.yml
+  - type: ErrorCatalog
+    url: errors/tidb-problem-types.yml
+- aid: tidb:tidb-cloud-starter-essential-api
+  name: TiDB Cloud Starter and Essential API
+  description: >-
+    The published Swagger 2.0 contract for managing TiDB Cloud Starter and Essential instances — instances,
+    data branches, export tasks and import tasks, plus the region list. 20 operations, harvested verbatim
+    from PingCAP.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  baseURL: https://serverless.tidbapi.com/v1beta1
+  tags:
+  - Cluster
+  - Branch
+  - Export
+  - Import
+  properties:
+  - type: OpenAPI
+    url: openapi/_original/tidb-cloud-starter-essential-v1beta1-openapi-original.json
+  - type: OpenAPI
+    name: OpenAPI (provider-hosted)
+    url: https://docs-download.pingcap.com/api/tidbcloud-oas-v1beta1-serverless.swagger.json
+  - type: Overlay
+    url: overlays/tidb-starter-essential-overlay.yaml
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/serverless/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  - type: Authentication
+    url: authentication/tidb-authentication.yml
+  - type: RateLimits
+    url: rate-limits/tidb-rate-limits.yml
+  - type: ErrorCatalog
+    url: errors/tidb-problem-types.yml
+- aid: tidb:tidb-cloud-premium-api
+  name: TiDB Cloud Premium API
+  description: >-
+    The published Swagger 2.0 contract for TiDB Cloud Premium, the v1beta2 API — Premium instance lifecycle
+    and configuration, root passwords, CA certificates, cloud provider information, backups and
+    backup-based restore, regions and changefeeds. 25 operations, harvested verbatim from PingCAP.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta2/premium/
+  baseURL: https://cloud.tidbapi.com/v1beta2
+  tags:
+  - TiDB Cloud Premium Instance
+  - Backup
+  - Region
+  - Changefeed
+  properties:
+  - type: OpenAPI
+    url: openapi/_original/tidb-cloud-premium-v1beta2-openapi-original.json
+  - type: OpenAPI
+    name: OpenAPI (provider-hosted)
+    url: https://docs-download.pingcap.com/api/tidbcloud-oas-v1beta2-premium.swagger.json
+  - type: Overlay
+    url: overlays/tidb-premium-overlay.yaml
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta2/premium/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  - type: Authentication
+    url: authentication/tidb-authentication.yml
+  - type: RateLimits
+    url: rate-limits/tidb-rate-limits.yml
+  - type: ErrorCatalog
+    url: errors/tidb-problem-types.yml
+- aid: tidb:tidb-cloud-data-service-api
+  name: TiDB Cloud Data Service API
+  description: >-
+    The published Swagger 2.0 contract for TiDB Cloud Data Service — create Data Apps, link clusters as
+    data sources, define and test custom REST endpoints backed by SQL templates, deploy them, manage their
+    API keys, and retrieve the generated OpenAPI specification for the resulting app. 28 operations,
+    harvested verbatim from PingCAP.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  baseURL: https://dataservice.tidbapi.com
+  tags:
+  - Data App
+  - DataSource
+  - Deployment
+  - Data API Key
+  - OpenAPI Specification
+  tags_raw:
+  - Data App
+  - Data Source
+  - Endpoint
+  - Deployment
+  - Data API Key
+  - OpenAPI Specification
+  properties:
+  - type: OpenAPI
+    url: openapi/_original/tidb-cloud-dataservice-v1beta1-openapi-original.json
+  - type: OpenAPI
+    name: OpenAPI (provider-hosted)
+    url: https://docs-download.pingcap.com/api/tidbcloud-oas-v1beta1-dataservice.swagger.json
+  - type: Overlay
+    url: overlays/tidb-dataservice-overlay.yaml
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dataservice/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  - type: Authentication
+    url: authentication/tidb-authentication.yml
+  - type: RateLimits
+    url: rate-limits/tidb-rate-limits.yml
+  - type: ErrorCatalog
+    url: errors/tidb-problem-types.yml
+- aid: tidb:tidb-cloud-iam-api
+  name: TiDB Cloud IAM API
+  description: >-
+    The published Swagger 2.0 contract for TiDB Cloud identity and access management — organization API
+    keys, organization members and invitations, and console audit logs. 12 operations, harvested verbatim
+    from PingCAP. None of its operations carries an operationId.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  baseURL: https://iam.tidbapi.com/v1beta1
+  tags:
+  - APIKeys
+  - Member
+  - Audit Logs
+  - Account
+  tags_raw:
+  - API Key
+  - Member
+  - Audit Log
+  - Account
+  properties:
+  - type: OpenAPI
+    url: openapi/_original/tidb-cloud-iam-v1beta1-openapi-original.json
+  - type: OpenAPI
+    name: OpenAPI (provider-hosted)
+    url: https://docs-download.pingcap.com/api/tidbcloud-oas-v1beta1-iam.swagger.json
+  - type: Overlay
+    url: overlays/tidb-iam-overlay.yaml
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/iam/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  - type: Authentication
+    url: authentication/tidb-authentication.yml
+  - type: RateLimits
+    url: rate-limits/tidb-rate-limits.yml
+  - type: ErrorCatalog
+    url: errors/tidb-problem-types.yml
+- aid: tidb:tidb-cloud-billing-api
+  name: TiDB Cloud Billing API
+  description: >-
+    The published Swagger 2.0 contract for TiDB Cloud billing — monthly bills, monthly bill details and the
+    cost explorer, addressed by billed month. 4 operations, harvested verbatim from PingCAP. None of its
+    operations carries an operationId.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  baseURL: https://billing.tidbapi.com/v1beta1
+  tags:
+  - Billing
+  properties:
+  - type: OpenAPI
+    url: openapi/_original/tidb-cloud-billing-v1beta1-openapi-original.json
+  - type: OpenAPI
+    name: OpenAPI (provider-hosted)
+    url: https://docs-download.pingcap.com/api/tidbcloud-oas-v1beta1-billing.swagger.json
+  - type: Overlay
+    url: overlays/tidb-billing-overlay.yaml
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/billing/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  - type: Authentication
+    url: authentication/tidb-authentication.yml
+  - type: RateLimits
+    url: rate-limits/tidb-rate-limits.yml
+  - type: ErrorCatalog
+    url: errors/tidb-problem-types.yml
+- aid: tidb:tidb-cloud-msp-api
+  name: TiDB Cloud MSP API
+  description: >-
+    The published Swagger 2.0 contract for the TiDB Cloud Managed Service Provider surface, which PingCAP
+    marks as deprecated in its own v1beta1 overview. Recorded because it is still served and still
+    documented, with no sunset date stated. 7 operations, harvested verbatim from PingCAP.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta1/msp/
+  baseURL: https://msp.tidbapi.com/v1beta1/msp
+  tags:
+  - MSP
+  properties:
+  - type: OpenAPI
+    url: openapi/_original/tidb-cloud-msp-v1beta1-openapi-original.json
+  - type: OpenAPI
+    name: OpenAPI (provider-hosted)
+    url: https://docs-download.pingcap.com/api/tidbcloud-oas-v1beta1-msp.json
+  - type: Overlay
+    url: overlays/tidb-msp-overlay.yaml
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta1/msp/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  - type: Authentication
+    url: authentication/tidb-authentication.yml
+  - type: RateLimits
+    url: rate-limits/tidb-rate-limits.yml
+  - type: ErrorCatalog
+    url: errors/tidb-problem-types.yml
+- aid: tidb:tidb-cloud-api-v1beta
+  name: TiDB Cloud API v1beta
+  description: >-
+    The original TiDB Cloud management API, still served at api.tidbcloud.com and still the only surface
+    that exposes projects — projects, clusters, backups, restores and the deprecated import operations. 30
+    operations, harvested verbatim from PingCAP. Superseded by the v1beta1 APIs, with no published
+    end-of-life date.
+  humanURL: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  baseURL: https://api.tidbcloud.com
+  tags:
+  - Project
+  - Cluster
+  - Backup
+  - Import
+  - Restore
+  properties:
+  - type: OpenAPI
+    url: openapi/_original/tidb-cloud-v1beta-openapi-original.json
+  - type: OpenAPI
+    name: OpenAPI (provider-hosted)
+    url: https://docs-download.pingcap.com/api/tidbcloud-oas.json
+  - type: Overlay
+    url: overlays/tidb-v1beta-overlay.yaml
+  - type: APIReference
+    url: https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - type: Documentation
+    url: https://docs.pingcap.com/tidbcloud/api-overview/
+  - type: Authentication
+    url: authentication/tidb-authentication.yml
+  - type: RateLimits
+    url: rate-limits/tidb-rate-limits.yml
+  - type: ErrorCatalog
+    url: errors/tidb-problem-types.yml
 common:
   - type: AgenticAccess
     url: agentic-access/tidb-agentic-access.yml
@@ -707,7 +969,128 @@ common:
     url: rules/tidb-rules.yml
   - type: Vocabulary
     url: vocabulary/tidb-vocabulary.yml
-modified: '2026-05-19'
+  - type: Website
+    url: https://www.pingcap.com/
+  - type: DeveloperPortal
+    url: https://docs.pingcap.com/developer/
+  - type: Documentation
+    url: https://docs.pingcap.com/
+  - type: APIReference
+    url: https://docs.pingcap.com/api/
+  - type: GettingStarted
+    url: https://docs.pingcap.com/tidbcloud/tidb-cloud-quickstart/
+  - type: Support
+    url: https://docs.pingcap.com/tidbcloud/tidb-cloud-support/
+  - type: Blog
+    url: https://www.pingcap.com/blog/
+  - type: GitHubOrganization
+    url: https://github.com/pingcap
+  - type: Roadmap
+    url: https://github.com/pingcap/tidb/blob/master/roadmap.md
+  - type: Pricing
+    url: https://www.pingcap.com/pricing/
+  - type: SignUp
+    url: https://tidbcloud.com/free-trial
+  - type: Login
+    url: https://tidbcloud.com/
+  - type: TermsOfService
+    url: https://www.pingcap.com/legal/tidb-cloud-services-agreement/
+  - type: PrivacyPolicy
+    url: https://www.pingcap.com/privacy-policy/
+  - type: StatusPage
+    url: https://status.tidbcloud.com/
+  - type: Deprecation
+    name: TiDB release support and EOL policy
+    url: https://www.pingcap.com/tidb-release-support-policy/
+  - type: SLA
+    url: https://www.pingcap.com/legal/service-level-agreement-for-tidb-cloud-services/
+  - type: ChangeLog
+    url: https://docs.pingcap.com/tidbcloud/tidb-cloud-release-notes/
+  - type: ChangeLog
+    url: changelog/tidb-changelog.yml
+  - type: Lifecycle
+    url: lifecycle/tidb-lifecycle.yml
+  - type: Security
+    url: security/tidb-vulnerability-disclosure.yml
+  - type: VulnerabilityDisclosure
+    url: security/tidb-vulnerability-disclosure.yml
+  - type: TrustCenter
+    url: security/tidb-trust-center.yml
+  - type: Compliance
+    url: security/tidb-trust-center.yml
+  - type: Conformance
+    url: conformance/tidb-conformance.yml
+  - type: Packages
+    url: packages/tidb-packages.yml
+  - type: SDKs
+    url: packages/tidb-packages.yml
+  - type: CLI
+    url: cli/tidb-cli.yml
+  - type: MCPServer
+    url: mcp/tidb-mcp.yml
+  - type: ToolCrosswalk
+    url: mcp/tidb-tool-crosswalk.yml
+  - type: AgentSkill
+    url: skills/_index.yml
+  - type: LLMsTxt
+    url: llms/tidb-llms.txt
+  - type: LLMsTxt
+    name: llms.txt (provider-hosted)
+    url: https://www.pingcap.com/llms.txt
+  - type: Conventions
+    url: conventions/tidb-conventions.yml
+  - type: ErrorCatalog
+    url: errors/tidb-problem-types.yml
+  - type: DataModel
+    url: data-model/tidb-data-model.yml
+  - type: Sandbox
+    url: sandbox/tidb-sandbox.yml
+  - type: Webhooks
+    url: asyncapi/tidb-webhooks.yml
+  - type: RateLimits
+    url: rate-limits/tidb-rate-limits.yml
+  - type: Plans
+    url: plans/tidb-plans-pricing.yml
+  - type: FinOps
+    url: finops/tidb-finops.yml
+  - type: Examples
+    url: examples/tidb-cloud-api-list-clusters-example.json
+modified: '2026-09-17'
 description: >-
-  TiDB is an open-source distributed SQL database that supports Hybrid Transactional and Analytical Processing
-  workloads, with horizontal scalability, strong consistency, and high availability.
+  TiDB is an open-source, MySQL-compatible distributed SQL database built by PingCAP for Hybrid Transactional
+  and Analytical Processing (HTAP) workloads, with horizontal scale-out, Raft-based strong consistency, high
+  availability and built-in vector search for AI retrieval. It ships both as self-managed open source and as
+  TiDB Cloud, the managed service, whose control plane is published as eight Swagger 2.0 contracts across
+  Starter, Essential, Dedicated and Premium tiers plus Data Service, IAM and billing.
+created: '2026-05-04'
+tags:
+- Database
+- Distributed SQL
+- HTAP
+- Cloud
+- Open-Source
+- Vector Search
+- Data Infrastructure
+- Database-as-a-Service
+- MySQL Compatible
+- Artificial Intelligence
+tags_raw:
+- Database
+- Distributed SQL
+- HTAP
+- Cloud
+- Open Source
+- Vector Search
+- Data Infrastructure
+- DBaaS
+- MySQL Compatible
+- AI
+maintainers:
+- FN: Kin Lane
+  email: kin@apievangelist.com
+  url: https://apievangelist.com
+x-enrichment:
+  date: '2026-09-17'
+  status: enriched
+  artifacts_added: 40
+  pass: local-v3
