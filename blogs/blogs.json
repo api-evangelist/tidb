@@ -1,0 +1,14 @@
+{
+  "repo": "tidb",
+  "feeds": [
+    {
+      "source": "https://docs.pingcap.com/tidbcloud/tidb-cloud-support/",
+      "feed_url": "https://docs.pingcap.com/tidbcloud/tidb-cloud-support/",
+      "title": "",
+      "saved": 0,
+      "method": "none"
+    }
+  ],
+  "post_count": 0,
+  "fetched": "2026-09-19T20:17:39Z"
+}
