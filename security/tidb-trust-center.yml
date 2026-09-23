@@ -1,0 +1,46 @@
+generated: '2026-09-17'
+method: searched
+source: https://www.pingcap.com/trust-hub/
+status: published
+trust_center:
+  name: TiDB Trust Hub
+  url: https://www.pingcap.com/trust-hub/
+  hosted_by: PingCAP, on its own marketing site — not a third-party trust portal (no Vanta/Drata/SafeBase,
+    and trust.pingcap.com does not resolve)
+  sections:
+  - https://www.pingcap.com/trust-hub/faq/#general
+  - https://www.pingcap.com/trust-hub/faq/#company
+  - https://www.pingcap.com/trust-hub/faq/#security
+  - https://www.pingcap.com/trust-hub/faq/#data-privacy
+  - https://www.pingcap.com/trust-hub/faq/#compliance
+certifications:
+- name: SOC 2
+  evidence: '"We conduct regular third-party audits against rigorous standards, including SOC 2 and PCI-DSS"'
+  report_available: on request via sales
+- name: PCI DSS
+  evidence: same statement as SOC 2
+  report_available: on request via sales
+- name: ISO/IEC 27001
+  evidence: certification badge displayed on the Trust Hub
+- name: ISO/IEC 27701
+  evidence: certification badge displayed on the Trust Hub
+- name: HIPAA
+  evidence: badge displayed on the Trust Hub
+regulatory:
+- name: GDPR
+- name: EU-US Data Privacy Framework
+documents:
+- name: Data Processing Agreement for TiDB Cloud Services
+  url: https://www.pingcap.com/legal/data-processing-agreement-for-tidb-cloud-services/
+- name: Sub-processors and Affiliates for TiDB Cloud Services
+  url: https://www.pingcap.com/legal/sub-processors-and-affiliates-for-tidb-cloud-services/
+- name: Service Level Agreement for TiDB Cloud Services
+  url: https://www.pingcap.com/legal/service-level-agreement-for-tidb-cloud-services/
+- name: TiDB Cloud Services Agreement
+  url: https://www.pingcap.com/legal/tidb-cloud-services-agreement/
+- name: Privacy Policy
+  url: https://www.pingcap.com/privacy-policy/
+gaps:
+- No downloadable audit report and no self-serve NDA/report request flow — everything is obtained through
+  sales contact.
+- No machine-readable compliance surface of any kind.

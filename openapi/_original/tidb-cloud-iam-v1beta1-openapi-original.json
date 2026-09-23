@@ -1,0 +1,1348 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "description": "*TiDB Cloud API is in beta.*\n\n# Overview\n\nThe TiDB Cloud API is a [REST interface](https://en.wikipedia.org/wiki/Representational_state_transfer) that provides you with programmatic access to manage administrative objects within TiDB Cloud.\n\nThe API has the following features:\n\n- **JSON entities.** All entities are expressed in JSON.\n- **HTTPS-only.** You can only access the API via HTTPS, ensuring all the data sent over the network is encrypted with TLS.\n- **Key-based access and digest authentication.** Before you access TiDB Cloud API, you must generate an API key. All requests are authenticated through [HTTP Digest Authentication](https://en.wikipedia.org/wiki/Digest_access_authentication), ensuring the API key is never sent over the network.\n\n# Get Started\n\nThis guide helps you make your first API call to TiDB Cloud API. You'll learn how to authenticate a request, build a request, and interpret the response.\n\n## Prerequisites\n\nTo complete this guide, you need to perform the following tasks:\n\n- Create a [TiDB Cloud account](https://tidbcloud.com/free-trial)\n- Install [curl](https://curl.se/)\n\n## Step 1. Create an API key\n\nTo create an API key, log in to your TiDB Cloud console. Navigate to the [**API Keys**](https://tidbcloud.com/org-settings/api-keys) page of your organization, and create an API key.\n\nAn API key contains a public key and a private key. Copy and save them in a secure location. You will need to use the API key later in this guide.\n\nFor more details about creating API keys, refer to [API Key Management](#section/Authentication/API-Key-Management).\n\n## Step 2. Make your first API call\n\n### Build an API call\n\nTiDB Cloud API call consists of the following components:\n\n- **A host.** The host for TiDB Cloud API is <https://iam.tidbapi.com>.\n- **An API Key**. The public key and the private key are required for authentication.\n- **A request.** When submitting data to a resource via `POST`, `PATCH`, or `PUT`, you must submit your payload in JSON.\n\nIn this guide, you call the [List all accessible API Keys](#tag/API-Key/paths/~1apikeys/get) endpoint. For the detailed description of the endpoint, see the [API reference](#tag/API-Key/paths/~1apikeys/get).\n\n### Call an API endpoint\n\nTo get all projects in your organization, run the following command in your terminal. Remember to change `YOUR_PUBLIC_KEY` to your public key and `YOUR_PRIVATE_KEY` to your private key.\n\n```shell\ncurl --digest \\\n  --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --request GET \\\n  --url https://iam.tidbapi.com/v1beta1/apikeys\n```\n\n## Step 3. Check the response\n\nAfter making the API call, if the status code in response is `200` and you see details about all the API keys in your organization, your request is successful. Here is an example of a successful response.\n\n```log\n{\n\t\"apiKeys\": [{\n\t\t\"name\": \"orgs/1/apiKeys/2\",\n\t\t\"accessKey\": \"ABCDEFGH\",\n\t\t\"secretKey\": \"********************************0000\",\n\t\t\"displayName\": \"New Key\",\n\t\t\"role\": \"org:owner\"\n\t}],\n\t\"nextPageToken\": \"\"\n}\n``` \n\n# Authentication\n\nThe TiDB Cloud API uses [HTTP Digest Authentication](https://en.wikipedia.org/wiki/Digest_access_authentication). It protects your private key from being sent over the network. For more details about HTTP Digest Authentication, refer to the [IETF RFC](https://datatracker.ietf.org/doc/html/rfc7616).\n\n## API key overview\n\n- The API key contains a public key and a private key, which act as the username and password required in the HTTP Digest Authentication. The private key only displays upon the key creation.\n- The API key belongs to your organization and acts as the `Organization Owner` role. You can check [permissions of owner](https://docs.pingcap.com/tidbcloud/manage-user-access#configure-member-roles).\n- You must provide the correct API key in every request. Otherwise, TiDB Cloud responds with a `401` error.\n\n## API key management\n\n### Create an API key\n\nOnly the **owner** of an organization can create an API key.\n\nTo create an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **Create API Key**.\n4. Enter a description for your API key.\n5. Configure the role and scope for the API key. For more information about the permissions of a role, see [User roles](https://docs.pingcap.com/tidbcloud/manage-user-access/#user-roles).\n6. Click **Generate API Key**. Copy and save the public key and the private key.\n7. Make sure that you have copied and saved the private key in a secure location. The private key only displays upon the creation. After leaving this page, you will not be able to get the full private key again.\n8. Click **Done**.\n\n### View details of an API key\n\nTo view details of an API key, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. You can view the details of the API keys on the page.\n\n### Edit an API key\n\nOnly the **owner** of an organization can modify an API key.\n\nTo edit an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **...** in the API key row that you want to change, and then click **Update Role**.\n4. You can update the description and role of the API key.\n5. Click **Update**.\n\n### Delete an API key\n\nOnly the **owner** of an organization can delete an API key.\n\nTo delete an API key in an organization, perform the following steps:\n\n1. In the [TiDB Cloud console](https://tidbcloud.com), switch to your target organization using the combo box in the upper-left corner.\n2. In the left navigation pane, click **Organization Settings** > **API Keys**.\n3. On the **API Keys** page, click **...** in the API key row that you want to delete, and then click **Delete**.\n4. Click **I understand, delete it.**\n\n# Rate Limiting\n\nThe TiDB Cloud API allows up to 100 requests per minute per API key. If you exceed the rate limit, the API returns a `429` error. For more quota, you can [submit a request](https://support.pingcap.com/hc/en-us/requests/new?ticket_form_id=7800003722519) to contact our support team.\n\nEach API request returns the following headers about the limit.\n\n- `X-Ratelimit-Limit-Minute`: The number of requests allowed per minute. It is 100 currently.\n- `X-Ratelimit-Remaining-Minute`: The number of remaining requests in the current minute. When it reaches `0`, the API returns a `429` error and indicates that you exceed the rate limit.\n- `X-Ratelimit-Reset`: The time in seconds at which the current rate limit resets.\n\nIf you exceed the rate limit, an error response returns like this.\n\n```\n> HTTP/2 429\n> date: Fri, 22 Jul 2022 05:28:37 GMT\n> content-type: application/json\n> content-length: 66\n> x-ratelimit-reset: 23\n> x-ratelimit-remaining-minute: 0\n> x-ratelimit-limit-minute: 100\n> x-kong-response-latency: 2\n> server: kong/2.8.1\n\n> {\"details\":[],\"code\":49900007,\"message\":\"The request exceeded the limit of 100 times per apikey per minute. For more quota, please contact us: https://support.pingcap.com/hc/en-us/requests/new?ticket_form_id=7800003722519\"}\n```\n\n# API Changelog\n\nThis changelog lists all changes to the TiDB Cloud API.\n\n<!-- In reverse chronological order -->\n\n## 20260526\n- Introduce the following endpoints for managing organization members:\n    - [List members](#tag/Member/paths/~1members/get)\n    - [Invite members](#tag/Member/paths/~1members/post)\n    - [Batch update members](#tag/Member/paths/~1members~1batchUpdate/post)\n    - [Delete a member](#tag/Member/paths/~1members~1%7Buser_id%7D/delete)\n    - [Update a member](#tag/Member/paths/~1members~1%7Buser_id%7D/patch)\n    - [Resend an invitation](#tag/Member/paths/~1members~1%7Buser_id%7D~1resendInvitation/post)\n\n## 20251209\n- Add the [List console audit logs](#tag/Audit-Log/paths/~1auditLogs/get) endpoint.\n## 20250812\n- Add the role-based access control (RBAC) for API key management at both the organization and project levels.\n## 20240116\n- Add the [Create a new API key](#tag/API-Key/paths/~1apikeys/post) endpoint.\n- Add the [Get a single API key](#tag/API-Key/paths/~1apikeys~1%7BaccessKey%7D/get) endpoint.\n- Add the [List API keys](#tag/API-Key/paths/~1apikeys/get) endpoint.\n- Add the [Update an API key](#tag/API-Key/paths/~1apikeys~1%7BaccessKey%7D/patch) endpoint.\n- Add the [Delete an API key](#tag/API-Key/paths/~1apikeys~1%7BaccessKey%7D/delete) endpoint.\n",
+    "title": "IAM System OPENAPI",
+    "contact": {},
+    "version": "v1beta1"
+  },
+  "host": "iam.tidbapi.com",
+  "basePath": "/v1beta1",
+  "paths": {
+    "/apikeys": {
+      "get": {
+        "description": "Lists all API keys.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "API Key"
+        ],
+        "summary": "List API keys",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "The ID of the project. If not specified, the project ID of the default project is used.",
+            "name": "projectId",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "The pagination token received from a previous [List API keys](#tag/API-Key/paths/~1apikeys/get) request. Use this token to retrieve the next page of results.",
+            "name": "pageToken",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "The maximum number of API keys to return. If not specified, at most 100 API keys will be returned.",
+            "name": "pageSize",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiListApiKeyRsp"
+            }
+          },
+          "400": {
+            "description": "A request field is invalid.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiError"
+            }
+          }
+        },
+        "x-code-samples": [
+          {
+            "lang": "curl",
+            "label": "curl",
+            "source": "curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --location 'https://iam.tidbapi.com/v1beta1/apikeys'"
+          }
+        ]
+      },
+      "post": {
+        "description": "Creates a new API key with the specified permissions and configuration.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "API Key"
+        ],
+        "summary": "Create a new API key",
+        "parameters": [
+          {
+            "name": "apiKey",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiCreateApiKeyReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiApiKey"
+            }
+          },
+          "400": {
+            "description": "A request field is invalid.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiError"
+            }
+          }
+        },
+        "x-code-samples": [
+          {
+            "lang": "curl",
+            "label": "curl",
+            "source": "curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --location 'https://iam.tidbapi.com/v1beta1/apikeys' --header 'Content-Type: application/json' --data '{\n    \"displayName\": \"YOUR_API_NAME\",\n    \"role\": \"org:owner\"\n}'"
+          }
+        ]
+      }
+    },
+    "/apikeys/{accessKey}": {
+      "get": {
+        "description": "Retrieves the details of a specific API key using its `accessKey`.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "API Key"
+        ],
+        "summary": "Get an API key",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "The access key of the API key.",
+            "name": "accessKey",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiApiKey"
+            }
+          },
+          "400": {
+            "description": "A request field is invalid.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiError"
+            }
+          }
+        },
+        "x-code-samples": [
+          {
+            "lang": "curl",
+            "label": "curl",
+            "source": "curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --location 'https://iam.tidbapi.com/v1beta1/apikeys/{YOUR_ACCESS_KEY}'"
+          }
+        ]
+      },
+      "delete": {
+        "description": "Deletes an API key.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "API Key"
+        ],
+        "summary": "Delete an API key",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "The access key of the API key to delete.",
+            "name": "accessKey",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response."
+          },
+          "400": {
+            "description": "A request field is invalid.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiError"
+            }
+          }
+        },
+        "x-code-samples": [
+          {
+            "lang": "curl",
+            "label": "curl",
+            "source": "curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --location --request DELETE 'https://iam.tidbapi.com/v1beta1/apikeys/{YOUR_ACCESS_KEY}'"
+          }
+        ]
+      },
+      "patch": {
+        "description": "Updates an API key by modifying the specified fields.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "API Key"
+        ],
+        "summary": "Update an API key",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "The access key of the API key to update.",
+            "name": "accessKey",
+            "in": "path",
+            "required": true
+          },
+          {
+            "name": "apiKey",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiUpdateApiKeyReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response."
+          },
+          "400": {
+            "description": "A request field is invalid.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiError"
+            }
+          }
+        },
+        "x-code-samples": [
+          {
+            "lang": "curl",
+            "label": "curl",
+            "source": "curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --location --request PATCH 'https://iam.tidbapi.com/v1beta1/apikeys/{YOUR_ACCESS_KEY}' --header 'Content-Type: application/json' --data '{\n    \"displayName\": \"YOUR_UPDATED_API_NAME\"\n}'"
+          }
+        ]
+      }
+    },
+    "/auditLogs": {
+      "get": {
+        "description": "Lists all console audit logs for your organization. This endpoint helps you track various behaviors and operations of users on the [TiDB Cloud console](https://tidbcloud.com/). You can filter results by time range, event type, or keyword.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Audit Log"
+        ],
+        "summary": "List audit logs",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "The pagination token received from a previous [List audit logs](#tag/Audit-Log/paths/~1auditLogs/get) request. Use this token to retrieve the next page of results.",
+            "name": "pageToken",
+            "in": "query"
+          },
+          {
+            "type": "integer",
+            "description": "The maximum number of audit logs to return. If not specified, at most 100 audit logs will be returned.",
+            "name": "pageSize",
+            "in": "query",
+            "default": "100",
+            "minimum": "1",
+            "maximum": "100"
+          },
+          {
+            "type": "string",
+            "format": "date-time",
+            "description": "Filters the results to include only audit logs created on or after this timestamp, in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.",
+            "name": "startTime",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "format": "date-time",
+            "description": "Filters the results to include only audit logs created before or at this timestamp, in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.",
+            "name": "endTime",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "Filters the results by specific event types. For more information, see [Console audit event types](https://docs.pingcap.com/tidbcloud/tidb-cloud-console-auditing/#console-audit-event-types).",
+            "name": "auditEventTypes",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "Filters results to include only audit logs that contain the specified search term.",
+            "name": "keyword",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "schema": {
+              "$ref": "#/definitions/controller.queryAuditLogRsp"
+            }
+          },
+          "400": {
+            "description": "Bad Request",
+            "schema": {
+              "$ref": "#/definitions/controller.openApiError"
+            }
+          },
+          "500": {
+            "description": "Internal Server Error",
+            "schema": {
+              "$ref": "#/definitions/controller.openApiError"
+            }
+          }
+        },
+        "x-code-samples": [
+          {
+            "lang": "curl",
+            "label": "curl",
+            "source": "curl --digest --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --location 'https://iam.tidbapi.com/v1beta1/auditLogs?startTime=2025-12-03T00:00:00Z'"
+          }
+        ]
+      }
+    },
+    "/members": {
+      "get": {
+        "description": "Lists all members in your organization. You can filter the results by email address, role, status, project ID, or instance ID.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Member"
+        ],
+        "summary": "List members",
+        "parameters": [
+          {
+            "type": "integer",
+            "description": "The maximum number of members to return. If not specified, at most 100 members will be returned.",
+            "name": "pageSize",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "The pagination token received from a previous `List members` request. Use this token to retrieve the next page of results.\n\n**Note**: When paginating, all other parameters must match the original request.",
+            "name": "pageToken",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "Filters the results by email address. Only members whose email matches the specified value are returned.",
+            "name": "email",
+            "in": "query"
+          },
+          {
+            "type": "array",
+            "items": {
+              "enum": [
+                "org:owner",
+                "org:member",
+                "org:billing_admin",
+                "org:billing_viewer",
+                "org:audit_admin",
+                "project:owner",
+                "project:dev",
+                "project:readonly",
+                "project:ctl_plane_viewer",
+                "cluster:admin",
+                "cluster:viewer"
+              ],
+              "type": "string"
+            },
+            "collectionFormat": "multi",
+            "description": "Filters the results by one or more roles. Only members assigned any of the specified roles are returned.\n\nTo specify multiple roles, repeat the `roles` parameter for each value. For example, `?roles=org:owner&roles=org:member`.",
+            "name": "roles",
+            "in": "query"
+          },
+          {
+            "type": "array",
+            "items": {
+              "enum": [
+                "Active",
+                "Pending"
+              ],
+              "type": "string"
+            },
+            "collectionFormat": "multi",
+            "description": "Filters the results by one or more member statuses. Only members in any of the specified statuses are returned.\n\nTo specify multiple statuses, repeat the `statuses` parameter for each value. For example, `?statuses=Active&statuses=Pending`.",
+            "name": "statuses",
+            "in": "query"
+          },
+          {
+            "enum": [
+              "email asc",
+              "email desc",
+              "invite_time asc",
+              "invite_time desc",
+              "login_time asc",
+              "login_time desc"
+            ],
+            "type": "string",
+            "description": "Specifies the sorting order of results. Use a supported field name, optionally followed by `asc` (ascending order) or `desc` (descending order). For example, `email desc`. By default, results are sorted in ascending order.\n\nSupported fields: `email`, `invite_time`, `login_time`.",
+            "name": "orderBy",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "The ID of the project. If specified, only members assigned to the specified project are returned.",
+            "name": "projectId",
+            "in": "query"
+          },
+          {
+            "type": "string",
+            "description": "The ID of the TiDB Cloud Starter, Essential, or Premium instance. If specified, only members assigned to the specified instance are returned.",
+            "name": "instanceId",
+            "in": "query"
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiListUsersRsp"
+            }
+          },
+          "400": {
+            "description": "A request field is invalid.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiError"
+            }
+          },
+          "401": {
+            "description": "The API key cannot be authenticated.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiError"
+            }
+          },
+          "403": {
+            "description": "The API key does not have permission to access the resource.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiError"
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiError"
+            }
+          }
+        },
+        "x-code-samples": [
+          {
+            "lang": "curl",
+            "source": "curl --digest \\\n  --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --request GET \\\n  --url 'https://iam.tidbapi.com/v1beta1/members'"
+          }
+        ]
+      },
+      "post": {
+        "description": "Invites one or more users to your organization. You can also assign organization, project, and instance roles to the invited members in the same request.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Member"
+        ],
+        "summary": "Invite members",
+        "parameters": [
+          {
+            "description": "The members to invite, including their email addresses and roles.",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiInviteUsersReq"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiInviteUsersRsp"
+            }
+          },
+          "400": {
+            "description": "A request field is invalid.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiError"
+            }
+          },
+          "401": {
+            "description": "The API key cannot be authenticated.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiError"
+            }
+          },
+          "403": {
+            "description": "The API key does not have permission to access the resource.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiError"
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiError"
+            }
+          }
+        },
+        "x-code-samples": [
+          {
+            "lang": "curl",
+            "source": "curl --digest \\\n  --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --request POST \\\n  -d '{\"emails\": [\"user@example.com\"], \"orgRole\": {\"rbacRole\": \"org:member\"}}' \\\n  --url 'https://iam.tidbapi.com/v1beta1/members'"
+          }
+        ]
+      }
+    },
+    "/members/batchUpdate": {
+      "post": {
+        "description": "Updates the organization, project, and instance roles of multiple members in a single request. You can update at most 100 members per request.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Member"
+        ],
+        "summary": "Batch update members",
+        "parameters": [
+          {
+            "description": "The members to update and the new roles to assign to each of them.",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/api.openApiBatchUpdateUsersReqDoc"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiBatchUpdateUsersRsp"
+            }
+          },
+          "400": {
+            "description": "A request field is invalid.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiError"
+            }
+          },
+          "401": {
+            "description": "The API key cannot be authenticated.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiError"
+            }
+          },
+          "403": {
+            "description": "The API key does not have permission to access the resource.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiError"
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiError"
+            }
+          }
+        },
+        "x-code-samples": [
+          {
+            "lang": "curl",
+            "source": "curl --digest \\\n  --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --request POST \\\n  -d '{\"users\": [{\"userId\": \"123456\", \"orgRole\": {\"rbacRole\": \"org:member\"}}]}' \\\n  --url 'https://iam.tidbapi.com/v1beta1/members/batchUpdate'"
+          }
+        ]
+      }
+    },
+    "/members/{user_id}": {
+      "delete": {
+        "description": "Removes a member from your organization. The member loses all roles within the organization.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Member"
+        ],
+        "summary": "Delete a member",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "The ID of the member to remove from your organization.",
+            "name": "user_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response."
+          },
+          "400": {
+            "description": "A request field is invalid.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiError"
+            }
+          },
+          "401": {
+            "description": "The API key cannot be authenticated.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiError"
+            }
+          },
+          "403": {
+            "description": "The API key does not have permission to access the resource.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiError"
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiError"
+            }
+          }
+        },
+        "x-code-samples": [
+          {
+            "lang": "curl",
+            "source": "curl --digest \\\n  --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --request DELETE \\\n  --url 'https://iam.tidbapi.com/v1beta1/members/{user_id}'"
+          }
+        ]
+      },
+      "patch": {
+        "description": "Updates the organization, project, and instance roles of a member. Project roles and instance roles are fully replaced when provided in the request.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Member"
+        ],
+        "summary": "Update a member",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "The ID of the member to update.",
+            "name": "user_id",
+            "in": "path",
+            "required": true
+          },
+          {
+            "description": "The new roles to assign to the member.",
+            "name": "body",
+            "in": "body",
+            "required": true,
+            "schema": {
+              "$ref": "#/definitions/api.openApiUpdateUserReqDoc"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response."
+          },
+          "400": {
+            "description": "A request field is invalid.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiError"
+            }
+          },
+          "401": {
+            "description": "The API key cannot be authenticated.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiError"
+            }
+          },
+          "403": {
+            "description": "The API key does not have permission to access the resource.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiError"
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiError"
+            }
+          }
+        },
+        "x-code-samples": [
+          {
+            "lang": "curl",
+            "source": "curl --digest \\\n  --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --request PATCH \\\n  -d '{\"orgRole\": {\"rbacRole\": \"org:member\"}}' \\\n  --url 'https://iam.tidbapi.com/v1beta1/members/{user_id}'"
+          }
+        ]
+      }
+    },
+    "/members/{user_id}/resendInvitation": {
+      "post": {
+        "description": "Resends the invitation email to a user who has not yet accepted the invitation.",
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "tags": [
+          "Member"
+        ],
+        "summary": "Resend an invitation",
+        "parameters": [
+          {
+            "type": "string",
+            "description": "The ID of the member whose invitation email you want to resend.",
+            "name": "user_id",
+            "in": "path",
+            "required": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "A successful response."
+          },
+          "400": {
+            "description": "A request field is invalid.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiError"
+            }
+          },
+          "401": {
+            "description": "The API key cannot be authenticated.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiError"
+            }
+          },
+          "403": {
+            "description": "The API key does not have permission to access the resource.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiError"
+            }
+          },
+          "500": {
+            "description": "Internal server error.",
+            "schema": {
+              "$ref": "#/definitions/api.OpenApiError"
+            }
+          }
+        },
+        "x-code-samples": [
+          {
+            "lang": "curl",
+            "source": "curl --digest \\\n  --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \\\n  --request POST \\\n  --url 'https://iam.tidbapi.com/v1beta1/members/{user_id}/resendInvitation'"
+          }
+        ]
+      }
+    }
+  },
+  "definitions": {
+    "api.OpenApiListApiKeyRsp": {
+      "type": "object",
+      "properties": {
+        "apiKeys": {
+          "description": "A list of API keys that match the query.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/api.OpenApiApiKey"
+          }
+        },
+        "nextPageToken": {
+          "description": "The token to retrieve the next page of results. Use this value as the `pageToken` parameter in the next request. This field is empty when there are no more pages.",
+          "type": "string",
+          "example": "498c7f44-656f-4944-b455-0695faa5d4f9"
+        }
+      }
+    },
+    "api.OpenApiApiKey": {
+      "type": "object",
+      "properties": {
+        "accessKey": {
+          "description": "The access key of the API key.",
+          "type": "string",
+          "example": "ABCDEFGH"
+        },
+        "displayName": {
+          "description": "The display name of the API key.",
+          "type": "string",
+          "example": "New Key"
+        },
+        "name": {
+          "description": "The name of the API key.",
+          "type": "string",
+          "example": "orgs/1/apiKeys/2"
+        },
+        "role": {
+          "description": "The role of the API key.",
+          "type": "string",
+          "example": "org:owner"
+        },
+        "secretKey": {
+          "description": "The secret key of the API key.",
+          "type": "string",
+          "example": "498c7f44-656f-4944-b455-0695faa5d4f9"
+        }
+      }
+    },
+    "api.OpenApiError": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "error": {},
+        "msgPrefix": {
+          "type": "string"
+        },
+        "status": {
+          "type": "integer"
+        }
+      }
+    },
+    "api.OpenApiCreateApiKeyReq": {
+      "type": "object",
+      "properties": {
+        "displayName": {
+          "description": "The display name of API key.",
+          "type": "string",
+          "example": "New Key"
+        },
+        "projectId": {
+          "description": "The ID of the project. If not specified, the project ID of the default project is used.",
+          "type": "integer",
+          "example": 123456
+        },
+        "role": {
+          "description": "The role of API key.\n\n- If `projectId` is set to `0`, use an [organization role](https://docs.pingcap.com/tidbcloud/manage-user-access/#organization-roles):\n\n  - `org:owner`: indicates the `Organization Owner` role.\n\n  - `org:member`: indicates the `Organization Viewer` role.\n\n  - `org:billing_admin`: indicates the `Organization Billing Manager` role.\n\n  - `org:billing_viewer`: indicates the `Organization Billing Viewer` role.\n\n  - `org:audit_admin`: indicates the `Organization Console Audit Manager` role.\n\n- if `projectId` is not set to `0`, use a [project role](https://docs.pingcap.com/tidbcloud/manage-user-access/#project-roles):\n\n  - `project:owner`: indicates the `Project Owner` role.\n\n  - `project:dev`: indicates the `Project Data Access Read-Write` role.\n\n  - `project:readonly`: indicates the `Project Data Access Read-Only` role.\n\n  - `project:ctl_plane_viewer`: indicates the `Project Viewer` role.",
+          "type": "string",
+          "example": "org:owner"
+        }
+      }
+    },
+    "api.OpenApiUpdateApiKeyReq": {
+      "type": "object",
+      "properties": {
+        "displayName": {
+          "description": "The display name of the API key.",
+          "type": "string",
+          "example": "New Key"
+        },
+        "projectId": {
+          "description": "The project to which the API key belongs. If not set, the API key belongs to org.",
+          "type": "integer",
+          "example": 123456
+        },
+        "role": {
+          "description": "The role of API key.\n\n- If `projectId` is set to `0`, use an [organization role](https://docs.pingcap.com/tidbcloud/manage-user-access/#organization-roles):\n\n  - `org:owner`: indicates the `Organization Owner` role.\n\n  - `org:member`: indicates the `Organization Viewer` role.\n\n  - `org:billing_admin`: indicates the `Organization Billing Manager` role.\n\n  - `org:billing_viewer`: indicates the `Organization Billing Viewer` role.\n\n  - `org:audit_admin`: indicates the `Organization Console Audit Manager` role.\n\n- if `projectId` is not set to `0`, use a [project role](https://docs.pingcap.com/tidbcloud/manage-user-access/#project-roles):\n\n  - `project:owner`: indicates the `Project Owner` role.\n\n  - `project:dev`: indicates the `Project Data Access Read-Write` role.\n\n  - `project:readonly`: indicates the `Project Data Access Read-Only` role.\n\n  - `project:ctl_plane_viewer`: indicates the `Project Viewer` role.",
+          "type": "string",
+          "example": "org:owner"
+        }
+      }
+    },
+    "controller.queryAuditLogRsp": {
+      "type": "object",
+      "properties": {
+        "auditLogs": {
+          "description": "A list of console audit logs that match the query.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/controller.orgAuditLog"
+          },
+          "title": "AuditLog"
+        },
+        "nextPageToken": {
+          "description": "The token to retrieve the next page of results. Use this value as the `pageToken` parameter in the next request. This field is empty when there are no more pages.",
+          "type": "string",
+          "example": "1a2b3c4d5e6f7g8h"
+        },
+        "totalSize": {
+          "description": "The total number of console audit logs that match the query.",
+          "type": "integer",
+          "example": 100
+        }
+      }
+    },
+    "controller.orgAuditLog": {
+      "type": "object",
+      "properties": {
+        "clusterId": {
+          "description": "The ID of the cluster associated with the audit event.",
+          "type": "string",
+          "example": "1"
+        },
+        "clusterName": {
+          "description": "The display name of the cluster.",
+          "type": "string",
+          "example": "Cluster0"
+        },
+        "clusterType": {
+          "description": "The plan of the cluster.",
+          "type": "string",
+          "example": "Dedicated"
+        },
+        "details": {
+          "description": "The additional details about the audit event.",
+          "type": "string",
+          "example": "{\"port_number\":\"4000\",\"tidb_node_group_id\":\"\",\"tidb_quantity\":\"1\",\"tidb_size\":\"8C16G\",\"tier_type\":\"dedicated\",\"tikv_quantity\":\"3\",\"tikv_size\":\"8C32G\",\"tikv_storage_size\":\"500\"}"
+        },
+        "endTime": {
+          "description": "The timestamp when the operation completed, in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.",
+          "type": "string",
+          "example": "2025-12-03T07:34:32Z"
+        },
+        "eventType": {
+          "description": "The type of the audit event.",
+          "type": "string",
+          "example": "CreateCluster"
+        },
+        "id": {
+          "description": "The ID of the audit event.",
+          "type": "string",
+          "example": "1234567890"
+        },
+        "operationEmail": {
+          "description": "The email address of the user who performed the operation.",
+          "type": "string",
+          "example": "user@test.com"
+        },
+        "operationId": {
+          "description": "The ID of the operation that generated the audit event.",
+          "type": "string",
+          "example": "0987654321"
+        },
+        "operationIp": {
+          "description": "The IP address from which the operation was performed.",
+          "type": "string",
+          "example": "0.0.0.0"
+        },
+        "operationLoginMethod": {
+          "description": "The authentication method used when the user signed in.",
+          "type": "string",
+          "example": "google-oauth2"
+        },
+        "operationType": {
+          "description": "The type of the operation, indicating whether the operation was performed by a user or through the API.",
+          "type": "string",
+          "example": "User"
+        },
+        "organizationId": {
+          "description": "The ID of the organization in which the event occurred.",
+          "type": "string",
+          "example": "1122334455"
+        },
+        "organizationName": {
+          "description": "The name of the organization.",
+          "type": "string",
+          "example": "Test Organization"
+        },
+        "projectId": {
+          "description": "The ID of the project associated with the event.",
+          "type": "string",
+          "example": "6677889900"
+        },
+        "projectName": {
+          "description": "The name of the project.",
+          "type": "string",
+          "example": "Test Project"
+        },
+        "result": {
+          "description": "The outcome of the operation, such as `Success` or `Failure`.",
+          "type": "string",
+          "example": "Success"
+        },
+        "tranceId": {
+          "description": "A trace identifier used to correlate this audit event with related system logs.",
+          "type": "string",
+          "example": "1a2b3c4d5e6f7g8h9i0j1k2l3m4n5o6p"
+        }
+      }
+    },
+    "controller.openApiError": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "type": "string"
+        },
+        "error": {},
+        "msgPrefix": {
+          "type": "string"
+        },
+        "status": {
+          "type": "integer"
+        }
+      }
+    },
+    "api.OpenApiBatchUpdateError": {
+      "type": "object",
+      "properties": {
+        "code": {
+          "description": "The error code returned when the member update failed.",
+          "type": "string"
+        },
+        "message": {
+          "description": "The error message describing why the member update failed.",
+          "type": "string"
+        }
+      }
+    },
+    "api.OpenApiBatchUpdateUserResult": {
+      "type": "object",
+      "properties": {
+        "error": {
+          "description": "The error details when the member update failed. This field is empty when the update succeeded.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/api.OpenApiBatchUpdateError"
+            }
+          ]
+        },
+        "success": {
+          "description": "Indicates whether the member was updated successfully.",
+          "type": "boolean"
+        },
+        "userId": {
+          "description": "The ID of the member.",
+          "type": "string"
+        }
+      }
+    },
+    "api.OpenApiBatchUpdateUsersRsp": {
+      "type": "object",
+      "properties": {
+        "results": {
+          "description": "The list of update results, one for each member in the request.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/api.OpenApiBatchUpdateUserResult"
+          }
+        }
+      }
+    },
+    "api.OpenApiInstanceRole": {
+      "type": "object",
+      "properties": {
+        "rbacRole": {
+          "description": "The instance-level role assigned to the member.",
+          "type": "string",
+          "enum": [
+            "cluster:admin",
+            "cluster:viewer"
+          ],
+          "example": "cluster:admin"
+        },
+        "scopeId": {
+          "description": "The ID of the TiDB Cloud Starter, Essential, or Premium instance to which the role applies.",
+          "type": "string"
+        }
+      }
+    },
+    "api.OpenApiInviteUserResult": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "description": "The email address of the invited member.",
+          "type": "string"
+        },
+        "userId": {
+          "description": "The ID of the invited member.",
+          "type": "string"
+        }
+      }
+    },
+    "api.OpenApiInviteUsersReq": {
+      "type": "object",
+      "required": [
+        "emails",
+        "orgRole"
+      ],
+      "properties": {
+        "emails": {
+          "description": "The email addresses of the users to invite.",
+          "type": "array",
+          "items": {
+            "type": "string"
+          }
+        },
+        "instanceRoles": {
+          "description": "The instance-level roles to assign to the invited members.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/api.OpenApiInstanceRole"
+          }
+        },
+        "orgRole": {
+          "description": "The organization-level role to assign to the invited members.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/api.OpenApiOrgRole"
+            }
+          ]
+        },
+        "projectRoles": {
+          "description": "The project-level roles to assign to the invited members.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/api.OpenApiProjectRole"
+          }
+        }
+      }
+    },
+    "api.OpenApiInviteUsersRsp": {
+      "type": "object",
+      "properties": {
+        "message": {
+          "description": "A human-readable message describing the result of the invitation.",
+          "type": "string"
+        },
+        "success": {
+          "description": "Indicates whether the invitation was sent successfully.",
+          "type": "boolean"
+        },
+        "users": {
+          "description": "The list of members that were invited.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/api.OpenApiInviteUserResult"
+          }
+        }
+      }
+    },
+    "api.OpenApiListUsersRsp": {
+      "type": "object",
+      "properties": {
+        "nextPageToken": {
+          "description": "The token to retrieve the next page of results. Use this value as the `pageToken` parameter in the next request. This field is empty when there are no more pages.",
+          "type": "string",
+          "example": ""
+        },
+        "totalSize": {
+          "description": "The total number of members that match the query.",
+          "type": "integer",
+          "example": 10
+        },
+        "users": {
+          "description": "The list of members returned for the current page.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/api.OpenApiUser"
+          }
+        }
+      }
+    },
+    "api.OpenApiOrgRole": {
+      "type": "object",
+      "properties": {
+        "rbacRole": {
+          "description": "The organization-level role assigned to the member.",
+          "type": "string",
+          "enum": [
+            "org:owner",
+            "org:member",
+            "org:billing_admin",
+            "org:billing_viewer",
+            "org:audit_admin"
+          ],
+          "example": "org:owner"
+        },
+        "scopeId": {
+          "description": "The ID of the organization to which the role applies.",
+          "type": "string"
+        }
+      }
+    },
+    "api.OpenApiProjectRole": {
+      "type": "object",
+      "properties": {
+        "rbacRole": {
+          "description": "The project-level role assigned to the member.",
+          "type": "string",
+          "enum": [
+            "project:owner",
+            "project:dev",
+            "project:readonly",
+            "project:ctl_plane_viewer"
+          ],
+          "example": "project:owner"
+        },
+        "scopeId": {
+          "description": "The ID of the project to which the role applies.",
+          "type": "string"
+        }
+      }
+    },
+    "api.OpenApiUser": {
+      "type": "object",
+      "properties": {
+        "email": {
+          "description": "The email address of the member.",
+          "type": "string",
+          "example": "user@example.com"
+        },
+        "firstName": {
+          "description": "The first name of the member.",
+          "type": "string",
+          "example": "John"
+        },
+        "instanceRoles": {
+          "description": "The instance-level roles assigned to the member.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/api.OpenApiInstanceRole"
+          }
+        },
+        "inviteTime": {
+          "description": "The timestamp when the member was invited, in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.",
+          "type": "string",
+          "example": "2024-01-01T00:00:00Z"
+        },
+        "lastLoginTime": {
+          "description": "The timestamp when the member last logged in, in the [ISO 8601](https://en.wikipedia.org/wiki/ISO_8601) format.",
+          "type": "string",
+          "example": "2024-01-01T00:00:00Z"
+        },
+        "lastName": {
+          "description": "The last name of the member.",
+          "type": "string",
+          "example": "Doe"
+        },
+        "orgRole": {
+          "description": "The organization-level role assigned to the member.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/api.OpenApiOrgRole"
+            }
+          ]
+        },
+        "projectRoles": {
+          "description": "The project-level roles assigned to the member.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/api.OpenApiProjectRole"
+          }
+        },
+        "status": {
+          "description": "The current status of the member. `Active` indicates the member has accepted the invitation; `Pending` indicates the invitation has not yet been accepted.",
+          "type": "string",
+          "example": "Active"
+        },
+        "userId": {
+          "description": "The ID of the member.",
+          "type": "string",
+          "example": "123456"
+        }
+      }
+    },
+    "api.openApiBatchUpdateUserEntryDoc": {
+      "type": "object",
+      "required": [
+        "userId"
+      ],
+      "properties": {
+        "instanceRoles": {
+          "description": "The new instance-level roles to assign to the member. The existing instance roles are fully replaced when this field is provided.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/api.OpenApiInstanceRole"
+          }
+        },
+        "orgRole": {
+          "description": "The new organization-level role to assign to the member.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/api.OpenApiOrgRole"
+            }
+          ]
+        },
+        "projectRoles": {
+          "description": "The new project-level roles to assign to the member. The existing project roles are fully replaced when this field is provided.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/api.OpenApiProjectRole"
+          }
+        },
+        "userId": {
+          "description": "The ID of the member to update.",
+          "type": "string"
+        }
+      }
+    },
+    "api.openApiBatchUpdateUsersReqDoc": {
+      "type": "object",
+      "properties": {
+        "users": {
+          "description": "The list of members to update.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/api.openApiBatchUpdateUserEntryDoc"
+          }
+        }
+      }
+    },
+    "api.openApiUpdateUserReqDoc": {
+      "type": "object",
+      "properties": {
+        "instanceRoles": {
+          "description": "The new instance-level roles to assign to the member. The existing instance roles are fully replaced when this field is provided.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/api.OpenApiInstanceRole"
+          }
+        },
+        "orgRole": {
+          "description": "The new organization-level role to assign to the member.",
+          "allOf": [
+            {
+              "$ref": "#/definitions/api.OpenApiOrgRole"
+            }
+          ]
+        },
+        "projectRoles": {
+          "description": "The new project-level roles to assign to the member. The existing project roles are fully replaced when this field is provided.",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/api.OpenApiProjectRole"
+          }
+        }
+      }
+    }
+  },
+  "tags": []
+}

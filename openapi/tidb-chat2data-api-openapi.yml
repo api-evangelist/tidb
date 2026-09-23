@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: TiDB Cloud Chat2Query Chat2 Data API
-  description: The TiDB Cloud Chat2Query API is an AI-powered interface that enables developers to generate and execute SQL statements against TiDB Cloud clusters using natural language instructions. It is exposed as a special Data App within TiDB Cloud, authenticated via API keys scoped to the Chat2Query Data App. The API provides endpoints for generating data summaries of database schemas, translating natural language prompts into SQL via the v2 and v3 chat2data endpoints, refining existing queries, managing multi-round chat sessions, and suggesting questions for data exploration. It is intended for building AI-assisted data exploration tools, reporting interfaces, and applications that need to query structured data without requiring users to write SQL directly. The API uses HTTP Digest Authentication and is rate limited to 100 requests per day per Data App.
+  description: The TiDB Cloud Chat2Query API is an AI-powered interface that enables developers to generate and execute SQL statements against TiDB Cloud clusters using natural language instructions.
   version: v3
   contact:
     name: TiDB Cloud Support
@@ -125,47 +125,36 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    JobStatusResponse:
+    Chat2DataRequest:
       type: object
-      description: Status and result of an asynchronous Chat2Query v2 job.
+      description: Request body for generating and executing a SQL query from natural language.
+      required:
+      - cluster_id
+      - database
+      - question
       properties:
-        code:
-          type: integer
-          description: The response code. 200 indicates success.
-        msg:
+        cluster_id:
           type: string
-          description: A message describing the result.
-        result:
-          type: object
-          properties:
-            job_id:
-              type: string
-              description: The job identifier.
-            status:
-              type: string
-              description: The current status of the job.
-              enum:
-              - RUNNING
-              - DONE
-              - FAILED
-            data:
-              $ref: '#/components/schemas/Chat2DataResult'
-    JobResponse:
-      type: object
-      description: Response for asynchronous v2 Chat2Query job creation.
-      properties:
-        code:
-          type: integer
-          description: The response code. 200 indicates success.
-        msg:
+          description: The ID of the TiDB Cloud cluster to run the SQL query against.
+        database:
           type: string
-          description: A message describing the result.
-        result:
-          type: object
-          properties:
-            job_id:
-              type: string
-              description: The unique identifier for polling the job status.
+          description: The database within the cluster to query.
+        data_summary_id:
+          type: integer
+          description: The ID of a previously generated data summary to use as schema context.
+        question:
+          type: string
+          description: The natural language question to translate into SQL and execute.
+        sql_generate_mode:
+          type: string
+          description: The SQL generation strategy to use.
+          enum:
+          - direct
+          - auto_breakdown
+          default: direct
+        session_id:
+          type: string
+          description: The session ID for multi-round conversational queries.
     Chat2DataResult:
       type: object
       description: The result of a Chat2Data SQL generation and execution.
@@ -197,19 +186,47 @@ components:
         msg:
           type: string
           description: A human-readable error message describing the failure.
-    SuggestQuestionsRequest:
+    JobResponse:
       type: object
-      description: Request body for generating question suggestions for a database.
-      required:
-      - cluster_id
-      - database
+      description: Response for asynchronous v2 Chat2Query job creation.
       properties:
-        cluster_id:
+        code:
+          type: integer
+          description: The response code. 200 indicates success.
+        msg:
           type: string
-          description: The ID of the TiDB Cloud cluster.
-        database:
+          description: A message describing the result.
+        result:
+          type: object
+          properties:
+            job_id:
+              type: string
+              description: The unique identifier for polling the job status.
+    JobStatusResponse:
+      type: object
+      description: Status and result of an asynchronous Chat2Query v2 job.
+      properties:
+        code:
+          type: integer
+          description: The response code. 200 indicates success.
+        msg:
           type: string
-          description: The database to generate question suggestions for.
+          description: A message describing the result.
+        result:
+          type: object
+          properties:
+            job_id:
+              type: string
+              description: The job identifier.
+            status:
+              type: string
+              description: The current status of the job.
+              enum:
+              - RUNNING
+              - DONE
+              - FAILED
+            data:
+              $ref: '#/components/schemas/Chat2DataResult'
     ColumnDefinition:
       type: object
       description: A column definition in a query result set.
@@ -253,37 +270,26 @@ components:
           description: A message describing the result.
         result:
           $ref: '#/components/schemas/Chat2DataResult'
-    Chat2DataRequest:
+    SuggestQuestionsRequest:
       type: object
-      description: Request body for generating and executing a SQL query from natural language.
+      description: Request body for generating question suggestions for a database.
       required:
       - cluster_id
       - database
-      - question
       properties:
         cluster_id:
           type: string
-          description: The ID of the TiDB Cloud cluster to run the SQL query against.
+          description: The ID of the TiDB Cloud cluster.
         database:
           type: string
-          description: The database within the cluster to query.
-        data_summary_id:
-          type: integer
-          description: The ID of a previously generated data summary to use as schema context.
-        question:
-          type: string
-          description: The natural language question to translate into SQL and execute.
-        sql_generate_mode:
-          type: string
-          description: The SQL generation strategy to use.
-          enum:
-          - direct
-          - auto_breakdown
-          default: direct
-        session_id:
-          type: string
-          description: The session ID for multi-round conversational queries.
+          description: The database to generate question suggestions for.
   responses:
+    BadRequest:
+      description: The request body or parameters are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
     Unauthorized:
       description: Authentication failed. Check your Chat2Query API key credentials.
       content:
@@ -298,12 +304,6 @@ components:
             $ref: '#/components/schemas/ErrorResponse'
     NotFound:
       description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: The request body or parameters are invalid.
       content:
         application/json:
           schema:

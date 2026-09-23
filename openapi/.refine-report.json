@@ -40,7 +40,8 @@
     "tidb-cloud-chat2query-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
     "tidb-cloud-data-service-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
     "tidb-http-api-openapi.yml: upgraded openapi 3.1.0 -> OpenAPI 3.2.0",
-    "tag 'Regions' spans 2 source specs (tidb-cloud-api-openapi.yml, tidb-http-api-openapi.yml): per-path servers applied"
+    "tag 'Regions' spans 2 source specs (tidb-cloud-api-openapi.yml, tidb-http-api-openapi.yml): per-path servers applied",
+    "apis.yml register: already-registered"
   ],
   "skipped": [
     "tidb-api-keys-api-openapi.yml: previously refined output, superseded by openapi/_original/",

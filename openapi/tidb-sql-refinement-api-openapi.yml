@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: TiDB Cloud Chat2Query SQL Refinement API
-  description: The TiDB Cloud Chat2Query API is an AI-powered interface that enables developers to generate and execute SQL statements against TiDB Cloud clusters using natural language instructions. It is exposed as a special Data App within TiDB Cloud, authenticated via API keys scoped to the Chat2Query Data App. The API provides endpoints for generating data summaries of database schemas, translating natural language prompts into SQL via the v2 and v3 chat2data endpoints, refining existing queries, managing multi-round chat sessions, and suggesting questions for data exploration. It is intended for building AI-assisted data exploration tools, reporting interfaces, and applications that need to query structured data without requiring users to write SQL directly. The API uses HTTP Digest Authentication and is rate limited to 100 requests per day per Data App.
+  description: The TiDB Cloud Chat2Query API is an AI-powered interface that enables developers to generate and execute SQL statements against TiDB Cloud clusters using natural language instructions.
   version: v3
   contact:
     name: TiDB Cloud Support
@@ -79,6 +79,19 @@ components:
         msg:
           type: string
           description: A human-readable error message describing the failure.
+    ColumnDefinition:
+      type: object
+      description: A column definition in a query result set.
+      properties:
+        col:
+          type: string
+          description: The column name.
+        data_type:
+          type: string
+          description: The SQL data type of the column.
+        nullable:
+          type: boolean
+          description: Whether the column can contain NULL values.
     RefineSqlRequest:
       type: object
       description: Request body for refining a previously generated SQL query.
@@ -104,19 +117,6 @@ components:
         task:
           type: string
           description: A description of how to refine the SQL query.
-    ColumnDefinition:
-      type: object
-      description: A column definition in a query result set.
-      properties:
-        col:
-          type: string
-          description: The column name.
-        data_type:
-          type: string
-          description: The SQL data type of the column.
-        nullable:
-          type: boolean
-          description: Whether the column can contain NULL values.
     Chat2DataResponse:
       type: object
       description: API response wrapper for a Chat2Data operation.
@@ -130,6 +130,12 @@ components:
         result:
           $ref: '#/components/schemas/Chat2DataResult'
   responses:
+    BadRequest:
+      description: The request body or parameters are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
     Unauthorized:
       description: Authentication failed. Check your Chat2Query API key credentials.
       content:
@@ -138,12 +144,6 @@ components:
             $ref: '#/components/schemas/ErrorResponse'
     RateLimitExceeded:
       description: Rate limit exceeded. The Chat2Query API allows 100 requests per day per Data App. Contact TiDB Cloud support to request a higher limit.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: The request body or parameters are invalid.
       content:
         application/json:
           schema:

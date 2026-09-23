@@ -1,0 +1,98 @@
+generated: '2026-09-17'
+method: searched
+source: https://docs.pingcap.com/tidbcloud/monitor-alert-webhook/,
+  https://docs.pingcap.com/tidbcloud/monitor-built-in-alerting/,
+  https://docs.pingcap.com/tidbcloud/changefeed-overview/
+asyncapi_published: false
+asyncapi_note: >-
+  PingCAP publishes no AsyncAPI document for any surface. Nothing is generated here in its place — a
+  webhook catalog read from the docs is recorded instead, and the event schema is genuinely absent because
+  the provider does not publish one.
+webhooks:
+  present: true
+  direction: outbound (TiDB Cloud POSTs to a URL the customer supplies)
+  configuration: console only — Alert Subscription under Project Settings (Dedicated) or instance Settings
+    (Essential, Premium). There is no REST operation to register a webhook subscriber.
+  docs: https://docs.pingcap.com/tidbcloud/monitor-alert-webhook/
+  availability:
+    plans: [TiDB Cloud Dedicated, TiDB Cloud Essential, TiDB Cloud Premium]
+    excluded: [TiDB Cloud Starter]
+    support_plan_required: Enterprise or Premium support plan
+  transport: HTTP POST with a JSON payload
+  payload_schema_published: false
+  customizable: false
+  customizable_note: 'Quoting the docs: "Currently, TiDB Cloud does not support customizing the request
+    headers or the payload format." An agent therefore cannot know the payload shape before receiving one,
+    and cannot add a shared-secret header for verification.'
+  signing: none documented
+  retries: not documented
+  delivery_log: not documented
+  scope:
+    dedicated: one subscription covers all alerts in the project
+    essential: per instance
+    premium: per instance
+  permissions: Organization Owner, or Project Owner (Dedicated) / Project Owner or Instance Manager
+    (Essential, Premium)
+  validation: TiDB Cloud test-posts to the URL when the subscriber is saved and reports a failure inline.
+other_channels:
+  note: The webhook is the generic member of a documented family of alert subscribers.
+  channels:
+  - name: Email
+    docs: https://docs.pingcap.com/tidbcloud/monitor-alert-email/
+  - name: Slack
+    docs: https://docs.pingcap.com/tidbcloud/monitor-alert-slack/
+  - name: PagerDuty
+    docs: https://docs.pingcap.com/tidbcloud/monitor-alert-pagerduty/
+  - name: Zoom
+    docs: https://docs.pingcap.com/tidbcloud/monitor-alert-zoom/
+  - name: Lark
+    docs: https://docs.pingcap.com/tidbcloud/monitor-alert-lark/
+  - name: Flashduty
+    docs: https://docs.pingcap.com/tidbcloud/monitor-alert-flashduty/
+event_catalog:
+  source: https://docs.pingcap.com/tidbcloud/monitor-built-in-alerting/
+  note: >-
+    TiDB Cloud's built-in alert conditions are the events a webhook subscriber receives. They are published
+    as prose conditions with recommended actions, not as typed events with ids, so no event name or schema
+    can be recorded — only the condition text.
+  groups:
+  - group: Resource usage
+    conditions:
+    - Total TiDB / TiKV / TiFlash node memory utilization across cluster exceeded 70% for 10 minutes
+    - Total TiDB / TiKV / TiFlash node CPU utilization exceeded 80% for 10 minutes
+    - TiKV storage utilization exceeds 80%
+    - TiFlash storage utilization exceeds 80%
+    - Max memory utilization across TiDB / TiKV nodes exceeded 70% for 10 minutes
+    - Max CPU utilization across TiDB / TiKV nodes exceeded 80% for 10 minutes
+  - group: Data migration
+    conditions:
+    - Data migration job met error during data export / import / incremental migration
+    - Data migration job paused for more than 6 hours during incremental migration
+    - Replication lag larger than 10 minutes and still increasing for more than 20 minutes
+  - group: Changefeed
+    conditions:
+    - The changefeed latency exceeds 600 seconds
+    - The changefeed status is FAILED
+    - The changefeed status is WARNING
+  - group: Performance overview
+    conditions:
+    - Request units per second exceed 80% of the maximum RCU
+    - QPS drops by 80%
+    - Query P99 latency exceeds 200 ms
+    - Query P95 latency exceeds 200 ms
+    - Request error rate exceeds 10%
+streaming:
+  changefeeds:
+    note: >-
+      TiDB Cloud's real event-streaming surface is the changefeed (CDC), which replicates row changes to
+      Apache Kafka, MySQL, Amazon S3, GCS, Azure Blob Storage or Alibaba Cloud OSS. It is data replication
+      rather than an API event feed, and the message format is the downstream sink's (Canal-JSON, Avro,
+      CSV), not an AsyncAPI-described channel. Changefeeds ARE managed through the REST API — create, list,
+      get, delete, pause, resume, scale — and those operations are catalogued in the Dedicated and Premium
+      specs.
+    docs: https://docs.pingcap.com/tidbcloud/changefeed-overview/
+gaps:
+- No AsyncAPI document, no published webhook payload schema, no signature or shared secret, and no
+  documented retry or replay behaviour.
+- Webhooks cannot be registered through the API, only through the console — an agent can provision a
+  cluster end to end but cannot subscribe itself to that cluster's alerts.

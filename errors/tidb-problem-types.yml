@@ -1,0 +1,92 @@
+generated: '2026-09-17'
+method: derived
+source: openapi/_original/tidb-cloud-*-openapi-original.json (responses + definitions) and the Error
+  Codes section of https://docs.pingcap.com/tidbcloud/api/v1beta/
+format: none
+format_note: >-
+  TiDB Cloud does NOT use RFC 9457 application/problem+json. Errors are plain application/json in one of
+  three vendor envelopes, which is itself the most useful thing to know before writing a client.
+envelopes:
+- id: google-rpc-status
+  used_by: [TiDB Cloud Dedicated API, TiDB Cloud Starter and Essential API, TiDB Cloud Premium API,
+    TiDB Cloud IAM API, TiDB Cloud MSP API]
+  schema: '#/definitions/googlerpcStatus (also emitted as rpcStatus)'
+  shape:
+    code: integer (int32) — a google.rpc.Code value, not the HTTP status
+    message: string
+    details: array of google.protobuf.Any
+  occurrences: 434
+  note: These APIs are gRPC services fronted by grpc-gateway, which is why the error body is a
+    google.rpc.Status and why `code` does not match the HTTP status code.
+- id: tidbcloud-v1beta-error
+  used_by: [TiDB Cloud API v1beta]
+  schema: '#/definitions/ErrorResponse'
+  shape:
+    code: integer — an 8-digit TiDB Cloud application error code, e.g. 49900001
+    message: string
+    details: array of string
+  example: '{"code": 49900001, "message": "public_key not found", "details": []}'
+- id: dataservice-openapi-error
+  used_by: [TiDB Cloud Data Service API]
+  schema: '#/definitions/api.OpenApiError (batch variant api.OpenApiBatchUpdateError, internal
+    controller.openApiError)'
+  occurrences: 34
+- id: billing-base-error
+  used_by: [TiDB Cloud Billing API]
+  schema: '#/definitions/billing_errors.BaseError'
+  shape:
+    code: string
+    error: any
+    msgPrefix: string
+    status: integer
+  occurrences: 9
+status_codes:
+- status: 400
+  title: Bad Request
+  meaning: The request was malformed, or a field failed validation.
+  occurrences: 154
+  remediation: Read `message` in the body; the gRPC-gateway APIs put field-level detail in `details[]`.
+- status: 401
+  title: Unauthorized
+  meaning: The Digest challenge was not answered, or the API key pair is wrong or revoked.
+  occurrences: 113
+  remediation: Confirm the request used `--digest`, and that the public key is the username and the private
+    key the password. On the v1beta API this surfaces as application code 49900001, "public_key not found".
+- status: 403
+  title: Forbidden
+  meaning: The API key is valid but lacks the role needed for this organization, project, cluster or instance.
+  occurrences: 114
+  remediation: Check the key's role in the TiDB Cloud console under Organization Settings > API Keys.
+- status: 404
+  title: Not Found
+  meaning: The addressed cluster, instance, branch, import, export, changefeed or Data App does not exist
+    in the caller's scope.
+  occurrences: 39
+- status: 429
+  title: Too Many Requests
+  meaning: The per-API-key rate limit of 100 requests per minute was exceeded.
+  occurrences: 107
+  remediation: >-
+    Back off until X-Ratelimit-Reset seconds have elapsed; X-Ratelimit-Remaining-Minute reaching 0 is the
+    warning. A higher quota is granted only by support request.
+  headers: [X-Ratelimit-Limit-Minute, X-Ratelimit-Remaining-Minute, X-Ratelimit-Reset]
+- status: 500
+  title: Internal Server Error
+  meaning: Server-side failure.
+  occurrences: 114
+  remediation: Retry with backoff; there is no request-id header to quote to support, so record the cluster
+    id and the timestamp.
+- status: default
+  title: Unexpected error
+  meaning: The grpc-gateway catch-all response, typed as google.rpc.Status.
+  occurrences: 115
+gaps:
+- No published registry of the 8-digit application error codes (49900001 is the only one documented, and
+  only as an inline example). An agent cannot map a code to a cause without guessing.
+- No Retry-After header on 429; recovery depends on the vendor-specific X-Ratelimit-Reset.
+- No request-id / correlation-id header on any response, so a failure is not independently reportable.
+- Four different error envelopes across one product family.
+related:
+- errors/tidb-problem-types.yml is the control-plane catalog. TiDB the database has a separate, much larger
+  SQL error-code registry at https://docs.pingcap.com/tidb/stable/error-codes/ (MySQL-compatible error
+  numbers), which belongs to the data plane and is not duplicated here.

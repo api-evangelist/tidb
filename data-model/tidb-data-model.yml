@@ -1,0 +1,198 @@
+generated: '2026-09-17'
+method: derived
+source: openapi/_original/tidb-cloud-*-openapi-original.json (path hierarchy, $ref graph and id-reference
+  fields) cross-read against https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+scope: >-
+  The TiDB Cloud CONTROL plane. Rows, tables and schemas inside a cluster are the data plane and are
+  addressed over MySQL, not over these APIs, so they do not appear here.
+note: >-
+  The control plane is a three-level containment tree — organization, then project (v1beta) or instance
+  family (v1beta1/v1beta2), then cluster — with every other resource hanging off a cluster. The identifier
+  style splits with the API version: v1beta uses snake_case path ids (project_id, cluster_id, backup_id)
+  while v1beta1/v1beta2 use camelCase (clusterId, tidbId, branchId, changefeedId, importId, dataAppId).
+  Nothing in the surface uses prefixed or self-describing ids; every id is an opaque numeric or UUID string.
+entities:
+- name: Organization
+  api: TiDB Cloud IAM API
+  identifier: implicit — derived from the API key, never a path parameter
+  note: The billing and IAM APIs are organization-scoped without naming the organization in the path.
+- name: Project
+  api: TiDB Cloud API v1beta
+  identifier: project_id
+  operations: [ListProjects]
+  note: Projects exist only in v1beta. The v1beta1 APIs address clusters directly.
+- name: Cluster
+  api: [TiDB Cloud Dedicated API, TiDB Cloud Starter and Essential API, TiDB Cloud API v1beta]
+  identifier: clusterId (v1beta1) / cluster_id (v1beta)
+  operations: [ClusterService_ListClusters, ClusterService_GetCluster, ClusterService_CreateCluster,
+    ClusterService_UpdateCluster, ClusterService_DeleteCluster, ClusterService_PauseCluster,
+    ClusterService_ResumeCluster, ClusterService_ResetRootPassword]
+- name: TiDB Cloud Premium Instance
+  api: TiDB Cloud Premium API
+  identifier: tidbId
+  operations: [TidbService_ListTidbs, TidbService_GetTidb, TidbService_CreateTidb, TidbService_UpdateTidb,
+    TidbService_DeleteTidb, TidbService_ResetRootPassword, TidbService_RestoreTidb,
+    TidbService_GetRestoreStatus]
+  note: Premium's top-level resource is named `tidb`, not `cluster` — the same concept under a third name.
+- name: TiDB Node Group
+  api: TiDB Cloud Dedicated API
+  identifier: tidbNodeGroupId
+- name: Region
+  api: [TiDB Cloud Dedicated API, TiDB Cloud Premium API]
+  identifier: regionId
+- name: Branch
+  api: TiDB Cloud Starter and Essential API
+  identifier: branchId
+  operations: [BranchService_ListBranches, BranchService_GetBranch, BranchService_CreateBranch,
+    BranchService_ResetBranch, BranchService_DeleteBranch]
+- name: Backup
+  api: [TiDB Cloud Premium API, TiDB Cloud API v1beta]
+  identifier: backupId / backup_id
+- name: Restore
+  api: [TiDB Cloud Premium API, TiDB Cloud API v1beta]
+  identifier: restore_id
+- name: Import
+  api: [TiDB Cloud Dedicated API, TiDB Cloud Starter and Essential API, TiDB Cloud API v1beta]
+  identifier: importId / id / import_id
+- name: Export
+  api: TiDB Cloud Starter and Essential API
+  identifier: exportId
+- name: Changefeed
+  api: [TiDB Cloud Dedicated API, TiDB Cloud Premium API]
+  identifier: changefeedId
+- name: Private Endpoint Connection
+  api: [TiDB Cloud Dedicated API, TiDB Cloud API v1beta]
+  identifier: privateEndpointConnectionId / endpoint_id
+- name: Integration
+  api: TiDB Cloud Dedicated API
+  identifier: id
+  note: Third-party observability integrations — Datadog, New Relic, Prometheus.
+- name: Data App
+  api: TiDB Cloud Data Service API
+  identifier: dataAppId
+- name: Data Source
+  api: TiDB Cloud Data Service API
+  identifier: clusterId, inside a Data App
+  note: A Data Source IS a cluster linked into a Data App, which is why the path parameter is a clusterId.
+- name: Endpoint
+  api: TiDB Cloud Data Service API
+  identifier: endpoint.name
+- name: Deployment
+  api: TiDB Cloud Data Service API
+  identifier: deploymentId
+- name: Data API Key
+  api: TiDB Cloud Data Service API
+  identifier: apiKeyId
+- name: API Key
+  api: TiDB Cloud IAM API
+  identifier: accessKey
+  note: Organization-level TiDB Cloud API keys — a different identity space from Data App API keys and from
+    SQL users.
+- name: Member
+  api: TiDB Cloud IAM API
+  identifier: user_id
+- name: Audit Log
+  api: TiDB Cloud IAM API
+- name: Billing Statement
+  api: TiDB Cloud Billing API
+  identifier: billedMonth
+- name: MSP Customer
+  api: TiDB Cloud MSP API
+  identifier: mspCustomerId, customerOrgId
+  status: deprecated
+relationships:
+- from: Project
+  to: Cluster
+  type: has_many
+  via: project_id (v1beta path containment)
+- from: Cluster
+  to: TiDB Node Group
+  type: has_many
+  via: clusterId
+- from: Cluster
+  to: Import
+  type: has_many
+  via: clusterId
+- from: Cluster
+  to: Export
+  type: has_many
+  via: clusterId
+- from: Cluster
+  to: Branch
+  type: has_many
+  via: clusterId
+- from: Cluster
+  to: Integration
+  type: has_many
+  via: clusterId
+- from: Cluster
+  to: Backup
+  type: has_many
+  via: cluster_id
+- from: TiDB Node Group
+  to: Private Endpoint Connection
+  type: has_many
+  via: tidbNodeGroupId
+- from: Premium Instance
+  to: Backup
+  type: has_many
+  via: tidbId
+- from: Backup
+  to: Restore
+  type: has_one
+  via: backupId supplied to TidbService_RestoreTidb / CreateRestoreTask
+- from: Changefeed
+  to: Cluster
+  type: belongs_to
+  via: the cluster named in the changefeed's upstream configuration
+  note: >-
+    Changefeeds are addressed at the ROOT of the Dedicated and Premium APIs (/changefeeds/{changefeedId}),
+    not nested under their cluster, so the relationship is carried in the body rather than in the path.
+- from: Data App
+  to: Data Source
+  type: has_many
+  via: dataAppId
+- from: Data Source
+  to: Cluster
+  type: belongs_to
+  via: clusterId
+- from: Data App
+  to: Endpoint
+  type: has_many
+  via: dataAppId
+- from: Data App
+  to: Data API Key
+  type: has_many
+  via: dataAppId
+- from: Data App
+  to: Deployment
+  type: has_many
+  via: dataAppId
+- from: Organization
+  to: API Key
+  type: has_many
+  via: implicit — scoped by the calling key
+- from: Organization
+  to: Member
+  type: has_many
+  via: user_id
+- from: Organization
+  to: Billing Statement
+  type: has_many
+  via: billedMonth
+identity_spaces:
+  note: >-
+    THREE unrelated credential types with confusingly similar names, which is the single most likely source
+    of an integration mistake in this surface.
+  spaces:
+  - name: TiDB Cloud API key
+    managed_by: TiDB Cloud IAM API / console Organization Settings
+    used_for: authenticating control-plane REST calls (Digest, public key + private key)
+  - name: Data App API key
+    managed_by: TiDB Cloud Data Service API
+    used_for: authenticating calls to a customer-published Data Service endpoint
+  - name: SQL user
+    managed_by: MySQL protocol, the ticloud CLI (`serverless sql-user`), or the MCP server's
+      db_create_user / db_remove_user tools
+    used_for: connecting to the database itself
+render: null

@@ -1,0 +1,87 @@
+generated: '2026-09-17'
+method: searched
+source: https://docs.pingcap.com/tidbcloud/cli-reference/, https://docs.pingcap.com/tidbcloud/get-started-with-cli/,
+  https://docs.pingcap.com/ai/ti/ti-overview/, https://github.com/tidbcloud/tidbcloud-cli,
+  https://github.com/tidbcloud/ti-cli
+note: >-
+  TiDB Cloud ships TWO first-party CLIs with overlapping but different scopes, and the docs say so plainly.
+  `ti` is the newer one, aimed at automation and AI agents; `ticloud` is the older, broader one. Neither
+  covers TiDB Cloud Dedicated. A third binary, `tiup`, is the self-managed TiDB cluster manager and belongs
+  to the open-source product rather than the cloud service.
+clis:
+- name: ti
+  binary: ti
+  status: public preview (announced 2026-09-15)
+  scope: TiDB Cloud Starter instances and TiDB Cloud Filesystem
+  repository: https://github.com/tidbcloud/ti-cli
+  version: v0.2.4
+  released: '2026-09-09'
+  docs: https://docs.pingcap.com/ai/ti/ti-quick-start/
+  install:
+  - go install github.com/tidbcloud/ti-cli@latest
+  - download a release binary from https://github.com/tidbcloud/ti-cli/releases
+  agent_affordances:
+  - JSON output by default
+  - JMESPath output queries
+  - '--wait on applicable commands'
+  - '--dry-run on applicable commands'
+  note: >-
+    PingCAP describes this one as built so that "your scripts, CI jobs, and AI agents" can run it. It is the
+    only place in the TiDB surface where a dry-run affordance is published — the REST API has none.
+- name: ticloud
+  binary: ticloud
+  status: public preview
+  scope: TiDB Cloud Starter and Essential instances, data import, data export, audit logs
+  not_supported: TiDB Cloud Dedicated clusters
+  repository: https://github.com/tidbcloud/tidbcloud-cli
+  version: v1.0.0-beta.11
+  released: '2025-12-23'
+  docs: https://docs.pingcap.com/tidbcloud/cli-reference/
+  install:
+  - curl https://raw.githubusercontent.com/tidbcloud/tidbcloud-cli/main/install.sh | sh
+  - tiup install cloud   # then invoke as `tiup cloud [command] [subcommand]`
+  - download a release binary from https://github.com/tidbcloud/tidbcloud-cli/releases/latest
+  - https://github.com/tidbcloud/setup-tidbcloud-cli   # GitHub Actions
+  prerequisites:
+  - a MySQL command-line client, for `ticloud serverless shell`
+  commands:
+  - command: auth
+    subcommands: [login, logout, whoami]
+    description: Log in and out
+  - command: serverless
+    alias: s
+    subcommands: [create, delete, describe, list, update, spending-limit, region, shell]
+    description: Manage a TiDB Cloud Starter or Essential instance
+  - command: serverless branch
+    subcommands: [create, delete, describe, list, shell]
+    description: Manage branches
+  - command: serverless import
+    subcommands: [cancel, describe, list, start]
+    description: Manage import tasks
+  - command: serverless export
+    subcommands: [create, describe, list, cancel, download]
+    description: Manage export tasks
+  - command: serverless sql-user
+    subcommands: [create, list, delete, update]
+    description: Manage SQL users
+  - command: serverless audit-log
+    subcommands: [config, describe, filter-rule, download]
+    description: Manage database audit logging
+  - command: completion
+    subcommands: [bash, zsh, fish, powershell]
+    description: Shell completion
+related:
+  tiup:
+    note: >-
+      `tiup` is the cluster manager for TiDB Self-Managed (deploy, scale, upgrade, playground). It is a
+      different product surface from the TiDB Cloud CLIs and is documented at
+      https://docs.pingcap.com/tidb/stable/tiup-overview/.
+    url: https://tiup.io/
+key_flows:
+- Sign in, create a Starter instance, and open a SQL shell — `ticloud auth login`,
+  `ticloud serverless create`, `ticloud serverless shell`.
+- Branch a Starter instance for a test, then reset it — `ticloud serverless branch create`,
+  `ticloud serverless branch shell`, `ticloud serverless branch delete`.
+- Import a dump and watch it — `ticloud serverless import start`, `ticloud serverless import describe`,
+  `ticloud serverless import cancel`.
+- Export and download — `ticloud serverless export create`, `ticloud serverless export download`.

@@ -1,0 +1,93 @@
+generated: '2026-09-17'
+method: derived
+source: mcp/tidb-mcp.yml + openapi/_original/tidb-cloud-*-openapi-original.json
+note: >-
+  TiDB ships an MCP server AND a large published REST surface, but they address DIFFERENT planes and do not
+  overlap at all. The TiDB MCP Server speaks the MySQL data plane inside one database — list schemas, run
+  SELECTs, run DML/DDL, manage SQL users. The eight TiDB Cloud OpenAPI documents are the control plane —
+  create and scale clusters, branches, backups, imports, exports, changefeeds, Data Apps, API keys, billing.
+  Every MCP tool is therefore mcp_only and every REST operation is rest_only; the crosswalk is empty by
+  construction and that emptiness is the finding, not a gap to paper over. An agent that needs to both
+  provision a cluster and query it has to speak two protocols: HTTP Digest REST for the control plane and
+  either MCP or the MySQL wire protocol for the data plane.
+surfaces:
+  openapi:
+    files:
+    - openapi/_original/tidb-cloud-dedicated-v1beta1-openapi-original.json
+    - openapi/_original/tidb-cloud-starter-essential-v1beta1-openapi-original.json
+    - openapi/_original/tidb-cloud-premium-v1beta2-openapi-original.json
+    - openapi/_original/tidb-cloud-dataservice-v1beta1-openapi-original.json
+    - openapi/_original/tidb-cloud-iam-v1beta1-openapi-original.json
+    - openapi/_original/tidb-cloud-billing-v1beta1-openapi-original.json
+    - openapi/_original/tidb-cloud-msp-v1beta1-openapi-original.json
+    - openapi/_original/tidb-cloud-v1beta-openapi-original.json
+    operations: 162
+    gated: false
+    auth: HTTP Digest Authentication with a TiDB Cloud API key (public key as user, private key as password)
+  graphql:
+    present: false
+  mcp:
+    server: tidb-mcp-server
+    transport: stdio | sse
+    hosted_endpoint: null
+    tools_list_gated: n/a — no public remote endpoint exists to introspect
+    plane: MySQL data plane
+  data_service:
+    note: >-
+      TiDB Cloud Data Service is a third surface and the only one that bridges the two planes — it lets an
+      operator publish a SQL query as a custom HTTPS endpoint under data.tidbcloud.com and generates an
+      OpenAPI document for the resulting Data App. Those specs are per-customer and per-app, so they are not
+      catalogued here; the control-plane operations that CREATE them are (Data App, Endpoint, Deployment).
+crosswalk: []
+mcp_only:
+- tool: show_databases
+  reason: MySQL data-plane operation; no TiDB Cloud REST operation lists schemas inside a running cluster.
+- tool: switch_database
+  reason: MySQL session state; has no REST equivalent because the control plane holds no session.
+- tool: show_tables
+  reason: MySQL data-plane operation; table metadata is not exposed by the TiDB Cloud management API.
+- tool: db_query
+  reason: Arbitrary read SQL. The only HTTP equivalent is a Data Service endpoint an operator publishes in
+    advance for one fixed query, not a general query operation.
+- tool: db_execute
+  reason: Arbitrary DML/DDL. No TiDB Cloud REST operation executes SQL against a cluster.
+- tool: db_create_user
+  reason: SQL user management runs over the MySQL protocol. The IAM API manages TiDB Cloud API keys and
+    organization members, which are a different identity space from database users.
+- tool: db_remove_user
+  reason: Same as db_create_user — SQL users are not IAM subjects.
+rest_only:
+  note: >-
+    All 162 published control-plane operations have no MCP tool. Listed below by resource family rather than
+    one row per operationId, because the divergence is categorical — the MCP server covers none of them.
+  families:
+  - api: TiDB Cloud Dedicated API
+    tags: [Cluster, Region, Private Endpoint Connection, Import, Integration, Changefeed]
+    operations: 36
+  - api: TiDB Cloud Starter and Essential API
+    tags: [Cluster, Branch, Export, Import]
+    operations: 20
+  - api: TiDB Cloud Premium API
+    tags: [TiDB Cloud Premium Instance, Backup, Region, Changefeed]
+    operations: 25
+  - api: TiDB Cloud Data Service API
+    tags: [Data App, Data Source, Endpoint, Deployment, Data API Key, OpenAPI Specification]
+    operations: 28
+  - api: TiDB Cloud IAM API
+    tags: [API Key, Member]
+    operations: 12
+  - api: TiDB Cloud Billing API
+    tags: [Billing]
+    operations: 4
+  - api: TiDB Cloud MSP API
+    tags: [MSP]
+    operations: 7
+  - api: TiDB Cloud API v1beta
+    tags: [Project, Cluster, Backup, Import, Restore]
+    operations: 30
+coverage:
+  mcp_tools: 7
+  mcp_tools_bound_to_rest: 0
+  rest_operations: 162
+  rest_operations_bound_to_tools: 0
+  overlap_percent: 0

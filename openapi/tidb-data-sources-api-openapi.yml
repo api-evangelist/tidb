@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: TiDB Cloud Data Service Data Sources API
-  description: The TiDB Cloud Data Service API enables developers to manage Data Apps and custom REST endpoints backed by SQL queries running against TiDB Cloud clusters. Operators create Data Apps, link them to clusters, define custom endpoints with SQL templates, manage API keys, and deploy endpoints via this API. Endpoints support GET, POST, PUT, and DELETE methods, return JSON-formatted results, and can be configured with pagination, rate limiting, and caching. The API uses HTTP Digest Authentication and is served from the dataservice.tidbapi.com host.
+  description: The TiDB Cloud Data Service API enables developers to manage Data Apps and custom REST endpoints backed by SQL queries running against TiDB Cloud clusters.
   version: v1beta1
   contact:
     name: TiDB Cloud Support
@@ -102,15 +102,6 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
-    CreateDataSourceRequest:
-      type: object
-      description: Request body for linking a cluster as a data source.
-      required:
-      - clusterId
-      properties:
-        clusterId:
-          type: string
-          description: The unique identifier of the TiDB Cloud cluster to link.
     ErrorResponse:
       type: object
       description: Standard error response returned when an API request fails.
@@ -149,22 +140,22 @@ components:
         clusterType:
           type: string
           description: The type of cluster (SERVERLESS or DEDICATED).
-  parameters:
-    clusterId:
-      name: clusterId
-      in: path
-      description: The unique identifier of the TiDB Cloud cluster used as a data source.
-      required: true
-      schema:
-        type: string
-    dataAppId:
-      name: dataAppId
-      in: path
-      description: The unique identifier of the Data App.
-      required: true
-      schema:
-        type: string
+    CreateDataSourceRequest:
+      type: object
+      description: Request body for linking a cluster as a data source.
+      required:
+      - clusterId
+      properties:
+        clusterId:
+          type: string
+          description: The unique identifier of the TiDB Cloud cluster to link.
   responses:
+    BadRequest:
+      description: The request body or parameters are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
     Unauthorized:
       description: Authentication failed. Check your API key credentials.
       content:
@@ -177,12 +168,21 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: The request body or parameters are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
+  parameters:
+    dataAppId:
+      name: dataAppId
+      in: path
+      description: The unique identifier of the Data App.
+      required: true
+      schema:
+        type: string
+    clusterId:
+      name: clusterId
+      in: path
+      description: The unique identifier of the TiDB Cloud cluster used as a data source.
+      required: true
+      schema:
+        type: string
   securitySchemes:
     digestAuth:
       type: http

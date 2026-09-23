@@ -1,0 +1,75 @@
+generated: '2026-09-17'
+method: searched
+source: https://docs.pingcap.com/tidbcloud/tidb-cloud-release-notes/, https://status.tidbcloud.com/,
+  https://www.pingcap.com/tidb-release-support-policy/,
+  https://www.pingcap.com/legal/service-level-agreement-for-tidb-cloud-services/,
+  and the version prefixes in openapi/_original/tidb-cloud-*-openapi-original.json
+versioning:
+  style: version in both the URL path and the hostname
+  current:
+  - v1beta2 (cloud.tidbapi.com/v1beta2) — TiDB Cloud Premium
+  - v1beta1 (dedicated | serverless | dataservice | iam | billing | msp .tidbapi.com/v1beta1)
+  legacy:
+  - v1beta (api.tidbcloud.com/api/v1beta)
+  stability: >-
+    EVERY published version is still labelled beta or public preview by PingCAP's own specs and docs
+    ("TiDB Cloud API is in beta", "TiDB Cloud API is in public preview"). Nothing in the surface is GA,
+    including v1beta1, which has been the working version for years. A caller has no published signal
+    separating a stable endpoint from one that may change.
+deprecation:
+  policy_published: false
+  sunset_header: false
+  deprecation_header: false
+  note: >-
+    PingCAP publishes NO API deprecation policy and returns no RFC 8594 Sunset or Deprecation headers.
+    Deprecation is communicated as prose in the docs and release notes only. Two surfaces are currently
+    marked deprecated this way.
+  deprecated_surfaces:
+  - surface: TiDB Cloud MSP API (v1beta1, msp.tidbapi.com)
+    marked_at: https://docs.pingcap.com/api/tidb-cloud-api-v1beta1.md
+    evidence: 'the v1beta1 overview lists it as "MSP (Deprecated)"'
+    sunset_date: not stated
+  - surface: Import operations in the v1beta API
+    marked_at: https://docs.pingcap.com/api/tidb-cloud-api-v1beta.md
+    evidence: 'the v1beta overview lists "Import (Deprecated)"'
+    sunset_date: not stated
+  - surface: 'ticloud CLI for TiDB Cloud Starter automation'
+    marked_at: https://docs.pingcap.com/tidbcloud/cli-reference/
+    evidence: >-
+      Not deprecated, but superseded in guidance — the reference now recommends the newer `ti` CLI for new
+      Starter automation and keeps `ticloud` for Essential and for import/export/audit-log operations.
+    sunset_date: not stated
+  database_support_policy:
+    url: https://www.pingcap.com/tidb-release-support-policy/
+    note: >-
+      PingCAP DOES publish a support/EOL policy for TiDB the database (LTS release lines and their support
+      windows). It covers the database product, not the TiDB Cloud REST API.
+status_page:
+  url: https://status.tidbcloud.com/
+  vendor: Atlassian Statuspage
+  scope: TiDB Cloud
+  history: true
+  subscribe: true
+  machine_readable: >-
+    Statuspage exposes the usual /api/v2/status.json and /history.rss endpoints for this host; no
+    TiDB-authored status API is published.
+sla:
+  published: true
+  url: https://www.pingcap.com/legal/service-level-agreement-for-tidb-cloud-services/
+  scope: TiDB Cloud services
+changelog:
+  url: https://docs.pingcap.com/tidbcloud/tidb-cloud-release-notes/
+  cadence: rolling, dated entries — roughly weekly through 2026
+  api_changes_called_out: true
+  note: Release notes carry an explicit "API changes" heading when the REST surface moves, which is how the
+    v1beta2 changefeed endpoints were announced on 2026-09-08.
+  detail: changelog/tidb-changelog.yml
+support:
+  docs: https://docs.pingcap.com/tidbcloud/tidb-cloud-support/
+  contact: https://www.pingcap.com/contact-us/
+  community_slack: https://slack.tidb.io/invite?team=tidb-community&channel=everyone&ref=pingcap
+gaps:
+- No deprecation policy and no Sunset/Deprecation headers on a surface that already carries two deprecated
+  components.
+- Nothing has ever reached GA; every version is beta.
+- No published end-of-life date for the v1beta API even though v1beta1 supersedes it.

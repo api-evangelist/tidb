@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: TiDB Cloud Chat2Query Data Summaries API
-  description: The TiDB Cloud Chat2Query API is an AI-powered interface that enables developers to generate and execute SQL statements against TiDB Cloud clusters using natural language instructions. It is exposed as a special Data App within TiDB Cloud, authenticated via API keys scoped to the Chat2Query Data App. The API provides endpoints for generating data summaries of database schemas, translating natural language prompts into SQL via the v2 and v3 chat2data endpoints, refining existing queries, managing multi-round chat sessions, and suggesting questions for data exploration. It is intended for building AI-assisted data exploration tools, reporting interfaces, and applications that need to query structured data without requiring users to write SQL directly. The API uses HTTP Digest Authentication and is rate limited to 100 requests per day per Data App.
+  description: The TiDB Cloud Chat2Query API is an AI-powered interface that enables developers to generate and execute SQL statements against TiDB Cloud clusters using natural language instructions.
   version: v3
   contact:
     name: TiDB Cloud Support
@@ -137,14 +137,6 @@ paths:
         '429':
           $ref: '#/components/responses/RateLimitExceeded'
 components:
-  parameters:
-    dataSummaryId:
-      name: data_summary_id
-      in: path
-      description: The unique identifier of the data summary.
-      required: true
-      schema:
-        type: integer
   schemas:
     CreateDataSummaryRequest:
       type: object
@@ -175,33 +167,6 @@ components:
         msg:
           type: string
           description: A human-readable error message describing the failure.
-    ListDataSummariesResponse:
-      type: object
-      description: API response wrapper for listing data summaries.
-      properties:
-        code:
-          type: integer
-          description: The response code. 200 indicates success.
-        msg:
-          type: string
-          description: A message describing the result.
-        result:
-          type: array
-          description: The list of data summary objects.
-          items:
-            $ref: '#/components/schemas/DataSummary'
-    DataSummaryResponse:
-      type: object
-      description: API response wrapper for a data summary operation.
-      properties:
-        code:
-          type: integer
-          description: The response code. 200 indicates success.
-        msg:
-          type: string
-          description: A message describing the result.
-        result:
-          $ref: '#/components/schemas/DataSummary'
     DataSummary:
       type: object
       description: An AI-generated summary of a database schema.
@@ -222,7 +187,40 @@ components:
           - RUNNING
           - DONE
           - FAILED
+    DataSummaryResponse:
+      type: object
+      description: API response wrapper for a data summary operation.
+      properties:
+        code:
+          type: integer
+          description: The response code. 200 indicates success.
+        msg:
+          type: string
+          description: A message describing the result.
+        result:
+          $ref: '#/components/schemas/DataSummary'
+    ListDataSummariesResponse:
+      type: object
+      description: API response wrapper for listing data summaries.
+      properties:
+        code:
+          type: integer
+          description: The response code. 200 indicates success.
+        msg:
+          type: string
+          description: A message describing the result.
+        result:
+          type: array
+          description: The list of data summary objects.
+          items:
+            $ref: '#/components/schemas/DataSummary'
   responses:
+    BadRequest:
+      description: The request body or parameters are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
     Unauthorized:
       description: Authentication failed. Check your Chat2Query API key credentials.
       content:
@@ -241,12 +239,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: The request body or parameters are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
+  parameters:
+    dataSummaryId:
+      name: data_summary_id
+      in: path
+      description: The unique identifier of the data summary.
+      required: true
+      schema:
+        type: integer
   securitySchemes:
     digestAuth:
       type: http

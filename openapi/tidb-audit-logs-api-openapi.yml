@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: TiDB Cloud Audit Logs API
-  description: The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud. It supports managing projects, clusters, backups, restores, data imports, billing, and private endpoint connections across both TiDB Cloud Serverless and TiDB Cloud Dedicated tiers. The API uses HTTP Digest Authentication with public and private API keys and returns JSON-formatted responses. Available as both v1beta and the newer v1beta1 versions, it enables automation of database infrastructure lifecycle management at scale.
+  description: The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud.
   version: v1beta1
   contact:
     name: TiDB Cloud Support
@@ -67,18 +67,22 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    ListAuditLogsResponse:
+    ErrorResponse:
       type: object
-      description: Paginated list of audit log entries.
+      description: Standard error response returned when an API request fails.
       properties:
-        auditLogs:
-          type: array
-          description: The list of audit log entries.
-          items:
-            $ref: '#/components/schemas/AuditLog'
-        nextPageToken:
+        code:
+          type: integer
+          description: The HTTP status code of the error.
+        status:
           type: string
-          description: Token to retrieve the next page of results.
+          description: The error status string.
+        error:
+          type: string
+          description: A machine-readable error code identifier.
+        msgPrefix:
+          type: string
+          description: A human-readable error message describing the failure.
     AuditLog:
       type: object
       description: A console audit log entry recording an administrative action.
@@ -105,22 +109,18 @@ components:
         orgId:
           type: string
           description: The ID of the organization where the event occurred.
-    ErrorResponse:
+    ListAuditLogsResponse:
       type: object
-      description: Standard error response returned when an API request fails.
+      description: Paginated list of audit log entries.
       properties:
-        code:
-          type: integer
-          description: The HTTP status code of the error.
-        status:
+        auditLogs:
+          type: array
+          description: The list of audit log entries.
+          items:
+            $ref: '#/components/schemas/AuditLog'
+        nextPageToken:
           type: string
-          description: The error status string.
-        error:
-          type: string
-          description: A machine-readable error code identifier.
-        msgPrefix:
-          type: string
-          description: A human-readable error message describing the failure.
+          description: Token to retrieve the next page of results.
   parameters:
     pageSize:
       name: pageSize

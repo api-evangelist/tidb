@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: TiDB Cloud Clusters API
-  description: The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud. It supports managing projects, clusters, backups, restores, data imports, billing, and private endpoint connections across both TiDB Cloud Serverless and TiDB Cloud Dedicated tiers. The API uses HTTP Digest Authentication with public and private API keys and returns JSON-formatted responses. Available as both v1beta and the newer v1beta1 versions, it enables automation of database infrastructure lifecycle management at scale.
+  description: The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud.
   version: v1beta1
   contact:
     name: TiDB Cloud Support
@@ -225,6 +225,123 @@ paths:
           $ref: '#/components/responses/NotFound'
 components:
   schemas:
+    ErrorResponse:
+      type: object
+      description: Standard error response returned when an API request fails.
+      properties:
+        code:
+          type: integer
+          description: The HTTP status code of the error.
+        status:
+          type: string
+          description: The error status string.
+        error:
+          type: string
+          description: A machine-readable error code identifier.
+        msgPrefix:
+          type: string
+          description: A human-readable error message describing the failure.
+    ListClustersResponse:
+      type: object
+      description: Paginated list of TiDB Cloud clusters.
+      properties:
+        clusters:
+          type: array
+          description: The list of cluster objects on this page.
+          items:
+            $ref: '#/components/schemas/Cluster'
+        nextPageToken:
+          type: string
+          description: Token to retrieve the next page of results. Empty if on the last page.
+    ClusterComponents:
+      type: object
+      description: The component configuration for a TiDB Cloud cluster.
+      properties:
+        tidb:
+          $ref: '#/components/schemas/ComponentSpec'
+        tikv:
+          $ref: '#/components/schemas/StorageComponentSpec'
+        tiflash:
+          $ref: '#/components/schemas/StorageComponentSpec'
+    ComponentSpec:
+      type: object
+      description: Specification for a stateless TiDB compute node group.
+      properties:
+        nodeSize:
+          type: string
+          description: The node size key identifying the CPU and memory configuration.
+        nodeQuantity:
+          type: integer
+          description: The number of nodes in this component group.
+    ConnectionStrings:
+      type: object
+      description: Connection string information for connecting to the cluster.
+      properties:
+        defaultUser:
+          type: string
+          description: The default database user for the cluster.
+        standard:
+          $ref: '#/components/schemas/ConnectionString'
+        vpcPeering:
+          $ref: '#/components/schemas/ConnectionString'
+        privateEndpoint:
+          $ref: '#/components/schemas/ConnectionString'
+    ConnectionString:
+      type: object
+      description: A specific type of connection string for accessing the cluster.
+      properties:
+        host:
+          type: string
+          description: The hostname for the connection.
+        port:
+          type: integer
+          description: The TCP port number for the connection.
+    StorageComponentSpec:
+      type: object
+      description: Specification for a TiKV or TiFlash storage node group.
+      properties:
+        nodeSize:
+          type: string
+          description: The node size key identifying the CPU and memory configuration.
+        nodeQuantity:
+          type: integer
+          description: The number of nodes in this component group.
+        storageSize:
+          type: integer
+          description: The storage capacity per node in GiB.
+    CreateClusterRequest:
+      type: object
+      description: Request body for creating a new TiDB Cloud Dedicated cluster.
+      required:
+      - displayName
+      - cloudProvider
+      - regionId
+      - components
+      properties:
+        displayName:
+          type: string
+          description: The display name for the new cluster.
+        projectId:
+          type: string
+          description: The project ID to create the cluster in. Defaults to the default project.
+        cloudProvider:
+          type: string
+          description: The cloud provider for the cluster.
+          enum:
+          - AWS
+          - GCP
+          - AZURE
+        regionId:
+          type: string
+          description: The region identifier where the cluster will be deployed.
+        components:
+          $ref: '#/components/schemas/ClusterComponents'
+        rootPassword:
+          type: string
+          description: The initial root password for the cluster.
+        port:
+          type: integer
+          description: The SQL connection port. Default is 4000.
     Cluster:
       type: object
       description: A TiDB Cloud Dedicated cluster resource.
@@ -276,123 +393,6 @@ components:
           $ref: '#/components/schemas/ClusterComponents'
         connectionStrings:
           $ref: '#/components/schemas/ConnectionStrings'
-    ListClustersResponse:
-      type: object
-      description: Paginated list of TiDB Cloud clusters.
-      properties:
-        clusters:
-          type: array
-          description: The list of cluster objects on this page.
-          items:
-            $ref: '#/components/schemas/Cluster'
-        nextPageToken:
-          type: string
-          description: Token to retrieve the next page of results. Empty if on the last page.
-    ConnectionString:
-      type: object
-      description: A specific type of connection string for accessing the cluster.
-      properties:
-        host:
-          type: string
-          description: The hostname for the connection.
-        port:
-          type: integer
-          description: The TCP port number for the connection.
-    ErrorResponse:
-      type: object
-      description: Standard error response returned when an API request fails.
-      properties:
-        code:
-          type: integer
-          description: The HTTP status code of the error.
-        status:
-          type: string
-          description: The error status string.
-        error:
-          type: string
-          description: A machine-readable error code identifier.
-        msgPrefix:
-          type: string
-          description: A human-readable error message describing the failure.
-    StorageComponentSpec:
-      type: object
-      description: Specification for a TiKV or TiFlash storage node group.
-      properties:
-        nodeSize:
-          type: string
-          description: The node size key identifying the CPU and memory configuration.
-        nodeQuantity:
-          type: integer
-          description: The number of nodes in this component group.
-        storageSize:
-          type: integer
-          description: The storage capacity per node in GiB.
-    ConnectionStrings:
-      type: object
-      description: Connection string information for connecting to the cluster.
-      properties:
-        defaultUser:
-          type: string
-          description: The default database user for the cluster.
-        standard:
-          $ref: '#/components/schemas/ConnectionString'
-        vpcPeering:
-          $ref: '#/components/schemas/ConnectionString'
-        privateEndpoint:
-          $ref: '#/components/schemas/ConnectionString'
-    ClusterComponents:
-      type: object
-      description: The component configuration for a TiDB Cloud cluster.
-      properties:
-        tidb:
-          $ref: '#/components/schemas/ComponentSpec'
-        tikv:
-          $ref: '#/components/schemas/StorageComponentSpec'
-        tiflash:
-          $ref: '#/components/schemas/StorageComponentSpec'
-    ComponentSpec:
-      type: object
-      description: Specification for a stateless TiDB compute node group.
-      properties:
-        nodeSize:
-          type: string
-          description: The node size key identifying the CPU and memory configuration.
-        nodeQuantity:
-          type: integer
-          description: The number of nodes in this component group.
-    CreateClusterRequest:
-      type: object
-      description: Request body for creating a new TiDB Cloud Dedicated cluster.
-      required:
-      - displayName
-      - cloudProvider
-      - regionId
-      - components
-      properties:
-        displayName:
-          type: string
-          description: The display name for the new cluster.
-        projectId:
-          type: string
-          description: The project ID to create the cluster in. Defaults to the default project.
-        cloudProvider:
-          type: string
-          description: The cloud provider for the cluster.
-          enum:
-          - AWS
-          - GCP
-          - AZURE
-        regionId:
-          type: string
-          description: The region identifier where the cluster will be deployed.
-        components:
-          $ref: '#/components/schemas/ClusterComponents'
-        rootPassword:
-          type: string
-          description: The initial root password for the cluster.
-        port:
-          type: integer
-          description: The SQL connection port. Default is 4000.
     UpdateClusterRequest:
       type: object
       description: Request body for updating a TiDB Cloud Dedicated cluster configuration.
@@ -403,13 +403,6 @@ components:
         components:
           $ref: '#/components/schemas/ClusterComponents'
   parameters:
-    clusterId:
-      name: clusterId
-      in: path
-      description: The unique identifier of the TiDB Cloud Dedicated cluster.
-      required: true
-      schema:
-        type: string
     pageSize:
       name: pageSize
       in: query
@@ -427,7 +420,20 @@ components:
       required: false
       schema:
         type: string
+    clusterId:
+      name: clusterId
+      in: path
+      description: The unique identifier of the TiDB Cloud Dedicated cluster.
+      required: true
+      schema:
+        type: string
   responses:
+    BadRequest:
+      description: The request body or parameters are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
     Unauthorized:
       description: Authentication failed. Check your API key credentials.
       content:
@@ -442,12 +448,6 @@ components:
             $ref: '#/components/schemas/ErrorResponse'
     NotFound:
       description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: The request body or parameters are invalid.
       content:
         application/json:
           schema:

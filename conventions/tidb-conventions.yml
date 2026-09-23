@@ -1,0 +1,169 @@
+generated: '2026-09-17'
+method: searched
+source: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/ + https://docs.pingcap.com/tidbcloud/api/v1beta/
+  (the info.description sections of the published specs) and openapi/_original/tidb-cloud-*-openapi-original.json
+scope: The TiDB Cloud control-plane REST APIs (v1beta, v1beta1, v1beta2). The MySQL data plane and the
+  TiDB HTTP status API follow their own conventions and are noted separately where they differ.
+auth:
+  style: HTTP Digest Authentication (RFC 7616)
+  credential: A TiDB Cloud API key pair — the public key is the username, the private key is the password.
+  issued_at: https://tidbcloud.com/org-settings/api-keys
+  transport: HTTPS only
+  note: >-
+    Digest is unusual for a modern control plane and has a real agent consequence — the private key never
+    crosses the wire, but the client must handle the 401 challenge/response round trip. Every documented
+    example uses `curl --digest --user 'PUBLIC:PRIVATE'`. There is no OAuth, no bearer token and no
+    published scope vocabulary; authorization is by API-key role at the organization or project level.
+  docs: https://docs.pingcap.com/tidbcloud/api-overview/
+idempotency:
+  coverage: none
+  mechanism: null
+  header: null
+  scope: []
+  evidence: >-
+    No Idempotency-Key (or equivalent) header appears in any of the eight published TiDB Cloud specs, and
+    neither the API overview nor the per-API reference documents replay protection. Retrying a POST that
+    creates a cluster, branch, import, export, changefeed or Data App will create a second one.
+  mitigations:
+  - Several mutating operations are modelled as named custom methods on an existing resource
+    (`:pauseCluster`, `:resumeCluster`, `:pause`, `:resume`, `:reset`, `:cancel`) rather than as creates.
+    Those are naturally idempotent in effect — pausing a paused cluster is a no-op — but that is a property
+    of the verb, not a published guarantee.
+  - PUT/PATCH updates carry the resource id in the path, so they are idempotent by addressing.
+  note: >-
+    The gap matters most on the create paths, which are also the expensive ones — ClusterService_CreateCluster,
+    ImportService_CreateImport, ExportService_CreateExport, CreateChangefeed, DataApp_CreateDataApp.
+reversibility:
+  grade: documented
+  summary: >-
+    TiDB Cloud publishes a real reversal path for most of its expensive write surfaces, and names each one
+    as an explicit operation rather than leaving it to a support ticket. What it does NOT publish is the
+    WINDOW — no documented retention period for a deleted cluster, no undo window on a delete, no stated
+    period in which a backup remains restorable. The grade is therefore `documented`, not `verified`: an
+    agent can find the undo button but cannot learn from the contract how long it stays available.
+  surfaces:
+  - write: ClusterService_CreateCluster (Dedicated), ClusterService_CreateCluster (Starter/Essential),
+      TidbService_CreateTidb (Premium)
+    reversal: ClusterService_DeleteCluster / TidbService_DeleteTidb
+    kind: delete
+    window: not stated
+    note: Delete is the reversal of create, but delete itself has no published undo. No retention or
+      soft-delete period is documented for a deleted cluster or instance.
+  - write: cluster running state
+    reversal: ClusterService_PauseCluster <-> ClusterService_ResumeCluster
+    kind: pause/resume
+    window: not stated
+    docs: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+  - write: ImportService_CreateImport / CreateImport
+    reversal: ImportService_CancelImport / CancelImport
+    kind: cancel
+    window: while the task is still running — the contract does not state a deadline
+  - write: ExportService_CreateExport
+    reversal: ExportService_CancelExport, then ExportService_DeleteExport
+    kind: cancel
+    window: while the task is still running — the contract does not state a deadline
+  - write: CreateChangefeed
+    reversal: PauseChangefeed <-> ResumeChangefeed, DeleteChangefeed
+    kind: pause/resume, delete
+    window: not stated
+  - write: data written to a Premium instance
+    reversal: TidbService_RestoreTidb (from a backup), status via TidbService_GetRestoreStatus
+    kind: restore
+    window: >-
+      Bounded by backup retention, which is configured per instance and is not stated in the contract.
+      BackupService_DeleteBackup destroys the restore point with no published undo.
+  - write: data written to a v1beta cluster
+    reversal: CreateRestoreTask, status via GetRestoreTask
+    kind: restore
+    window: bounded by backup retention; not stated in the contract
+  - write: branch data (Starter/Essential)
+    reversal: BranchService_ResetBranch (reset the branch back to its parent), BranchService_DeleteBranch
+    kind: reset
+    window: not stated
+  - write: ClusterService_ResetRootPassword / TidbService_ResetRootPassword
+    reversal: none
+    kind: irreversible
+    note: The previous root password is not recoverable. This is the one write in the surface with no
+      reversal path at all.
+  irreversible:
+  - ClusterService_ResetRootPassword
+  - TidbService_ResetRootPassword
+  - BackupService_DeleteBackup
+  - TidbService_DeleteTidbBackup
+  - DeleteBackup
+dry_run_mode:
+  available: partial
+  note: >-
+    The REST surface publishes no dry-run parameter. The newer `ti` CLI does — `--dry-run` is documented
+    as supported on applicable commands (release note 2026-09-15) — so the rehearsal affordance exists at
+    the CLI layer and not at the API layer.
+  docs: https://docs.pingcap.com/ai/ti/ti-overview/
+pagination:
+  style: page token (Google AIP-158 shape) on v1beta1/v1beta2; page number on v1beta and Data Service
+  variants:
+  - apis: [TiDB Cloud Dedicated API, TiDB Cloud Starter and Essential API, TiDB Cloud Premium API]
+    request: pageSize, pageToken
+    response: nextPageToken, totalSize
+    also: [skip, orderBy, filter, view]
+  - apis: [TiDB Cloud API v1beta, TiDB Cloud Data Service API]
+    request: page, page_size
+    response: items, total
+  note: >-
+    Two incompatible pagination dialects inside one product. An agent written against v1beta1 will not
+    page a v1beta or Data Service list correctly, and nothing in either document says so.
+field_expansion:
+  available: partial
+  mechanism: a `view` query parameter (BASIC | FULL) on some v1beta1 list/get operations
+  note: Sparse-fieldset selection and expansion of related resources are not offered.
+metadata:
+  user_defined: >-
+    TiDB Cloud Dedicated clusters accept labels on create. There is no general free-form metadata bag on
+    every resource in the way Stripe offers one.
+request_id:
+  header: null
+  note: >-
+    No request-id or correlation-id response header is documented. Support troubleshooting is by cluster id
+    and timestamp. This is a real gap for an agent trying to make a failure reportable.
+versioning:
+  style: version in the URL path AND in the hostname
+  versions:
+  - version: v1beta
+    host: api.tidbcloud.com
+    path_prefix: /api/v1beta
+    status: legacy — projects, clusters, backups, restores; Import is marked deprecated inside it
+  - version: v1beta1
+    hosts: [dedicated.tidbapi.com, serverless.tidbapi.com, dataservice.tidbapi.com, iam.tidbapi.com,
+      billing.tidbapi.com, msp.tidbapi.com]
+    path_prefix: /v1beta1
+    status: current for Starter, Essential, Dedicated, Data Service, IAM, billing; MSP is marked deprecated
+  - version: v1beta2
+    host: cloud.tidbapi.com
+    path_prefix: /v1beta2
+    status: current for TiDB Cloud Premium
+  note: >-
+    Every version of the API is still labelled beta ("TiDB Cloud API is in public preview" / "TiDB Cloud
+    API is in beta" in each spec's own description). A caller cannot distinguish "stable enough to build on"
+    from "may change" anywhere in the surface, because nothing is GA.
+errors:
+  envelope: >-
+    Not RFC 9457. Three envelopes coexist. The v1beta1/v1beta2 gRPC-gateway APIs return a google.rpc.Status
+    object {code:int32, message:string, details:[Any]}; the v1beta API returns {code:int, message:string,
+    details:[string]} with a numeric application code such as 49900001; Data Service returns
+    api.OpenApiError and Billing returns billing_errors.BaseError {code:string, error, msgPrefix, status:int}.
+  content_type: application/json
+  catalog: errors/tidb-problem-types.yml
+rate_limits:
+  documented: true
+  limit: 100 requests per minute per API key
+  status_on_exhaustion: 429
+  headers:
+  - X-Ratelimit-Limit-Minute
+  - X-Ratelimit-Remaining-Minute
+  - X-Ratelimit-Reset
+  detail: rate-limits/tidb-rate-limits.yml
+cross_links:
+  errors: errors/tidb-problem-types.yml
+  lifecycle: lifecycle/tidb-lifecycle.yml
+  authentication: authentication/tidb-authentication.yml
+  rate_limits: rate-limits/tidb-rate-limits.yml
+  data_model: data-model/tidb-data-model.yml

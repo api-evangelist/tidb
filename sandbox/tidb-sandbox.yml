@@ -1,0 +1,68 @@
+generated: '2026-09-17'
+method: searched
+source: https://docs.pingcap.com/tidbcloud/tidb-cloud-quickstart/,
+  https://docs.pingcap.com/tidb/stable/quick-start-with-tidb/, https://play.tidbcloud.com/,
+  https://tidbcloud.com/free-trial
+note: >-
+  TiDB has no test-mode/live-mode key split and no fixture or trigger tooling, because it is a database
+  rather than a transactional service with simulated outcomes. What it offers instead is three genuinely
+  free places to run real SQL — a hosted no-signup playground, a free-forever managed instance, and a local
+  single-binary cluster. Nothing published here is a test credential and none is invented.
+modes:
+  test_vs_live: false
+  note: >-
+    TiDB Cloud API keys are not split into test and live prefixes. One API key pair (public + private) works
+    against real resources, so an agent exercising the control plane is always creating real, billable
+    objects. The nearest thing to a safe rehearsal is a TiDB Cloud Starter instance inside the free
+    allowance, or a branch of one.
+environments:
+- name: TiDB Playground
+  url: https://play.tidbcloud.com/
+  type: hosted, no signup
+  credentials_required: false
+  scope: Try TiDB SQL, vector search and HTAP features in the browser without an account.
+- name: TiDB Cloud Starter
+  url: https://tidbcloud.com/free-trial
+  type: managed free tier
+  credentials_required: true
+  signup: email + password, or Google / GitHub / Microsoft SSO
+  provisioning: >-
+    A default Starter instance named `Instance0` is created automatically on signup, so the first instance
+    needs no create call.
+  free_allowance:
+    request_units_per_month: 250000000
+    row_storage_gib: 25
+    column_storage_gib: 25
+    scope: per organization
+    source: https://www.pingcap.com/pricing/
+  scale_to_zero: true
+  note: This is the tier the REST API, the CLIs and the MCP server are all documented against.
+- name: Branches on a Starter or Essential instance
+  type: data branch
+  operations: [BranchService_CreateBranch, BranchService_ResetBranch, BranchService_DeleteBranch]
+  cli: ticloud serverless branch create | reset | delete
+  scope: >-
+    The closest thing TiDB Cloud offers to a disposable test environment for an existing dataset — fork the
+    data, run destructive work against the branch, then reset or delete it. Branches are a real product
+    feature, not a sandbox mode, and they are billed.
+- name: TiUP playground (local)
+  install: tiup playground
+  docs: https://docs.pingcap.com/tidb/stable/quick-start-with-tidb/
+  type: local single-machine cluster
+  credentials_required: false
+  scope: >-
+    A full local TiDB/TiKV/PD/TiFlash cluster on macOS or Linux for functional testing. PingCAP marks it
+    explicitly ONLY FOR quick start, not for production or stability testing. The TiDB HTTP status API on
+    port 10080 is available here without authentication, which makes it the only place that surface can be
+    exercised safely.
+test_data:
+  cards: null
+  accounts: null
+  tokens: null
+  fixtures: null
+  note: >-
+    No test cards, test bank accounts, magic identifiers or hosted test tokens exist — the product has no
+    simulated-outcome surface to seed. Sample datasets are offered instead, as import sources in the TiDB
+    Cloud console quick start.
+time_simulation:
+  available: false

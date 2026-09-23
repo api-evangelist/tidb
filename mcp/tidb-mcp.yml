@@ -1,0 +1,123 @@
+generated: '2026-09-17'
+method: searched
+source: https://docs.pingcap.com/ai/tidb-mcp-server/
+status: published
+deployment:
+  mode: local-stdio
+  endpoint: null
+  install: uvx --from "pytidb[mcp]" tidb-mcp-server
+  package: https://pypi.org/project/pytidb/
+  auth: api-key
+  verified: searched
+  note: >-
+    PingCAP operates NO hosted MCP endpoint. The TiDB MCP Server is launched by the MCP client on the
+    caller's own machine and connects outward to a TiDB or TiDB Cloud instance whose host, port, user and
+    password the caller supplies in environment variables. An SSE transport also exists, but it too is a
+    server the caller starts locally (`--transport sse`, then the client points at http://localhost:8000/sse)
+    — a localhost URL is not an agent-reachable endpoint, so the mode stays local-stdio rather than both.
+    `auth: api-key` here means TiDB SQL-user credentials, not a TiDB Cloud management API key.
+server:
+  name: tidb-mcp-server
+  display_name: TiDB MCP Server
+  maintainer: PingCAP
+  transports:
+  - stdio
+  - sse
+  default_transport: stdio
+  hosted: false
+  open_source: true
+  repository: https://github.com/pingcap/pytidb
+  docs: https://docs.pingcap.com/ai/tidb-mcp-server/
+  plane: MySQL data plane (one database), not the TiDB Cloud control plane
+configuration:
+  env:
+  - name: TIDB_HOST
+    description: TiDB host to connect to
+  - name: TIDB_PORT
+    description: TiDB port (4000 by default)
+  - name: TIDB_USERNAME
+    description: SQL user
+  - name: TIDB_PASSWORD
+    description: SQL user password
+  - name: TIDB_DATABASE
+    description: Default database
+  client_config: >-
+    An `mcpServers` block in the MCP client configuration file for stdio; a .env file plus a
+    http://localhost:8000/sse URL for SSE mode.
+  documented_clients:
+  - Cursor
+  - Claude Desktop
+tools:
+- name: show_databases
+  description: Show all databases in the TiDB Cloud Starter instance
+  category: schema
+  read_only: true
+  inputs:
+  - name: username
+    type: string
+    required: false
+  - name: password
+    type: string
+    required: false
+- name: switch_database
+  description: Switch to a specific database
+  category: schema
+  read_only: true
+  inputs:
+  - name: db_name
+    type: string
+    required: true
+  - name: username
+    type: string
+    required: false
+  - name: password
+    type: string
+    required: false
+- name: show_tables
+  description: Show all tables in the current database
+  category: schema
+  read_only: true
+  inputs: []
+- name: db_query
+  description: Execute read-only SQL queries
+  category: sql
+  read_only: true
+  inputs:
+  - name: sql_stmt
+    type: string
+    required: true
+- name: db_execute
+  description: Execute SQL statements (DML or DDL)
+  category: sql
+  read_only: false
+  inputs:
+  - name: sql_stmts
+    type: string or array
+    required: true
+- name: db_create_user
+  description: Create a new database user
+  category: user-management
+  read_only: false
+  inputs:
+  - name: username
+    type: string
+    required: true
+  - name: password
+    type: string
+    required: true
+- name: db_remove_user
+  description: Remove an existing database user
+  category: user-management
+  read_only: false
+  inputs:
+  - name: username
+    type: string
+    required: true
+summary:
+  tool_count: 7
+  read_only_tools: 4
+  mutating_tools: 3
+  tools_list_probed: false
+  tools_list_note: >-
+    No public remote endpoint exists to POST tools/list against, so the tool set and its input parameters
+    were read verbatim from the provider's own documentation page rather than from a live introspection.

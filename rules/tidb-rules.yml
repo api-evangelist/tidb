@@ -48,7 +48,7 @@ rules:
   tidb-servers-https-for-cloud:
     description: TiDB Cloud API server URLs must use HTTPS
     severity: error
-    given: "$.servers[?(@.url =~ /tidbcloud\.com/)].url"
+    given: '$.servers[?(@.url =~ /tidbcloud\.com/)].url'
     then:
       function: pattern
       functionOptions:

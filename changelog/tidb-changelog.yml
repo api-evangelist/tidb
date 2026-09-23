@@ -1,0 +1,72 @@
+generated: '2026-09-17'
+method: searched
+source: https://docs.pingcap.com/tidbcloud/tidb-cloud-release-notes/
+scheme: dated entries, no product version number on the API itself
+cadence: rolling — weekly or near-weekly through 2026
+format: human-readable markdown on the docs site; also served verbatim as
+  https://docs.pingcap.com/tidbcloud/tidb-cloud-release-notes.md
+machine_readable: false
+feed: false
+structure:
+  note: >-
+    Each dated entry is split under "General changes", "Console changes" and "API changes" headings, which
+    makes the REST surface's movement genuinely legible — an API change is called out as such rather than
+    buried in product news. That is unusually good practice for a control plane with no deprecation policy.
+  sections: [General changes, Console changes, API changes]
+current_version:
+  api: v1beta2 (TiDB Cloud Premium), v1beta1 (Starter, Essential, Dedicated, Data Service, IAM, billing)
+  note: No release is versioned; the changelog is dated, not semver.
+entries:
+- date: '2026-09-15'
+  sections: [General changes]
+  breaking: false
+  highlights:
+  - TiDB Cloud CLI `ti` enters public preview for TiDB Cloud Starter instances and TiDB Cloud Filesystem —
+    JSON output by default, JMESPath output queries, and `--wait` and `--dry-run` on applicable commands,
+    explicitly aimed at scripts, CI jobs and AI agents.
+- date: '2026-09-08'
+  sections: [Console changes, API changes]
+  breaking: false
+  additions:
+  - Changefeed API endpoints introduced for TiDB Cloud Premium (v1beta2) — create, list, get, delete,
+    pause, resume and scale CDC changefeeds to Kafka, MySQL, Amazon S3 and Alibaba Cloud OSS.
+  highlights:
+  - TiDB Cloud Essential instances carrying the June 30 enhancements now report CLOUD.202603.x as their
+    TiDB version in the console.
+- date: '2026-09-01'
+  sections: [General changes]
+  breaking: false
+  highlights:
+  - TiDB Cloud Essential can temporarily authorize TiDB Cloud Support to access Plan Replayer files, with
+    a chosen duration, extension and revocation, and automatic revocation on expiry.
+  - The Events page is available for TiDB Cloud Premium instances; event data is retained for 7 days.
+- date: '2026-08-28'
+  sections: [General changes]
+  breaking: false
+  highlights:
+  - TiDB Cloud Dedicated changes.
+- date: '2026-08-25'
+  sections: [General changes]
+  breaking: false
+  highlights:
+  - TiDB Cloud Premium changes.
+- date: '2026-08-18'
+  sections: [General changes]
+  breaking: false
+  highlights:
+  - TiDB Cloud Premium and TiDB Cloud Lake changes.
+- date: '2026-07-07'
+  sections: [General changes, Console changes, API changes]
+  breaking: false
+  additions:
+  - Changefeed API endpoints introduced for TiDB Cloud Dedicated (v1beta1) — create, list, get, delete,
+    pause, resume and scale changefeeds to Kafka, MySQL, Amazon S3, GCS and Azure Blob Storage.
+  highlights:
+  - Datadog integration (public preview) for TiDB Cloud Essential and Premium.
+  - The console standardizes on the `PREVIEW` label, replacing mixed use of `BETA` and `PREVIEW`.
+window:
+  from: '2026-07-07'
+  to: '2026-09-15'
+  note: >-
+    Recent window only. The page carries dated entries back through 2026 and PingCAP keeps a separate
+    archive page per year; older entries were not transcribed.

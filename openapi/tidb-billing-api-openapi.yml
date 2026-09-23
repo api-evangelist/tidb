@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: TiDB Cloud Billing API
-  description: The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud. It supports managing projects, clusters, backups, restores, data imports, billing, and private endpoint connections across both TiDB Cloud Serverless and TiDB Cloud Dedicated tiers. The API uses HTTP Digest Authentication with public and private API keys and returns JSON-formatted responses. Available as both v1beta and the newer v1beta1 versions, it enables automation of database infrastructure lifecycle management at scale.
+  description: The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud.
   version: v1beta1
   contact:
     name: TiDB Cloud Support
@@ -86,22 +86,18 @@ paths:
           $ref: '#/components/responses/Unauthorized'
 components:
   schemas:
-    BillsCostExplorer:
+    CostExplorerRequest:
       type: object
-      description: Results from a cost explorer query.
+      description: Request body for querying the cost explorer.
       properties:
-        trends:
+        filter:
+          type: object
+          description: Criteria to filter cost explorer results by project, cluster, or service.
+        groups:
           type: array
-          description: Array of cost trend data points.
+          description: Dimensions to group results by (project, cluster, service, region).
           items:
-            type: object
-            properties:
-              date:
-                type: string
-                description: The date for this trend data point.
-              cost:
-                type: string
-                description: The cost amount for this date.
+            type: string
     ErrorResponse:
       type: object
       description: Standard error response returned when an API request fails.
@@ -118,6 +114,22 @@ components:
         msgPrefix:
           type: string
           description: A human-readable error message describing the failure.
+    BillsCostExplorer:
+      type: object
+      description: Results from a cost explorer query.
+      properties:
+        trends:
+          type: array
+          description: Array of cost trend data points.
+          items:
+            type: object
+            properties:
+              date:
+                type: string
+                description: The date for this trend data point.
+              cost:
+                type: string
+                description: The cost amount for this date.
     BillsExplorer:
       type: object
       description: An organization's monthly billing summary.
@@ -156,18 +168,6 @@ components:
               totalCost:
                 type: string
                 description: The total cost for this service.
-    CostExplorerRequest:
-      type: object
-      description: Request body for querying the cost explorer.
-      properties:
-        filter:
-          type: object
-          description: Criteria to filter cost explorer results by project, cluster, or service.
-        groups:
-          type: array
-          description: Dimensions to group results by (project, cluster, service, region).
-          items:
-            type: string
     BillsDetails:
       type: object
       description: Detailed daily billing data for a month.
@@ -207,14 +207,14 @@ components:
           type: string
           description: The total cost for this specific record.
   responses:
-    Unauthorized:
-      description: Authentication failed. Check your API key credentials.
+    BadRequest:
+      description: The request body or parameters are invalid.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: The request body or parameters are invalid.
+    Unauthorized:
+      description: Authentication failed. Check your API key credentials.
       content:
         application/json:
           schema:

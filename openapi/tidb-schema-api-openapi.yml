@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: TiDB HTTP Schema API
-  description: The TiDB HTTP API is a built-in administrative interface available on self-managed TiDB server instances, accessible on port 10080 by default. It exposes endpoints for retrieving server status, database and table schema information, region metadata, MVCC key details, DDL job history, hot region data, and server configuration. Operators and monitoring systems use this API to inspect the internal state of a running TiDB node, integrate with observability tooling, and troubleshoot distributed SQL execution. The API does not require authentication by default and is intended for use within trusted internal networks. The port can be configured in tidb.toml via the status.status-port setting.
+  description: The TiDB HTTP API is a built-in administrative interface available on self-managed TiDB server instances, accessible on port 10080 by default.
   version: '1.0'
   contact:
     name: TiDB GitHub
@@ -105,22 +105,19 @@ paths:
         '404':
           description: No table with the specified ID was found.
 components:
-  parameters:
-    table:
-      name: table
-      in: path
-      description: The table name within the specified database.
-      required: true
-      schema:
-        type: string
-    db:
-      name: db
-      in: path
-      description: The database name.
-      required: true
-      schema:
-        type: string
   schemas:
+    ColumnInfo:
+      type: object
+      description: A column definition within a TiDB table schema.
+      properties:
+        id:
+          type: integer
+          description: The internal numeric column ID.
+        name:
+          $ref: '#/components/schemas/CIStr'
+        field_type:
+          type: object
+          description: The MySQL field type descriptor for this column.
     DatabaseSchema:
       type: object
       description: Schema information for a TiDB database.
@@ -133,6 +130,24 @@ components:
         collate:
           type: string
           description: The collation of the database.
+    TableByIDResponse:
+      type: object
+      description: Database and table information looked up by table ID.
+      properties:
+        db_info:
+          $ref: '#/components/schemas/DatabaseSchema'
+        table_info:
+          $ref: '#/components/schemas/TableSchema'
+    CIStr:
+      type: object
+      description: A case-insensitive string pair used in TiDB schema objects.
+      properties:
+        O:
+          type: string
+          description: The original case-preserved string value.
+        L:
+          type: string
+          description: The lowercase version of the string.
     IndexInfo:
       type: object
       description: An index definition on a TiDB table.
@@ -155,26 +170,6 @@ components:
         is_primary:
           type: boolean
           description: Whether this is the primary key index.
-    ColumnInfo:
-      type: object
-      description: A column definition within a TiDB table schema.
-      properties:
-        id:
-          type: integer
-          description: The internal numeric column ID.
-        name:
-          $ref: '#/components/schemas/CIStr'
-        field_type:
-          type: object
-          description: The MySQL field type descriptor for this column.
-    TableByIDResponse:
-      type: object
-      description: Database and table information looked up by table ID.
-      properties:
-        db_info:
-          $ref: '#/components/schemas/DatabaseSchema'
-        table_info:
-          $ref: '#/components/schemas/TableSchema'
     TableSchema:
       type: object
       description: Schema information for a TiDB table.
@@ -200,16 +195,21 @@ components:
           description: The list of index definitions on the table.
           items:
             $ref: '#/components/schemas/IndexInfo'
-    CIStr:
-      type: object
-      description: A case-insensitive string pair used in TiDB schema objects.
-      properties:
-        O:
-          type: string
-          description: The original case-preserved string value.
-        L:
-          type: string
-          description: The lowercase version of the string.
+  parameters:
+    table:
+      name: table
+      in: path
+      description: The table name within the specified database.
+      required: true
+      schema:
+        type: string
+    db:
+      name: db
+      in: path
+      description: The database name.
+      required: true
+      schema:
+        type: string
 externalDocs:
   description: TiDB HTTP API Reference
   url: https://github.com/pingcap/tidb/blob/master/docs/tidb_http_api.md

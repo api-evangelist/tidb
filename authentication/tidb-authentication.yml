@@ -1,17 +1,76 @@
-generated: '2026-07-11'
-method: derived
-source: openapi/tidb-cloud-api-openapi.yml, openapi/tidb-cloud-chat2query-openapi.yml, openapi/tidb-cloud-data-service-openapi.yml
+generated: '2026-09-17'
+method: searched
+source: https://docs.pingcap.com/tidbcloud/api-overview/ and the Authentication sections of
+  https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/ and https://docs.pingcap.com/tidbcloud/api/v1beta/,
+  cross-read against openapi/_original/tidb-cloud-*-openapi-original.json
+docs: https://docs.pingcap.com/tidbcloud/api-overview/
 summary:
   types:
   - http
+  primary: HTTP Digest Authentication with a TiDB Cloud API key pair
+  oauth2: false
+  openid_connect: false
+  mutual_tls: false
+  scopes_published: false
+  note: >-
+    The eight published Swagger 2.0 documents declare NO securityDefinitions at all — the authentication
+    model lives entirely in each spec's info.description prose and in the API overview page. A tool that
+    reads only the machine-readable part of these contracts will conclude the APIs are unauthenticated,
+    which they emphatically are not. That gap is the finding; the model itself is documented clearly for a
+    human.
 schemes:
 - name: digestAuth
   type: http
   scheme: digest
-  description: HTTP Digest Authentication using a TiDB Cloud API public key as the username
-    and private key as the password. Keys are generated in the TiDB Cloud console under Organization
-    Settings > API Keys.
-  sources:
-  - openapi/tidb-cloud-api-openapi.yml
-  - openapi/tidb-cloud-chat2query-openapi.yml
-  - openapi/tidb-cloud-data-service-openapi.yml
+  rfc: RFC 7616 (HTTP Digest Access Authentication)
+  credential:
+    username: the API key's PUBLIC key
+    password: the API key's PRIVATE key
+  issued_at: https://tidbcloud.com/org-settings/api-keys
+  example: |
+    curl --digest \
+      --user 'YOUR_PUBLIC_KEY:YOUR_PRIVATE_KEY' \
+      --request GET \
+      --url https://api.tidbcloud.com/api/v1beta/projects
+  applies_to:
+  - TiDB Cloud API v1beta (api.tidbcloud.com)
+  - TiDB Cloud Dedicated API (dedicated.tidbapi.com)
+  - TiDB Cloud Starter and Essential API (serverless.tidbapi.com)
+  - TiDB Cloud Premium API (cloud.tidbapi.com)
+  - TiDB Cloud Data Service API (dataservice.tidbapi.com)
+  - TiDB Cloud IAM API (iam.tidbapi.com)
+  - TiDB Cloud Billing API (billing.tidbapi.com)
+  - TiDB Cloud MSP API (msp.tidbapi.com)
+  rationale: 'PingCAP''s stated reason: Digest means "the API key is never sent over the network."'
+  declared_in_spec: false
+  agent_note: >-
+    Digest requires a challenge/response round trip — the first request gets a 401 with a WWW-Authenticate
+    header and must be replayed with the computed response. Most HTTP clients support it but few do so by
+    default; `curl --digest`, Python requests' HTTPDigestAuth and Go's equivalents all work.
+authorization:
+  model: role on the API key, at organization or project scope
+  scopes: none published
+  note: >-
+    There is no OAuth scope vocabulary, so no scopes/ artifact is written. Access is coarse — a key either
+    has the role for an organization or project or it does not, and 403 is the signal that it does not.
+  managed_by: TiDB Cloud IAM API (API Key, Member) and the console
+other_identity_surfaces:
+- name: Data App API key
+  used_for: calling a customer-published TiDB Cloud Data Service endpoint under data.tidbcloud.com
+  managed_by: TiDB Cloud Data Service API (Data API Key resource)
+  note: A different credential from the organization API key, in a different identity space.
+- name: SQL user
+  used_for: connecting to the database over the MySQL protocol, including from the TiDB MCP Server
+  managed_by: MySQL protocol, `ticloud serverless sql-user`, or the MCP server's db_create_user /
+    db_remove_user tools
+- name: Console SSO
+  used_for: human login to tidbcloud.com only — never exposed to API callers
+  providers: [Google, GitHub, Microsoft]
+transport:
+  https_only: true
+  note: 'Every spec states HTTPS-only: "You can only access the API via HTTPS."'
+gaps:
+- No securityDefinitions in any published spec, so the auth model is invisible to code generators and
+  spec-driven agents.
+- No OAuth, no scopes, no token exchange, and therefore no way to delegate a narrow capability to an agent.
+- No key rotation or expiry semantics documented on the API key itself.

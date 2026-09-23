@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: TiDB Cloud Imports API
-  description: The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud. It supports managing projects, clusters, backups, restores, data imports, billing, and private endpoint connections across both TiDB Cloud Serverless and TiDB Cloud Dedicated tiers. The API uses HTTP Digest Authentication with public and private API keys and returns JSON-formatted responses. Available as both v1beta and the newer v1beta1 versions, it enables automation of database infrastructure lifecycle management at scale.
+  description: The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud.
   version: v1beta1
   contact:
     name: TiDB Cloud Support
@@ -110,38 +110,6 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  parameters:
-    importId:
-      name: importId
-      in: path
-      description: The unique identifier of the import task.
-      required: true
-      schema:
-        type: string
-    clusterId:
-      name: clusterId
-      in: path
-      description: The unique identifier of the TiDB Cloud Dedicated cluster.
-      required: true
-      schema:
-        type: string
-    pageSize:
-      name: pageSize
-      in: query
-      description: Maximum number of results to return per page. Default is 100, maximum is 100.
-      required: false
-      schema:
-        type: integer
-        minimum: 1
-        maximum: 100
-        default: 100
-    pageToken:
-      name: pageToken
-      in: query
-      description: Pagination token returned from a previous list request to retrieve the next page.
-      required: false
-      schema:
-        type: string
   schemas:
     ErrorResponse:
       type: object
@@ -159,16 +127,6 @@ components:
         msgPrefix:
           type: string
           description: A human-readable error message describing the failure.
-    S3Source:
-      type: object
-      description: S3 source configuration for a data import task.
-      properties:
-        bucketUri:
-          type: string
-          description: The S3 bucket URI containing the import files (e.g., s3://bucket/path/).
-        roleArn:
-          type: string
-          description: The AWS IAM Role ARN granting TiDB Cloud access to the S3 bucket.
     CreateImportRequest:
       type: object
       description: Request body for creating a new data import task.
@@ -196,18 +154,16 @@ components:
           description: The target database in the cluster to import data into.
         s3Source:
           $ref: '#/components/schemas/S3Source'
-    ListImportsResponse:
+    S3Source:
       type: object
-      description: Paginated list of import tasks for a cluster.
+      description: S3 source configuration for a data import task.
       properties:
-        imports:
-          type: array
-          description: The list of import task objects.
-          items:
-            $ref: '#/components/schemas/Import'
-        nextPageToken:
+        bucketUri:
           type: string
-          description: Token to retrieve the next page of results.
+          description: The S3 bucket URI containing the import files (e.g., s3://bucket/path/).
+        roleArn:
+          type: string
+          description: The AWS IAM Role ARN granting TiDB Cloud access to the S3 bucket.
     Import:
       type: object
       description: A data import task for a TiDB Cloud cluster.
@@ -243,15 +199,59 @@ components:
         errorMessage:
           type: string
           description: Error message if the import task failed.
+    ListImportsResponse:
+      type: object
+      description: Paginated list of import tasks for a cluster.
+      properties:
+        imports:
+          type: array
+          description: The list of import task objects.
+          items:
+            $ref: '#/components/schemas/Import'
+        nextPageToken:
+          type: string
+          description: Token to retrieve the next page of results.
+  parameters:
+    pageSize:
+      name: pageSize
+      in: query
+      description: Maximum number of results to return per page. Default is 100, maximum is 100.
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 100
+    pageToken:
+      name: pageToken
+      in: query
+      description: Pagination token returned from a previous list request to retrieve the next page.
+      required: false
+      schema:
+        type: string
+    clusterId:
+      name: clusterId
+      in: path
+      description: The unique identifier of the TiDB Cloud Dedicated cluster.
+      required: true
+      schema:
+        type: string
+    importId:
+      name: importId
+      in: path
+      description: The unique identifier of the import task.
+      required: true
+      schema:
+        type: string
   responses:
-    Unauthorized:
-      description: Authentication failed. Check your API key credentials.
+    BadRequest:
+      description: The request body or parameters are invalid.
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: The request body or parameters are invalid.
+    Unauthorized:
+      description: Authentication failed. Check your API key credentials.
       content:
         application/json:
           schema:

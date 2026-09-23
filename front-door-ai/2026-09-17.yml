@@ -1,0 +1,37 @@
+# Front Door AI Index — tidb — 2026-09-17
+# AI vocabulary counted on the provider's root page. Generated; do not edit.
+# `score` is null unless ownership is `own` — see front_door_ai.py.
+front_door_ai:
+  slug: tidb
+  lexicon_version: '1.0'
+  probed_at: '2026-09-17'
+  host: www.pingcap.com
+  final_host: www.pingcap.com
+  ownership: shared
+  owner: pingcap
+  shares_host_with:
+  - pingcap
+  inherited_from: null
+  verdict: scored
+  score: null
+  host_score: 82
+  density: null
+  words: 1970
+  tiers:
+    agentic: 42
+    core: 40
+    model: 0
+  ambiguous: 47
+  top_terms:
+    agent: 45
+    AI: 37
+    AI agent: 16
+    agentic: 10
+    vector database: 5
+    MCP: 4
+    embedding: 4
+    RAG: 2
+    gen ai: 2
+    intelligence: 2
+    LLMs: 1
+    retrieval-augmented: 1

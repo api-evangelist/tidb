@@ -1,0 +1,185 @@
+generated: '2026-09-17'
+method: searched
+source: registry.npmjs.org, pypi.org, proxy.golang.org, crates.io, search.maven.org, github.com/pingcap,
+  github.com/tidbcloud, https://docs.pingcap.com/developer/
+note: >-
+  TiDB is MySQL wire-protocol compatible, so most application code reaches it through an ordinary MySQL
+  driver rather than a TiDB-specific SDK. The first-party client surface is therefore small and splits three
+  ways — serverless/edge drivers for TiDB Cloud (npm @tidbcloud/*), the AI/vector Python client (pytidb),
+  and the CLIs (ticloud, ti). There is NO first-party SDK for the TiDB Cloud management REST API in any
+  language; callers are expected to sign HTTP Digest requests themselves, which the API reference documents
+  with curl and Python examples.
+packages:
+- language: javascript
+  registry: npm
+  name: '@tidbcloud/serverless'
+  version: 0.3.0
+  published: '2026-03-17'
+  url: https://www.npmjs.com/package/@tidbcloud/serverless
+  install: npm install @tidbcloud/serverless
+  description: TiDB Cloud serverless driver — a fetch-based HTTP driver for querying TiDB Cloud Starter
+    and Essential from serverless and edge runtimes where TCP sockets are unavailable.
+  repository: https://github.com/tidbcloud/serverless-js
+  docs: https://docs.pingcap.com/tidbcloud/serverless-driver/
+  official: true
+- language: javascript
+  registry: npm
+  name: '@tidbcloud/prisma-adapter'
+  version: 6.17.0
+  published: '2025-10-28'
+  url: https://www.npmjs.com/package/@tidbcloud/prisma-adapter
+  install: npm install @tidbcloud/prisma-adapter
+  description: Prisma driver adapter that runs Prisma Client over the TiDB Cloud serverless driver.
+  repository: https://github.com/tidbcloud/prisma-adapter
+  official: true
+- language: javascript
+  registry: npm
+  name: '@tidbcloud/kysely'
+  version: 0.0.4
+  published: '2023-09-12'
+  url: https://www.npmjs.com/package/@tidbcloud/kysely
+  install: npm install @tidbcloud/kysely
+  description: Kysely dialect backed by the TiDB Cloud serverless driver.
+  repository: https://github.com/tidbcloud/kysely
+  official: true
+  note: Last published 2023-09-12 — three years behind the serverless driver it wraps.
+- language: python
+  registry: pypi
+  name: pytidb
+  version: 0.0.14
+  published: '2026-02-03'
+  url: https://pypi.org/project/pytidb/
+  install: pip install pytidb
+  description: TiDB Python SDK for AI workloads — table modelling, CRUD, transactions, vector/full-text/hybrid
+    search and auto-embedding. The extra `pytidb[mcp]` also ships the TiDB MCP Server binary.
+  repository: https://github.com/pingcap/pytidb
+  docs: https://docs.pingcap.com/ai/
+  official: true
+- language: python
+  registry: pypi
+  name: tidb-vector
+  version: 0.0.15
+  published: '2025-07-15'
+  url: https://pypi.org/project/tidb-vector/
+  install: pip install tidb-vector
+  description: TiDB vector search client for Python; largely superseded by pytidb.
+  repository: https://github.com/pingcap/tidb-vector-python
+  official: true
+- language: python
+  registry: pypi
+  name: django-tidb
+  version: 6.0.1
+  published: '2026-08-05'
+  url: https://pypi.org/project/django-tidb/
+  install: pip install django-tidb
+  description: Django database backend for TiDB.
+  repository: https://github.com/pingcap/django-tidb
+  official: true
+- language: go
+  registry: pkg.go.dev
+  name: github.com/tidbcloud/ti-cli
+  version: v0.2.4
+  published: '2026-09-09'
+  url: https://pkg.go.dev/github.com/tidbcloud/ti-cli
+  install: go install github.com/tidbcloud/ti-cli@latest
+  description: '`ti` — the newer TiDB Cloud CLI for TiDB Cloud Starter instances and TiDB Cloud Filesystem,
+    built for scripts, CI jobs and AI agents (JSON output by default, --wait and --dry-run).'
+  repository: https://github.com/tidbcloud/ti-cli
+  docs: https://docs.pingcap.com/ai/ti/ti-quick-start/
+  official: true
+- language: go
+  registry: pkg.go.dev
+  name: github.com/tidbcloud/tidbcloud-cli
+  version: v0.5.2
+  published: '2023-08-15'
+  url: https://pkg.go.dev/github.com/tidbcloud/tidbcloud-cli
+  install: curl https://raw.githubusercontent.com/tidbcloud/tidbcloud-cli/main/install.sh | sh
+  description: '`ticloud` — the TiDB Cloud CLI for Starter and Essential instances, imports, exports and
+    audit logs.'
+  repository: https://github.com/tidbcloud/tidbcloud-cli
+  docs: https://docs.pingcap.com/tidbcloud/cli-reference/
+  official: true
+  note: >-
+    The Go module proxy last saw a semver tag (v0.5.2) on 2023-08-15, but the project ships real releases —
+    GitHub release v1.0.0-beta.11 on 2025-12-23 — as pre-release tags the proxy does not treat as latest.
+    Install via the published script or the GitHub releases page, not `go install @latest`.
+- language: rust
+  registry: crates.io
+  name: lakesql
+  version: 0.34.0
+  published: '2026-06-04'
+  url: https://crates.io/crates/lakesql
+  install: cargo install lakesql
+  description: TiDB Cloud Lake native command-line tool.
+  repository: https://github.com/tidbcloud/lakesql
+  official: true
+- language: rust
+  registry: crates.io
+  name: lake-driver
+  version: 0.34.0
+  published: '2026-06-04'
+  url: https://crates.io/crates/lake-driver
+  install: cargo add lake-driver
+  description: TiDB Cloud Lake driver for Rust.
+  repository: https://github.com/tidbcloud/lakesql
+  official: true
+- language: rust
+  registry: crates.io
+  name: lake-client
+  version: 0.34.0
+  published: '2026-06-04'
+  url: https://crates.io/crates/lake-client
+  install: cargo add lake-client
+  description: TiDB Cloud Lake client for Rust.
+  repository: https://github.com/tidbcloud/lakesql
+  official: true
+- language: java
+  registry: maven
+  name: io.tidb:tidb-jdbc
+  version: 0.0.4
+  published: '2021-09-12'
+  url: https://central.sonatype.com/artifact/io.tidb/tidb-jdbc
+  install: '<dependency><groupId>io.tidb</groupId><artifactId>tidb-jdbc</artifactId><version>0.0.4</version></dependency>'
+  description: TiDB JDBC driver, part of the io.tidb bigdata suite (Flink, Trino, Presto and MapReduce
+    connectors are published under the same group).
+  repository: https://github.com/tidb-incubator/TiBigData
+  official: true
+  note: >-
+    ABANDONMENT SIGNAL — every artifact in the io.tidb group (tidb-jdbc, flink-tidb-connector,
+    trino-connector, prestodb-connector, prestosql-connector, ticdc, bigdata, mapreduce-tidb-connector)
+    is still at 0.0.4, published 2021-09-12, five years behind the TiDB releases they target. Java callers
+    are directed at the ordinary MySQL Connector/J instead.
+- language: javascript
+  registry: npm
+  name: tidb
+  version: 0.2.0
+  published: '2024-02-26'
+  url: https://www.npmjs.com/package/tidb
+  description: A TiDB driver for Node.js. Community project published from a personal repository
+    (g1eny0ung/node-tidb), not from the pingcap or tidbcloud organizations.
+  repository: https://github.com/g1eny0ung/node-tidb
+  official: false
+- language: python
+  registry: pypi
+  name: tidb-mcp-server
+  version: 0.1.0
+  published: '2026-01-17'
+  url: https://pypi.org/project/tidb-mcp-server/
+  description: >-
+    NOT PingCAP. A PyPI package occupying the obvious name for the TiDB MCP Server, whose own summary reads
+    "MCP server package - Created by Poneglyph for security research". PingCAP's real MCP server is the
+    `tidb-mcp-server` entry point inside the pytidb[mcp] extra and is installed as
+    `uvx --from "pytidb[mcp]" tidb-mcp-server`. Recorded here so the name collision is visible, not endorsed.
+  official: false
+  warning: name-collision
+summary:
+  total: 14
+  official: 12
+  third_party: 2
+  languages:
+  - javascript
+  - python
+  - go
+  - rust
+  - java
+  management_api_sdk: none

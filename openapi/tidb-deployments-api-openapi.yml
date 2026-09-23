@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: TiDB Cloud Data Service Deployments API
-  description: The TiDB Cloud Data Service API enables developers to manage Data Apps and custom REST endpoints backed by SQL queries running against TiDB Cloud clusters. Operators create Data Apps, link them to clusters, define custom endpoints with SQL templates, manage API keys, and deploy endpoints via this API. Endpoints support GET, POST, PUT, and DELETE methods, return JSON-formatted results, and can be configured with pagination, rate limiting, and caching. The API uses HTTP Digest Authentication and is served from the dataservice.tidbapi.com host.
+  description: The TiDB Cloud Data Service API enables developers to manage Data Apps and custom REST endpoints backed by SQL queries running against TiDB Cloud clusters.
   version: v1beta1
   contact:
     name: TiDB Cloud Support
@@ -60,31 +60,6 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  parameters:
-    pageSize:
-      name: pageSize
-      in: query
-      description: Maximum number of results to return per page. Default is 100, maximum is 100.
-      required: false
-      schema:
-        type: integer
-        minimum: 1
-        maximum: 100
-        default: 100
-    pageToken:
-      name: pageToken
-      in: query
-      description: Pagination token returned from a previous list request to retrieve the next page.
-      required: false
-      schema:
-        type: string
-    dataAppId:
-      name: dataAppId
-      in: path
-      description: The unique identifier of the Data App.
-      required: true
-      schema:
-        type: string
   schemas:
     ErrorResponse:
       type: object
@@ -136,7 +111,38 @@ components:
         nextPageToken:
           type: string
           description: Token to retrieve the next page of results.
+  parameters:
+    pageSize:
+      name: pageSize
+      in: query
+      description: Maximum number of results to return per page. Default is 100, maximum is 100.
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 100
+    dataAppId:
+      name: dataAppId
+      in: path
+      description: The unique identifier of the Data App.
+      required: true
+      schema:
+        type: string
+    pageToken:
+      name: pageToken
+      in: query
+      description: Pagination token returned from a previous list request to retrieve the next page.
+      required: false
+      schema:
+        type: string
   responses:
+    BadRequest:
+      description: The request body or parameters are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
     Unauthorized:
       description: Authentication failed. Check your API key credentials.
       content:
@@ -145,12 +151,6 @@ components:
             $ref: '#/components/schemas/ErrorResponse'
     NotFound:
       description: The requested resource was not found.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: The request body or parameters are invalid.
       content:
         application/json:
           schema:

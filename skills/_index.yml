@@ -1,0 +1,43 @@
+generated: '2026-09-17'
+method: generated
+source: openapi/_original/tidb-cloud-*-openapi-original.json + conventions/tidb-conventions.yml +
+  errors/tidb-problem-types.yml + rate-limits/tidb-rate-limits.yml + sandbox/tidb-sandbox.yml
+note: >-
+  Packaged operating instructions for the marquee TiDB Cloud control-plane flows. Every operationId named
+  in these skills was read out of the provider's own published Swagger documents, not invented. PingCAP
+  publishes no Agent Skills of its own for TiDB Cloud; what it does publish is a set of Codex/agent rules
+  for writing SQL against TiDB, which is a data-plane concern and a different artifact.
+skills:
+- name: tidb-provision-starter-cluster
+  file: tidb-provision-starter-cluster.md
+  api: TiDB Cloud Starter and Essential API
+  operations: 6
+  summary: Pick a region, create a Starter or Essential instance, poll it ready, update it, delete it.
+- name: tidb-import-data
+  file: tidb-import-data.md
+  api: [TiDB Cloud Starter and Essential API, TiDB Cloud Dedicated API]
+  operations: 8
+  summary: Run and supervise an import on either plan, and cancel one that is going wrong — including the
+    operationId and path-parameter differences between the two APIs.
+- name: tidb-branch-and-reset
+  file: tidb-branch-and-reset.md
+  api: TiDB Cloud Starter and Essential API
+  operations: 5
+  summary: Branch before destructive work, run it (optionally through the TiDB MCP Server pointed at the
+    branch), then reset or delete.
+- name: tidb-manage-changefeed
+  file: tidb-manage-changefeed.md
+  api: [TiDB Cloud Dedicated API, TiDB Cloud Premium API]
+  operations: 9
+  summary: Size, create, watch, scale, pause/resume and delete a CDC changefeed.
+- name: tidb-publish-data-service-endpoint
+  file: tidb-publish-data-service-endpoint.md
+  api: TiDB Cloud Data Service API
+  operations: 10
+  summary: Turn a SQL query into a deployed HTTPS endpoint with its own OpenAPI document and API key.
+cross_cutting:
+  auth: HTTP Digest with a TiDB Cloud API key pair — see authentication/tidb-authentication.yml
+  idempotency: none — no Idempotency-Key anywhere; every skill states the retry hazard explicitly
+  rate_limit: 100 requests/minute per API key, 429 with X-Ratelimit-* headers, no Retry-After
+  errors: google.rpc.Status on v1beta1/v1beta2; not RFC 9457 — see errors/tidb-problem-types.yml
+  reversibility: see the reversibility block in conventions/tidb-conventions.yml

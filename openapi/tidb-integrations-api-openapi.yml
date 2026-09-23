@@ -1,7 +1,7 @@
 openapi: 3.2.0
 info:
   title: TiDB Cloud Integrations API
-  description: The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud. It supports managing projects, clusters, backups, restores, data imports, billing, and private endpoint connections across both TiDB Cloud Serverless and TiDB Cloud Dedicated tiers. The API uses HTTP Digest Authentication with public and private API keys and returns JSON-formatted responses. Available as both v1beta and the newer v1beta1 versions, it enables automation of database infrastructure lifecycle management at scale.
+  description: The TiDB Cloud API is a REST interface that provides programmatic access to manage administrative objects within TiDB Cloud.
   version: v1beta1
   contact:
     name: TiDB Cloud Support
@@ -68,15 +68,23 @@ paths:
         '404':
           $ref: '#/components/responses/NotFound'
 components:
-  parameters:
-    clusterId:
-      name: clusterId
-      in: path
-      description: The unique identifier of the TiDB Cloud Dedicated cluster.
-      required: true
-      schema:
-        type: string
   schemas:
+    ErrorResponse:
+      type: object
+      description: Standard error response returned when an API request fails.
+      properties:
+        code:
+          type: integer
+          description: The HTTP status code of the error.
+        status:
+          type: string
+          description: The error status string.
+        error:
+          type: string
+          description: A machine-readable error code identifier.
+        msgPrefix:
+          type: string
+          description: A human-readable error message describing the failure.
     Integration:
       type: object
       description: A third-party monitoring or observability integration for a cluster.
@@ -103,22 +111,6 @@ components:
           type: object
           description: Integration-specific configuration properties such as API keys and region.
           additionalProperties: true
-    ErrorResponse:
-      type: object
-      description: Standard error response returned when an API request fails.
-      properties:
-        code:
-          type: integer
-          description: The HTTP status code of the error.
-        status:
-          type: string
-          description: The error status string.
-        error:
-          type: string
-          description: A machine-readable error code identifier.
-        msgPrefix:
-          type: string
-          description: A human-readable error message describing the failure.
     ListIntegrationsResponse:
       type: object
       description: List of integrations for a cluster.
@@ -129,6 +121,12 @@ components:
           items:
             $ref: '#/components/schemas/Integration'
   responses:
+    BadRequest:
+      description: The request body or parameters are invalid.
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/ErrorResponse'
     Unauthorized:
       description: Authentication failed. Check your API key credentials.
       content:
@@ -141,12 +139,14 @@ components:
         application/json:
           schema:
             $ref: '#/components/schemas/ErrorResponse'
-    BadRequest:
-      description: The request body or parameters are invalid.
-      content:
-        application/json:
-          schema:
-            $ref: '#/components/schemas/ErrorResponse'
+  parameters:
+    clusterId:
+      name: clusterId
+      in: path
+      description: The unique identifier of the TiDB Cloud Dedicated cluster.
+      required: true
+      schema:
+        type: string
   securitySchemes:
     digestAuth:
       type: http

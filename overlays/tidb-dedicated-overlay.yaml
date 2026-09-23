@@ -1,0 +1,50 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for TiDB Cloud Dedicated API
+  version: 1.0.0
+extends: ../openapi/_original/tidb-cloud-dedicated-v1beta1-openapi-original.json
+generated: '2026-09-17'
+method: generated
+source: openapi/_original/tidb-cloud-dedicated-v1beta1-openapi-original.json + authentication/tidb-authentication.yml + lifecycle/tidb-lifecycle.yml
+x-note: >-
+  Captures API Evangelist's enhancements to PingCAP's published contract WITHOUT mutating it. The
+  contract is a Swagger 2.0 document that declares no securityDefinitions and no contact, licence or
+  termsOfService, even though the authentication model is documented in prose in its own
+  info.description. These actions add the machine-readable equivalents so a generated client wires
+  HTTP Digest correctly. Nothing here is asserted as PingCAP's own publication.
+actions:
+- target: $.info
+  update:
+    contact:
+      name: TiDB Cloud Support
+      url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+    termsOfService: https://www.pingcap.com/legal/tidb-cloud-services-agreement/
+    x-privacy-policy: https://www.pingcap.com/privacy-policy/
+    x-status-page: https://status.tidbcloud.com/
+    x-changelog: https://docs.pingcap.com/tidbcloud/tidb-cloud-release-notes/
+    x-stability: beta — PingCAP labels every version of this API public preview / beta
+- target: $
+  update:
+    externalDocs:
+      description: TiDB Cloud Dedicated API reference
+      url: https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
+    securityDefinitions:
+      digestAuth:
+        type: basic
+        description: >-
+          HTTP Digest Authentication (RFC 7616). The username is the TiDB Cloud API key's PUBLIC key and
+          the password is its PRIVATE key. Swagger 2.0 has no `digest` scheme, so `basic` is the closest
+          expressible type and this description carries the correction. Keys are issued at
+          https://tidbcloud.com/org-settings/api-keys.
+    security:
+    - digestAuth: []
+    x-rate-limit:
+      requests: 100
+      window: minute
+      scope: api-key
+      status: 429
+      headers: [X-Ratelimit-Limit-Minute, X-Ratelimit-Remaining-Minute, X-Ratelimit-Reset]
+      retry_after: false
+    x-idempotency:
+      coverage: none
+      note: No Idempotency-Key header is supported; retried creates duplicate resources.

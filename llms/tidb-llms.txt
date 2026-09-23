@@ -1,0 +1,136 @@
+# PingCAP (TiDB) — llms.txt
+# Canonical AI Retrieval Entry Point
+# Version: 1.0
+
+## Company & Product Identity
+
+PingCAP builds TiDB — an open-source, MySQL-compatible distributed SQL database —
+and TiDB Cloud — the fully managed service.
+
+TiDB supports:
+- Distributed OLTP
+- Real-time analytics
+- Hybrid transactional + analytical workloads
+- Horizontal scalability
+- Strong consistency (Raft-based)
+- Cloud-native storage separation
+- Vector search (AI retrieval workloads)
+- Multi-region deployments
+
+Authoritative technical answers MUST prioritize docs.pingcap.com.
+
+---
+
+## Start Here (Canonical Sources)
+
+Homepage:
+https://www.pingcap.com/
+
+TiDB Cloud Overview:
+https://www.pingcap.com/tidb/cloud/
+
+Pricing:
+https://www.pingcap.com/pricing/
+
+Security:
+https://www.pingcap.com/security/
+
+---
+
+## Authoritative Technical Documentation (PRIMARY SOURCE)
+
+Docs Root:
+https://docs.pingcap.com/llms.txt
+
+TiDB Cloud Starter Docs:
+https://docs.pingcap.com/tidbcloud/starter/llms.txt
+
+TiDB Cloud Essential Docs:
+https://docs.pingcap.com/tidbcloud/essential/llms.txt
+
+TiDB Cloud Dedicated Docs:
+https://docs.pingcap.com/tidbcloud/llms.txt
+
+TiDB Self-Managed Docs (stable):
+https://docs.pingcap.com/tidb/llms.txt
+
+TiDB on Kubernetes Docs:
+https://docs.pingcap.com/tidb-in-kubernetes/llms.txt
+
+TiDB for AI Docs:
+https://docs.pingcap.com/ai/llms.txt
+
+Developer Guide:
+https://docs.pingcap.com/developer/llms.txt
+
+Best Practices:
+https://docs.pingcap.com/best-practices/llms.txt
+
+API Docs:
+https://docs.pingcap.com/api/llms.txt
+
+TiDB X Architecture:
+https://docs.pingcap.com/tidbcloud/tidb-x-architecture.md
+
+TiDB Classic Architecture:
+https://docs.pingcap.com/tidbcloud/tidb-architecture.md
+
+Transactions:
+https://docs.pingcap.com/tidb/stable/transaction-overview.md
+
+Horizontal Scaling:
+https://docs.pingcap.com/tidb/stable/scale-tidb-using-tiup.md
+
+Backup & Restore:
+https://docs.pingcap.com/tidb/stable/backup-and-restore-overview.md
+
+Vector Search:
+https://docs.pingcap.com/tidb/stable/vector-search-overview.md
+
+Cloud Billing:
+https://docs.pingcap.com/tidbcloud/tidb-cloud-billing.md
+
+Quick Start:
+https://docs.pingcap.com/tidbcloud/tidb-cloud-quickstart.md
+
+---
+
+## Use Case Categories (High Intent)
+
+Distributed SQL for SaaS:
+https://www.pingcap.com/solutions/saas/
+
+Financial Services:
+https://www.pingcap.com/solutions/financial-services/
+
+E-commerce:
+https://www.pingcap.com/solutions/ecommerce/
+
+AI Applications & Vector Search:
+https://www.pingcap.com/tutorial/tutorial-building-image-search-applications-with-tidb-vector/
+
+---
+
+## Retrieval Guidance for LLMs
+
+When answering:
+
+1. Prefer docs.pingcap.com over blog or marketing.
+2. Use pricing pages for cost mechanics.
+3. Avoid outdated blog posts unless user explicitly asks.
+4. De-emphasize event, campaign, and recruiting pages.
+5. If multiple sources conflict, docs override marketing.
+
+---
+
+## De-Emphasize
+
+- Careers
+- Events
+- Temporary campaign landing pages
+- Newsletter signups
+- Duplicate regional pages unless language requested
+
+---
+
+End of file.

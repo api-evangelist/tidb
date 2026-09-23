@@ -1,0 +1,375 @@
+generated: '2026-09-17'
+method: probed
+source: live GET of the named /.well-known/ paths on every apis.yml host, every OpenAPI servers[] host, the docs host and the status host
+summary:
+  documents_found: 0
+  security_txt: false
+  openid_configuration: false
+  oauth_authorization_server: false
+  api_catalog: false
+  ai_plugin: false
+  agent_card: false
+  note: >-
+    PingCAP publishes no /.well-known/ discovery document for TiDB or TiDB Cloud on any host. Three distinct
+    non-404 shapes were seen and all three are misses. tidbcloud.com is a single-page app that answers 200 with
+    the same 10KB HTML console shell for every /.well-known/* path. The *.tidbapi.com API hosts answer 401 with
+    an empty JSON body for every path, which is an auth gate on a catch-all route and not a document. The
+    api.tidbcloud.com and *.tidbapi.com edges answer 403 on /.well-known/security.txt. The one real document
+    found, at status.tidbcloud.com, is Atlassian's own security.txt served by the hosted Statuspage that backs
+    the TiDB Cloud status site — its Canonical, Contact and Policy fields all point at atlassian.com, so it
+    documents Atlassian's disclosure programme rather than PingCAP's and is not credited to TiDB. PingCAP's own
+    disclosure surface is a web page, https://www.pingcap.com/security/, captured in
+    security/tidb-vulnerability-disclosure.yml. No WellKnown and no SecurityTxt pointer is emitted from this
+    file: it records an absence.
+hosts:
+- host: https://www.pingcap.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+- host: https://pingcap.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+- host: https://docs.pingcap.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 404
+    file: null
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+- host: https://tidbcloud.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: null
+    note: "200 returned the SPA console shell, not a document - treated as a miss"
+  - path: /.well-known/openid-configuration
+    status: 200
+    file: null
+    note: "200 returned the SPA console shell, not a document - treated as a miss"
+  - path: /.well-known/oauth-authorization-server
+    status: 200
+    file: null
+    note: "200 returned the SPA console shell, not a document - treated as a miss"
+  - path: /.well-known/api-catalog
+    status: 200
+    file: null
+    note: "200 returned the SPA console shell, not a document - treated as a miss"
+  - path: /.well-known/ai-plugin.json
+    status: 200
+    file: null
+    note: "200 returned the SPA console shell, not a document - treated as a miss"
+  - path: /.well-known/agent-card.json
+    status: 200
+    file: null
+    note: "200 returned the SPA console shell, not a document - treated as a miss"
+  - path: /.well-known/agent.json
+    status: 200
+    file: null
+    note: "200 returned the SPA console shell, not a document - treated as a miss"
+- host: https://api.tidbcloud.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+    file: null
+    note: "403 from the API edge - no document served"
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+- host: https://data.tidbcloud.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+    file: null
+    note: "403 from the API edge - no document served"
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+- host: https://dedicated.tidbapi.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+    file: null
+    note: "403 from the API edge - no document served"
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+- host: https://serverless.tidbapi.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+    file: null
+    note: "403 from the API edge - no document served"
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+- host: https://iam.tidbapi.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+    file: null
+    note: "403 from the API edge - no document served"
+  - path: /.well-known/openid-configuration
+    status: 401
+    file: null
+    note: "401 with an empty JSON body from the API host catch-all - no document served"
+  - path: /.well-known/oauth-authorization-server
+    status: 401
+    file: null
+    note: "401 with an empty JSON body from the API host catch-all - no document served"
+  - path: /.well-known/api-catalog
+    status: 401
+    file: null
+    note: "401 with an empty JSON body from the API host catch-all - no document served"
+  - path: /.well-known/ai-plugin.json
+    status: 401
+    file: null
+    note: "401 with an empty JSON body from the API host catch-all - no document served"
+  - path: /.well-known/agent-card.json
+    status: 401
+    file: null
+    note: "401 with an empty JSON body from the API host catch-all - no document served"
+  - path: /.well-known/agent.json
+    status: 401
+    file: null
+    note: "401 with an empty JSON body from the API host catch-all - no document served"
+- host: https://dataservice.tidbapi.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+    file: null
+    note: "403 from the API edge - no document served"
+  - path: /.well-known/openid-configuration
+    status: 401
+    file: null
+    note: "401 with an empty JSON body from the API host catch-all - no document served"
+  - path: /.well-known/oauth-authorization-server
+    status: 401
+    file: null
+    note: "401 with an empty JSON body from the API host catch-all - no document served"
+  - path: /.well-known/api-catalog
+    status: 401
+    file: null
+    note: "401 with an empty JSON body from the API host catch-all - no document served"
+  - path: /.well-known/ai-plugin.json
+    status: 401
+    file: null
+    note: "401 with an empty JSON body from the API host catch-all - no document served"
+  - path: /.well-known/agent-card.json
+    status: 401
+    file: null
+    note: "401 with an empty JSON body from the API host catch-all - no document served"
+  - path: /.well-known/agent.json
+    status: 401
+    file: null
+    note: "401 with an empty JSON body from the API host catch-all - no document served"
+- host: https://billing.tidbapi.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+    file: null
+    note: "403 from the API edge - no document served"
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+- host: https://msp.tidbapi.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+    file: null
+    note: "403 from the API edge - no document served"
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+- host: https://cloud.tidbapi.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 403
+    file: null
+    note: "403 from the API edge - no document served"
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null
+- host: https://status.tidbcloud.com
+  documents:
+  - path: /.well-known/security.txt
+    status: 200
+    file: null
+    note: "200 and a valid RFC 9116 document, but it is Atlassian Statuspage's own security.txt (Canonical https://www.atlassian.com/.well-known/security.txt) - not PingCAP's, not credited to TiDB"
+  - path: /.well-known/openid-configuration
+    status: 404
+    file: null
+  - path: /.well-known/oauth-authorization-server
+    status: 404
+    file: null
+  - path: /.well-known/api-catalog
+    status: 404
+    file: null
+  - path: /.well-known/ai-plugin.json
+    status: 404
+    file: null
+  - path: /.well-known/agent-card.json
+    status: 404
+    file: null
+  - path: /.well-known/agent.json
+    status: 404
+    file: null

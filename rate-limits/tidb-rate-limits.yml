@@ -4,28 +4,80 @@ schema: https://raw.githubusercontent.com/api-evangelist/interface-research/main
 provider: tidb
 providerId: tidb
 created: '2026-05-04'
-# Provenance stamped 2026-08-11: this artifact was written by the API Evangelist
-# bulk sweep dated 2026-05-04, not harvested from the provider. See roadmap#35.
-method: generated
-modified: '2026-05-05'
-reconciled: false
+# Provenance stamped 2026-08-11: the RU/storage quota rows below were written by the API Evangelist
+# bulk sweep dated 2026-05-04 from the public pricing page. See roadmap#35.
+# 2026-09-17: upgraded to method: searched. The HTTP rate limit the 2026-05 pass could not find was
+# published all along, inside the Rate Limiting section of the TiDB Cloud API specs themselves.
+method: searched
+modified: '2026-09-17'
+reconciled: true
 tags:
   - Database
   - Cloud
   - Rate Limiting
-description: TiDB Cloud limits its workload by Request Units (RUs) and storage rather than per-second
-  HTTP rate caps. The Starter tier allots 250M RUs/month and 25 GiB row + 25 GiB column storage per organization;
-  the Essential preview autoscales up to 100K RUs and the Premium/Dedicated tiers scale further. TiDB
-  Cloud's Management API and Data Service do publish HTTP throttling, but those numbers are not summarized
-  on the public pricing page reviewed.
+limit_count: 6
+description: >-
+  TiDB Cloud throttles on two independent axes. The CONTROL PLANE (the REST management APIs) is capped at
+  100 requests per minute per API key and returns 429 with X-Ratelimit-* headers. The DATA PLANE is metered
+  in Request Units and storage rather than HTTP requests — Starter allots 250M RUs/month and 25 GiB row +
+  25 GiB column storage per organization, the Essential preview autoscales up to 100K RUs, and Premium and
+  Dedicated scale further.
 sources:
+  - https://docs.pingcap.com/tidbcloud/api/v1beta/
+  - https://docs.pingcap.com/tidbcloud/api/v1beta1/dedicated/
   - https://www.pingcap.com/pricing/
-notes: Public pricing page covers RU/storage quotas; per-second HTTP rate limits for the TiDB Cloud
-  Management API and Data Service live in product docs that were not fetched in this pass — leave reconciled
-  false until docs.pingcap.com/tidbcloud rate-limit pages are confirmed.
+notes: >-
+  The HTTP limit and its headers are published inside the Rate Limiting section of the TiDB Cloud API
+  reference (carried in info.description of every published spec), not on the pricing page — which is why
+  an earlier pass recorded them as missing. A higher quota is granted only by support request; there is no
+  self-serve tier for it and no Retry-After header, so a client must read X-Ratelimit-Reset.
 responseCodes:
   throttled: 429
+headers:
+  - name: X-Ratelimit-Limit-Minute
+    description: Requests allowed per minute. Currently 100.
+  - name: X-Ratelimit-Remaining-Minute
+    description: Requests remaining in the current minute. At 0 the API returns 429.
+  - name: X-Ratelimit-Reset
+    description: Seconds until the current rate-limit window resets.
+  - name: Retry-After
+    present: false
+    description: Not returned. Back off on X-Ratelimit-Reset instead.
+quotaIncrease:
+  selfServe: false
+  url: https://support.pingcap.com/hc/en-us/requests/new?ticket_form_id=7800003722519
 limits:
+  - name: TiDB Cloud API requests
+    scope: api_key
+    metric: requests
+    limit: 100
+    timeFrame: minute
+    burst: null
+    responseCode: 429
+    headers:
+      - X-Ratelimit-Limit-Minute
+      - X-Ratelimit-Remaining-Minute
+      - X-Ratelimit-Reset
+    appliesTo:
+      - TiDB Cloud API v1beta (api.tidbcloud.com)
+      - TiDB Cloud Dedicated API (dedicated.tidbapi.com)
+      - TiDB Cloud Starter and Essential API (serverless.tidbapi.com)
+      - TiDB Cloud Premium API (cloud.tidbapi.com)
+      - TiDB Cloud Data Service API (dataservice.tidbapi.com)
+      - TiDB Cloud IAM API (iam.tidbapi.com)
+      - TiDB Cloud Billing API (billing.tidbapi.com)
+    source: https://docs.pingcap.com/tidbcloud/api/v1beta/
+    notes: Per API key, not per organization or per endpoint. 107 of the 162 published operations declare
+      a 429 response.
+  - name: Chat2Query Data App requests
+    scope: data_app
+    metric: requests
+    limit: 100
+    timeFrame: day
+    responseCode: 429
+    source: https://docs.pingcap.com/tidbcloud/use-chat2query-api/
+    notes: The Chat2Query Data App is rate limited to 100 requests per day per Data App — two orders of
+      magnitude tighter than the management API, and the binding constraint for any agent using it.
   - name: Starter Free Request Units
     scope: organization
     metric: request_units_per_month

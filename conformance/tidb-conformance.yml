@@ -1,0 +1,123 @@
+generated: '2026-09-17'
+method: derived
+source: openapi/_original/tidb-cloud-*-openapi-original.json, https://www.pingcap.com/trust-hub/,
+  https://www.pingcap.com/security/, https://docs.pingcap.com/tidbcloud/api-overview/
+note: >-
+  Assertions are recorded as observed, including the negatives. TiDB's market — distributed SQL databases —
+  has no API-level domain standard body of the SCIM/FHIR/OpenRTB kind, so the domain-standard slot is
+  legitimately empty and no conformance is invented to fill it. What TiDB does conform to is a WIRE
+  standard rather than an API standard: the MySQL protocol, which is the real interoperability claim and is
+  recorded below.
+conformance:
+- id: mysql-wire-protocol
+  name: MySQL 8.0 client/server protocol and SQL dialect
+  conforms: true
+  evidence: >-
+    TiDB is documented throughout as MySQL-compatible — any MySQL 8.0 client, driver, ORM or tool connects
+    to port 4000 unchanged, and the published error numbers reuse the MySQL error-code space.
+  evidence_url: https://docs.pingcap.com/tidb/stable/mysql-compatibility/
+  note: >-
+    This is the domain standard that actually matters for this market. A buyer who already speaks MySQL
+    integrates with no bespoke connector, which is exactly the distinction domain-standard conformance is
+    meant to draw — it just is not expressed as an API specification.
+- id: http-digest-auth
+  name: HTTP Digest Access Authentication (RFC 7616 / RFC 2617)
+  conforms: true
+  evidence: 'Every TiDB Cloud REST API authenticates with HTTP Digest: "All requests are authenticated
+    through HTTP Digest Authentication, ensuring the API key is never sent over the network."'
+  evidence_url: https://docs.pingcap.com/tidbcloud/api-overview/
+- id: google-aip-158-pagination
+  name: Google API Improvement Proposal 158 (list pagination)
+  conforms: partial
+  evidence: >-
+    The v1beta1 and v1beta2 APIs use pageSize/pageToken with nextPageToken and totalSize, the AIP-158 shape,
+    because they are gRPC services fronted by grpc-gateway. The older v1beta API and the Data Service API
+    use page/page_size with items/total instead, so the product is not internally consistent.
+  evidence_url: openapi/_original/tidb-cloud-dedicated-v1beta1-openapi-original.json
+- id: google-rpc-status
+  name: google.rpc.Status error model
+  conforms: true
+  evidence: 'The v1beta1/v1beta2 specs define googlerpcStatus {code, message, details[google.protobuf.Any]}
+    and reference it from 434 error responses.'
+  evidence_url: openapi/_original/tidb-cloud-dedicated-v1beta1-openapi-original.json
+- id: rfc9457
+  name: RFC 9457 Problem Details for HTTP APIs
+  conforms: false
+  evidence: >-
+    No operation declares application/problem+json and no error schema carries type/title/status/detail/
+    instance. Four different vendor error envelopes are used instead.
+  evidence_url: errors/tidb-problem-types.yml
+- id: rfc8594
+  name: RFC 8594 Sunset header / deprecation signalling
+  conforms: false
+  evidence: No Sunset or Deprecation response header is declared or documented, although two surfaces (the
+    MSP API and v1beta Import) are described in prose as deprecated.
+  evidence_url: lifecycle/tidb-lifecycle.yml
+- id: oauth2
+  name: OAuth 2.0
+  conforms: false
+  evidence: >-
+    The control plane uses API-key Digest auth, not OAuth. OAuth/SSO exists only for human console login
+    (Google, GitHub, Microsoft) and is not exposed to API callers, so there is no scope vocabulary and no
+    scopes/ artifact.
+  evidence_url: https://docs.pingcap.com/tidbcloud/tidb-cloud-quickstart/
+- id: openapi
+  name: OpenAPI / Swagger specification
+  conforms: true
+  version: Swagger 2.0 (OpenAPI 2.0)
+  evidence: >-
+    All eight published TiDB Cloud contracts are Swagger 2.0 documents served from PingCAP's own
+    docs-download.pingcap.com host and rendered on docs.pingcap.com. None has been migrated to OpenAPI 3.x.
+  evidence_url: https://docs-download.pingcap.com/api/tidbcloud-oas-v1beta1-dedicated.swagger.json
+- id: mcp
+  name: Model Context Protocol
+  conforms: true
+  evidence: PingCAP publishes the TiDB MCP Server (stdio and SSE transports) with seven tools; it is
+    locally run, not hosted.
+  evidence_url: https://docs.pingcap.com/ai/tidb-mcp-server/
+- id: a2a
+  name: A2A Agent Card
+  conforms: false
+  evidence: No /.well-known/agent-card.json or /.well-known/agent.json was served by any of the 14 hosts
+    probed on 2026-09-17.
+  evidence_url: well-known/tidb-well-known.yml
+- id: llms-txt
+  name: llms.txt
+  conforms: true
+  evidence: >-
+    PingCAP serves llms.txt at www.pingcap.com, docs.pingcap.com and per documentation section
+    (docs.pingcap.com/api/llms.txt, /tidbcloud/llms.txt, /ai/llms.txt), which is an unusually complete
+    implementation.
+  evidence_url: https://www.pingcap.com/llms.txt
+compliance:
+  published: true
+  source: https://www.pingcap.com/trust-hub/
+  certifications:
+  - name: SOC 2
+    evidence: '"We conduct regular third-party audits against rigorous standards, including SOC 2 and PCI-DSS"'
+  - name: PCI DSS
+    evidence: same statement as SOC 2
+  - name: ISO/IEC 27001
+    evidence: certification badge on the Trust Hub page
+  - name: ISO/IEC 27701
+    evidence: certification badge on the Trust Hub page
+  - name: HIPAA
+    evidence: badge on the Trust Hub page
+  regulatory:
+  - name: GDPR
+    evidence: 'Trust Hub states TiDB Cloud meets "GDPR and EU-US Data Privacy Framework"'
+  - name: EU-US Data Privacy Framework
+    evidence: same statement as GDPR
+  documents:
+  - https://www.pingcap.com/legal/data-processing-agreement-for-tidb-cloud-services/
+  - https://www.pingcap.com/legal/sub-processors-and-affiliates-for-tidb-cloud-services/
+  - https://www.pingcap.com/legal/service-level-agreement-for-tidb-cloud-services/
+  note: >-
+    The Trust Hub names the programmes but publishes no downloadable report and no request form; reports are
+    obtained through sales. There is no third-party trust portal (Vanta/Drata/SafeBase) at trust.pingcap.com.
+domain_standard:
+  applicable: false
+  reason: >-
+    The distributed-SQL / DBaaS market has no cross-vendor API standard for control-plane provisioning. The
+    interoperability standard in this market is the MySQL wire protocol, which TiDB implements and which is
+    recorded above as its own conformance entry. No conformance is asserted to fill an empty slot.
